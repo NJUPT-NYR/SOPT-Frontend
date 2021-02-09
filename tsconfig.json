@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "target": "ES2020",
+    "declaration": false,
+    "moduleResolution": "node",
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
+    "jsx": "react",
+    "checkJs": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "allowJs": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "skipDefaultLibCheck": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

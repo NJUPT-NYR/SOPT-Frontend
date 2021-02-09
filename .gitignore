@@ -1,0 +1,10 @@
+node_modules/
+build/
+
+*.log
+.env.*
+!.env.example
+
+.test.js
+.DS_Store
+**/.DS_Store
