@@ -1,4 +1,5 @@
 declare module "*.css";
+declare module "*.gif";
 
 /**
  * server-side-only
