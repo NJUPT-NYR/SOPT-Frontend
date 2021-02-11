@@ -1,5 +1,14 @@
 {
   "editor.formatOnSave": true,
   "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.tsserver.pluginPaths": ["typescript-plugin-css-modules"]
+  "typescript.tsserver.pluginPaths": ["typescript-plugin-css-modules"],
+  "css.validate": false,
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "tailwindCSS.includeLanguages": {
+    "typescript": "javascript",
+    "typescriptreact": "javascript"
+  },
+  "tailwindCSS.emmetCompletions": true
 }

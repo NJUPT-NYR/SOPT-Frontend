@@ -1,4 +1,4 @@
-const t = require("@babel/types");
+var t = require("@babel/types");
 
 // TODO set up unit test
 module.exports = {
@@ -8,20 +8,20 @@ module.exports = {
       var node = path.node;
       if (
         t.isImportDeclaration(parent) &&
-        parent.source &&
-        /\.modules\.css$/.test(parent.source.value)
+        /\.module\.css/.test(parent.source.value)
       ) {
-        var localName = node.local.name;
-        path.parentPath.replaceWith(
-          t.importDeclaration(
-            [
-              t.importSpecifier(
-                t.identifier(localName),
+        var originName = node.local.name;
+        node.local.name = "__" + originName;
+        path.parentPath.insertAfter(
+          t.variableDeclaration("var", [
+            t.variableDeclarator(
+              t.identifier(originName),
+              t.memberExpression(
+                t.identifier(node.local.name),
                 t.identifier("locals")
-              ),
-            ],
-            parent.source
-          )
+              )
+            ),
+          ])
         );
       }
     },

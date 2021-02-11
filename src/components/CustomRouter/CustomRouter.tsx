@@ -78,7 +78,7 @@ export class Route extends React.Component<IRouteProps, null> {
 
 interface ILinkProps {
   to: string;
-  children: JSX.Element | JSX.Element;
+  children: JSX.Element | JSX.Element[];
   onClick?: (event: any) => void;
 }
 export class Link extends React.Component<ILinkProps, any> {

@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { parserProps } from "@/utils";
 
 import App from "@/containers/App/App";
+import "./global.css";
 
 ReactDOM.hydrate(
   <App

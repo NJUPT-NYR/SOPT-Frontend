@@ -35,10 +35,9 @@ export default class Home extends BasicServerPage<IHomeProps, IHomeState> {
           <span key={item}>{item} </span>
         ))}
         <Link to="/profile">
-          <div className={styles?.text ?? styles?.locals?.text}>
-            go to profile
-          </div>
+          <div className={styles.text}>go to profile</div>
         </Link>
+        <div className="text-red-600">hello</div>
       </div>
     );
   }
