@@ -1,10 +1,10 @@
 import React from "react";
 import "reflect-metadata";
-import { matchRoutes } from "react-router-config";
 
 import { Router, Route } from "@/components";
 import { containers } from "@/containers";
 import { fetchPageProps } from "@/utils/request";
+import { urlMatch } from "@/utils";
 
 const routes = containers.map((container) => ({
   path: Reflect.getMetadata("pagePath", container),
@@ -22,8 +22,8 @@ interface IAppState {
 
 export default class App extends React.Component<IAppProps, IAppState> {
   handleFetchPageProps = async (path: string) => {
-    const matchedRoutes = matchRoutes(routes, path);
-    if (matchedRoutes?.[0]?.route?.component?.getInitPageProps) {
+    const matched = routes.find((one) => urlMatch(one.path, path).isMatched);
+    if (matched.component.getInitPageProps) {
       return await fetchPageProps(path);
     } else {
       return null;

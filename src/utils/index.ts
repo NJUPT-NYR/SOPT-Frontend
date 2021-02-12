@@ -1,5 +1,6 @@
 export { default as BasicServerPage } from "./serverPage";
 export { default as Observer } from "./observer";
+export * from "./urlMatch";
 
 /**
  * decode encode page props

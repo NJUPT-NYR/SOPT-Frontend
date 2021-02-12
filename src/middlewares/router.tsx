@@ -1,9 +1,7 @@
 import "reflect-metadata";
 import React from "react";
-import Router from "koa-router";
 import { renderToString } from "react-dom/server";
 import App from "@/containers/App/App";
-import * as path from "path";
 import { renderHTML } from "@/utils/render";
 import { Helmet } from "react-helmet";
 
@@ -11,14 +9,21 @@ import { Helmet } from "react-helmet";
  * pages
  */
 import { containers } from "@/containers/index";
+import type { ParameterizedContext } from "koa";
+import { urlMatch } from "@/utils";
 
-const router = new Router();
-
-containers.forEach((ServerPage: any) => {
-  const targetPath = Reflect.getMetadata("pagePath", ServerPage);
-  const routePath = path.join("/", targetPath);
-  router.get(routePath, async (ctx) => {
-    const result = await ServerPage.getInitPageProps(ctx);
+const middleware = async (ctx: ParameterizedContext, next) => {
+  const matchedPage = containers.find((one) => {
+    const targetPath = Reflect.getMetadata("pagePath", one);
+    const matched = urlMatch(targetPath, ctx.url);
+    if (matched.isMatched) {
+      ctx.query = matched.query;
+      ctx.params = matched.params;
+    }
+    return matched.isMatched;
+  });
+  if (matchedPage) {
+    const result = await matchedPage.getInitPageProps(ctx);
     const initPageProps = Buffer.from(JSON.stringify(result)).toString(
       "base64"
     );
@@ -26,12 +31,13 @@ containers.forEach((ServerPage: any) => {
       ctx.body = initPageProps;
     } else {
       const content = renderToString(
-        <App initPath={routePath} initPageProps={result} />
+        <App initPath={ctx.path} initPageProps={result} />
       );
       const helmet = Helmet.renderStatic();
       ctx.body = renderHTML({ content, initPageProps, helmet });
     }
-  });
-});
+  }
+  return next();
+};
 
-export default router.routes();
+export default middleware;

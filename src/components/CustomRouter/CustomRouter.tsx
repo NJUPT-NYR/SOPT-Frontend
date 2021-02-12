@@ -1,9 +1,9 @@
 import "reflect-metadata";
 import React from "react";
-import { matchRoutes, RouteConfig } from "react-router-config";
+import { urlMatch } from "@/utils";
 import { Observer } from "@/utils";
 
-const PathContext = React.createContext({
+export const PathContext = React.createContext({
   path: null,
   pageProps: null,
 });
@@ -62,11 +62,7 @@ export class Route extends React.Component<IRouteProps, null> {
   static contextType = PathContext;
   render() {
     const { path: currentPath, pageProps: currentPageProps } = this.context;
-    const machedRoutes = matchRoutes(
-      [{ path: this.props.path, exact: true }],
-      currentPath
-    );
-    if (!machedRoutes?.length) {
+    if (!urlMatch(this.props.path, currentPath).isMatched) {
       return null;
     }
     if (this.props.children instanceof Function) {
@@ -80,6 +76,7 @@ interface ILinkProps {
   to: string;
   children: JSX.Element | JSX.Element[];
   onClick?: (event: any) => void;
+  className?: string;
 }
 export class Link extends React.Component<ILinkProps, any> {
   handleClick = (event) => {
@@ -99,6 +96,13 @@ export class Link extends React.Component<ILinkProps, any> {
       </a>
     );
   }
+}
+
+export function navigateTo(path: string) {
+  pathObserver.dispatch({
+    path,
+    forward: true,
+  });
 }
 
 if (globalThis.window) {

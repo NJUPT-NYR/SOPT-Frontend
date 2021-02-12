@@ -2,7 +2,7 @@ import React from "react";
 import { Page } from "@/utils/decorator";
 import { BasicServerPage } from "@/utils";
 import type { Context } from "koa";
-import { Helmet } from "react-helmet";
+import { Scaffold } from "@/components";
 
 interface IProfileProps {
   name: string;
@@ -15,13 +15,10 @@ export default class Profile extends BasicServerPage<IProfileProps, null> {
   }
   render() {
     return (
-      <div>
-        <Helmet>
-          <title>Profile page</title>
-        </Helmet>
+      <Scaffold title="Profile Page">
         <div>profile page</div>
         <div>name: {this.props.name}</div>
-      </div>
+      </Scaffold>
     );
   }
 }
