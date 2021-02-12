@@ -1,5 +1,7 @@
 # SOPT-Frontend
 
+![CI](https://github.com/NJUPT-NYR/SOPT-Frontend/workflows/CI/badge.svg) ![Language](https://img.shields.io/badge/language-typescript-blue.svg?label=language) 
+
 User Interface and frontend framework for SOPT.
 
 ## How To Run
