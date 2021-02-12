@@ -1,6 +1,5 @@
 var t = require("@babel/types");
 
-// TODO set up unit test
 module.exports = {
   visitor: {
     ImportDefaultSpecifier(path) {
