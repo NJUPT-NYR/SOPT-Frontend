@@ -7,7 +7,7 @@ describe("Transfrom Css Module Babel Plugin", () => {
       plugins: [transformCssModulePlugin],
     });
     expect(result.code).toBe(
-      'import __styles from "home.module.css";\nvar styles = __styles.locals;'
+      'import _styles from "home.module.css";\nvar styles = _styles.locals;'
     );
     done();
   });

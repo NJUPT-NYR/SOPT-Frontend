@@ -10,7 +10,7 @@ module.exports = {
         /\.module\.css/.test(parent.source.value)
       ) {
         var originName = node.local.name;
-        node.local.name = "__" + originName;
+        node.local.name = path.scope.generateUidIdentifier(originName).name;
         path.parentPath.insertAfter(
           t.variableDeclaration("var", [
             t.variableDeclarator(

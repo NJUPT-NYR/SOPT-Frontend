@@ -17,7 +17,6 @@
     "ejs": "^3.1.6",
     "koa": "^2.13.1",
     "koa-mount": "^4.0.0",
-    "koa-router": "^10.0.0",
     "koa-static": "^5.0.0",
     "lru-cache": "^6.0.0",
     "mobx": "^6.1.5",
@@ -28,7 +27,6 @@
     "react-helmet": "^6.1.0",
     "react-icons": "^4.2.0",
     "react-mobx": "^0.0.4",
-    "react-router": "5",
     "tailwindcss": "^2.0.3"
   },
   "devDependencies": {
