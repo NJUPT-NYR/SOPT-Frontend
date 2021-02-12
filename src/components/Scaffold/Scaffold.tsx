@@ -11,7 +11,7 @@ export default function Scaffold({ children, title }: IScaffold) {
   return (
     <>
       <Helmet>
-        <title>{title}</title>
+        <title>{title ? title + "|NYR" : "NYR"}</title>
       </Helmet>
       <div>
         <Navigation />

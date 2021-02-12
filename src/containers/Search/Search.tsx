@@ -3,6 +3,8 @@ import { Page } from "@/utils/decorator";
 import { BasicServerPage } from "@/utils";
 import type { Context } from "koa";
 import { navigateTo, Scaffold } from "@/components";
+import { GoSearch } from "react-icons/go";
+import { ksGif } from "@/assets";
 
 interface ISearchProps {
   keyword: string;
@@ -19,7 +21,7 @@ export default class Search extends BasicServerPage<
   ISearchState
 > {
   state = {
-    searchKeyword: "",
+    searchKeyword: this.props.keyword ?? "",
   };
   static getInitPageProps(ctx: Context) {
     if (ctx.query.keyword) {
@@ -37,29 +39,49 @@ export default class Search extends BasicServerPage<
     this.setState({ searchKeyword: event.target.value });
   };
   handleSearch = () => {
-    navigateTo(`/search?keyword=${String(this.state.searchKeyword)}`);
+    if (this.state.searchKeyword?.length) {
+      navigateTo(`/search?keyword=${String(this.state.searchKeyword)}`);
+    }
   };
   render() {
     const { searchKeyword } = this.state;
     const { keyword, result } = this.props;
 
     return (
-      <Scaffold title={`${keyword}|Search Page`}>
-        <div>
-          <input
-            value={searchKeyword}
-            onChange={this.handleInput}
-            placeholder="请输入关键字"
-          />
-          <button onClick={this.handleSearch}>搜索</button>
-        </div>
-        {keyword && (
-          <div>
-            <div>search page</div>
-            <div>keyword: {keyword}</div>
-            <div>result: {result}</div>
+      <Scaffold title={keyword ? `${keyword}|Search Page` : "Search Page"}>
+        <div className="container mx-auto flex flex-col items-center pt-32 ">
+          <div className="flex flex-col items-center">
+            <div className="text-black font-semibold text-4xl pb-3">Search</div>
+            <div className="flex items-center">
+              <input
+                className="border py-2 px-3 text-grey-darkest focus:outline-none rounded-md w-96 "
+                value={searchKeyword}
+                onChange={this.handleInput}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    this.handleSearch();
+                  }
+                }}
+              />
+              <button
+                className="ml-2 focus:outline-none "
+                onClick={this.handleSearch}
+              >
+                <GoSearch className="text-3xl" />
+              </button>
+            </div>
           </div>
-        )}
+          {result && (
+            <div className="mt-16 flex flex-col items-center">
+              <div>Result is as follows.</div>
+              {keyword === "/ks" ? (
+                <img className="rounded-sm mt-2" src={ksGif} />
+              ) : (
+                <div>{result}</div>
+              )}
+            </div>
+          )}
+        </div>
       </Scaffold>
     );
   }

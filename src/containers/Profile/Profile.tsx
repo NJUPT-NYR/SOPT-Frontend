@@ -16,8 +16,9 @@ export default class Profile extends BasicServerPage<IProfileProps, null> {
   render() {
     return (
       <Scaffold title="Profile Page">
-        <div>profile page</div>
-        <div>name: {this.props.name}</div>
+        <div className="container mx-auto flex flex-col items-center">
+          <div className="mt-40 text-gray-500 text-lg">This Profile Page</div>
+        </div>
       </Scaffold>
     );
   }

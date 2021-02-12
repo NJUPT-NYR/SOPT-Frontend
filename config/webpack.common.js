@@ -86,6 +86,7 @@ var serverConfig = {
               limit: 8192,
               emitFile: false,
               outputPath: "static/images",
+              publicPath: "/static/images/",
             },
           },
         ],
@@ -198,6 +199,7 @@ var clientConfig = {
             options: {
               limit: 8192,
               outputPath: "static/images",
+              publicPath: "/static/images/",
             },
           },
         ],
