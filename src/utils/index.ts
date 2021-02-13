@@ -8,7 +8,7 @@ export * from "./urlMatch";
  */
 export function parserProps(encodeStr) {
   try {
-    return JSON.parse(atob(encodeStr));
+    return JSON.parse(decodeURIComponent(escape(window.atob(encodeStr))));
   } catch (_e) {
     return null;
   }

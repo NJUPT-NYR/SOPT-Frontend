@@ -2,7 +2,8 @@ import React from "react";
 import { Page } from "@/utils/decorator";
 import { BasicServerPage } from "@/utils";
 import type { Context } from "koa";
-import { Scaffold } from "@/components";
+import { Link, Scaffold } from "@/components";
+import { GoMarkGithub } from "react-icons/go";
 
 interface IProfileProps {
   name: string;
@@ -15,8 +16,8 @@ export default class Profile extends BasicServerPage<IProfileProps, null> {
   }
   render() {
     return (
-      <Scaffold title="Profile Page">
-        <div className="container mx-auto flex flex-col items-center">
+      <Scaffold title="Profile">
+        <div className="container mx-auto flex flex-col items-center pt-40">
           <div className="mt-40 text-gray-500 text-lg">This Profile Page</div>
         </div>
       </Scaffold>

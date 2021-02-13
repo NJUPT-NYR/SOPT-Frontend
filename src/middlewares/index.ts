@@ -1,6 +1,11 @@
-import mount from "koa-mount";
-
 import routerMiddleware from "./router";
 import staticMiddleware from "./static";
 
-export default [routerMiddleware, staticMiddleware];
+const middlewares = [staticMiddleware, routerMiddleware];
+
+if (ENABLE_MOCK) {
+  const mockMiddleware = require("../../mock/middleware").default;
+  middlewares.unshift(mockMiddleware);
+}
+
+export default middlewares;

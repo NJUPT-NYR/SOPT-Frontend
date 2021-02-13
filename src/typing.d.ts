@@ -2,10 +2,6 @@ declare module "*.css";
 declare module "*.gif";
 
 /**
- * server-side-only
- */
-
-/**
  * relative path of static files
  * server side only
  */
@@ -22,8 +18,11 @@ declare var ENALBE_SERVER_CLUSTER: boolean;
 declare var SERVER_PORT: number;
 
 /**
- * client-side-only
+ * enable mock
  */
+declare var ENABLE_MOCK: boolean;
+
+declare var API_GATEWAY_URL: string;
 
 /**
  * render html on server side, inject props into component

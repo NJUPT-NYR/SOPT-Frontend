@@ -15,6 +15,7 @@ import { urlMatch } from "@/utils";
 const middleware = async (ctx: ParameterizedContext, next) => {
   const matchedPage = containers.find((one) => {
     const targetPath = Reflect.getMetadata("pagePath", one);
+    if (!targetPath) return false;
     const matched = urlMatch(targetPath, ctx.url);
     if (matched.isMatched) {
       ctx.query = matched.query;
@@ -36,6 +37,8 @@ const middleware = async (ctx: ParameterizedContext, next) => {
       const helmet = Helmet.renderStatic();
       ctx.body = renderHTML({ content, initPageProps, helmet });
     }
+  } else {
+    ctx.redirect("/404");
   }
   return next();
 };

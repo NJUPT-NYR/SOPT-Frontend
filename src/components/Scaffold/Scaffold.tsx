@@ -13,9 +13,9 @@ export default function Scaffold({ children, title }: IScaffold) {
       <Helmet>
         <title>{title ? title + "|NYR" : "NYR"}</title>
       </Helmet>
-      <div>
+      <div className="flex flex-col">
         <Navigation />
-        {children}
+        <div className="flex-1">{children}</div>
       </div>
       <Footer />
     </div>

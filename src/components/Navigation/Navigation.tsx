@@ -9,8 +9,12 @@ const navigationItems = [
     to: "/",
   },
   {
-    label: "Search",
-    to: "/search",
+    label: "Upload",
+    to: "/uploading",
+  },
+  {
+    label: "Help",
+    to: "/help",
   },
   {
     label: "Profile",

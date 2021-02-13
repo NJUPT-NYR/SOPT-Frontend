@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import qs from "query-string";
 import React from "react";
 import { urlMatch } from "@/utils";
 import { Observer } from "@/utils";
@@ -98,9 +99,14 @@ export class Link extends React.Component<ILinkProps, any> {
   }
 }
 
-export function navigateTo(path: string) {
+export function navigateTo(path: string, queryObject?: any) {
   pathObserver.dispatch({
-    path,
+    path: qs.stringifyUrl(
+      { url: path, query: queryObject },
+      {
+        skipNull: true,
+      }
+    ),
     forward: true,
   });
 }

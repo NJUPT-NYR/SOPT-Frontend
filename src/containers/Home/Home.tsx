@@ -1,49 +1,73 @@
 import React from "react";
 import type { Context } from "koa";
+import type { Column } from "react-table";
+import classNames from "classnames";
 
-import { Link, Scaffold } from "@/components";
+import { Link, navigateTo, Scaffold, Search, Table } from "@/components";
 import { Page } from "@/utils/decorator";
 import { BasicServerPage } from "@/utils";
-import { GoMarkGithub } from "react-icons/go";
 
 import styles from "./home.module.css";
+import { IRecord } from "@/utils/interface";
+import { requestRecords } from "@/utils/model";
+
+const columns: Column<IRecord>[] = [
+  {
+    Header: "Name",
+    accessor: "name",
+  },
+  {
+    Header: "Link",
+    accessor: "link",
+  },
+  {
+    Header: "Size",
+    accessor: "size",
+  },
+  {
+    Header: "Date",
+    accessor: "date",
+  },
+  {
+    Header: "Upload",
+    accessor: "uploadCount",
+  },
+  {
+    Header: "Download",
+    accessor: "downloadCount",
+  },
+  {
+    Header: "Complete",
+    accessor: "completeCount",
+  },
+];
 
 interface IHomeProps {
-  list: number[];
-  ip: string;
+  list?: number[];
+  keyword?: string;
+  pagination?: number;
 }
 
+interface IHomeState {}
+
 @Page("/")
-export default class Home extends BasicServerPage<IHomeProps, null> {
-  static getInitPageProps(ctx: Context) {
-    const ip = ctx.ip;
-    return Promise.resolve({ list: [1, 2, 3], ip });
+export default class Home extends BasicServerPage<IHomeProps, IHomeState> {
+  static async getInitPageProps(ctx: Context) {
+    const result = await requestRecords({ keyword: ctx.query.keyword });
+    return { list: result.data };
   }
-  handleClick = () => {
-    console.log(this.props);
-  };
   render() {
+    const { list } = this.props;
     return (
-      <Scaffold title="Home Page">
-        <div className="container mx-auto flex flex-col items-center pt-40">
-          <div className="text-black font-semibold text-4xl">NYR</div>
-          <div className="mb-10">
-            <GoMarkGithub className="inline-block" />
-            <a
-              className="ml-2 text-gray-600 "
-              href="https://github.com/NJUPT-NYR/SOPT-Frontend"
-            >
-              https://github.com/NJUPT-NYR/SOPT-Frontend
-            </a>
-          </div>
-          <div className="text-gray-500">
-            Receive Request From {this.props.ip}
-          </div>
-          <Link to="/search">
-            <div className="underline cursor-pointer text-green-700 ">
-              Navigate To Search Page
-            </div>
-          </Link>
+      <Scaffold title="Home">
+        <div className={`container mx-auto flex flex-col items-center pb-32`}>
+          <Search
+            className={classNames(list?.length ? "mt-20" : "mt-40")}
+            onSearch={(keyword: string) => {
+              navigateTo(`/`, { keyword: keyword?.length ? keyword : null });
+            }}
+          />
+          <Table className="mt-5" columns={columns} data={list} />
         </div>
       </Scaffold>
     );

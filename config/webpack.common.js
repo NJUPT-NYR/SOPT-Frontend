@@ -104,6 +104,8 @@ var serverConfig = {
       ENALBE_SERVER_CLUSTER:
         String(process.env.ENALBE_SERVER_CLUSTER).toLowerCase() === "true",
       SERVER_PORT: Number(process.env.SERVER_PORT),
+      ENABLE_MOCK: process.env.ENABLE_MOCK,
+      API_GATEWAY_URL: process.env.API_GATEWAY_URL,
     }),
   ],
   resolve: {
@@ -139,6 +141,11 @@ var clientConfig = {
     new HtmlWebpackPlugin({
       templateContent: htmlTemplate,
       filename: "index.html",
+    }),
+    new webpack.DefinePlugin({
+      SERVER_PORT: Number(process.env.SERVER_PORT),
+      ENABLE_MOCK: process.env.ENABLE_MOCK,
+      API_GATEWAY_URL: process.env.API_GATEWAY_URL,
     }),
   ],
   resolve: {

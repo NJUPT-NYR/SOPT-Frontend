@@ -1,5 +1,7 @@
 import Home from "./Home/Home";
 import Profile from "./Profile/Profile";
-import Search from "./Search/Search";
+import Uploading from "./Uploading/Uploading";
+import Help from "./Help/Help";
+import NotFound from "./NotFound/NotFound";
 
-export const containers = [Home, Profile, Search];
+export const containers = [Home, Profile, Uploading, Help, NotFound];
