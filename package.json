@@ -29,6 +29,7 @@
     "react-helmet": "^6.1.0",
     "react-icons": "^4.2.0",
     "react-mobx": "^0.0.4",
+    "react-table": "^7.6.3",
     "tailwindcss": "^2.0.3"
   },
   "devDependencies": {
@@ -49,6 +50,7 @@
     "@types/query-string": "^6.3.0",
     "@types/react": "^17.0.1",
     "@types/react-dom": "^17.0.0",
+    "@types/react-table": "^7.0.28",
     "@typescript-eslint/eslint-plugin": "^4.15.0",
     "@typescript-eslint/parser": "^4.15.0",
     "autoprefixer": "^10.0.2",

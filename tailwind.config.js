@@ -6,7 +6,9 @@ module.exports = {
   purge: ["./src/**/*.tsx", "./src/**/*.css"],
   theme: {
     extend: {
-      width: {},
+      gridTemplateRows: {
+        scaffold: "auto 35px",
+      },
     },
   },
   variants: {},

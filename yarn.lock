@@ -1491,6 +1491,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-table@^7.0.28":
+  version "7.0.28"
+  resolved "https://registry.npmjs.org/@types/react-table/-/react-table-7.0.28.tgz#763383c3e7a285892ee64f311ee97a9c254b2bb0"
+  integrity sha512-crPm70S2KYGj3HJ2zCoeT0t8tdIvKDKCClMd1up3Gi/EDiTZraj3JFUsEL3+oXGSyv+n0EGGAf9a+0XsmdGpXA==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react@*", "@types/react@^17.0.1":
   version "17.0.1"
   resolved "https://registry.npm.taobao.org/@types/react/download/@types/react-17.0.1.tgz?cache=0&sync_timestamp=1612307459637&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Freact%2Fdownload%2F%40types%2Freact-17.0.1.tgz#eb1f1407dea8da3bc741879c1192aa703ab9975b"
@@ -7585,6 +7592,11 @@ react-side-effect@^2.1.0:
   version "2.1.1"
   resolved "https://registry.npm.taobao.org/react-side-effect/download/react-side-effect-2.1.1.tgz#66c5701c3e7560ab4822a4ee2742dee215d72eb3"
   integrity sha1-ZsVwHD51YKtIIqTuJ0Le4hXXLrM=
+
+react-table@^7.6.3:
+  version "7.6.3"
+  resolved "https://registry.npmjs.org/react-table/-/react-table-7.6.3.tgz#76434392b3f62344bdb704f5b227c2f29c1ffb14"
+  integrity sha512-hfPF13zDLxPMpLKzIKCE8RZud9T/XrRTsaCIf8zXpWZIZ2juCl7qrGpo3AQw9eAetXV5DP7s2GDm+hht7qq5Dw==
 
 react@^16.2.0:
   version "16.14.0"

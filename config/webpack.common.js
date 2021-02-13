@@ -133,8 +133,8 @@ var clientConfig = {
   plugins: [
     new webpack.CleanPlugin(),
     new MiniCssExtractPlugin({
-      filename: "static/css/[name]_[hash].css",
-      chunkFilename: "static/css/[id]_[hash].css",
+      filename: "static/css/[name]_[chunkhash].css",
+      chunkFilename: "static/css/[id]_[chunkhash].css",
     }),
     new HtmlWebpackPlugin({
       templateContent: htmlTemplate,
