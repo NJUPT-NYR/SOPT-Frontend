@@ -10,5 +10,7 @@
     "typescript": "javascript",
     "typescriptreact": "javascript"
   },
-  "tailwindCSS.emmetCompletions": true
+  "tailwindCSS.emmetCompletions": true,
+  "eslint.run": "onSave",
+  "prettier.enable": true
 }
