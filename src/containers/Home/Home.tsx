@@ -11,18 +11,34 @@ import styles from "./home.module.css";
 import { IRecord } from "@/utils/interface";
 import { requestRecords } from "@/utils/model";
 import { GoArrowDown, GoArrowUp, GoCheck } from "react-icons/go";
+import { BiLink } from "react-icons/bi";
 
 const columns: Column<IRecord>[] = [
   {
     Header: "Name",
     accessor(row) {
-      return <span className="text-gray-600">{row.name}</span>;
+      return (
+        <span
+          title={row.name}
+          className="text-gray-600 w-table-col-name overflow-hidden overflow-ellipsis"
+        >
+          {row.name}
+        </span>
+      );
     },
   },
   {
     Header: "Link",
     accessor(row) {
-      return <span className="text-gray-600">{row.link}</span>;
+      return (
+        <a
+          href={row.link}
+          title={row.link}
+          className="block cursor-pointer hover:bg-gray-100 rounded-md px-5 py-2 "
+        >
+          <BiLink />
+        </a>
+      );
     },
   },
   {
@@ -39,21 +55,33 @@ const columns: Column<IRecord>[] = [
   },
   {
     id: "uploadCount",
-    Header: <GoArrowUp className="text-xl" />,
+    Header: (
+      <div className="flex justify-center">
+        <GoArrowUp className="text-xl" />
+      </div>
+    ),
     accessor(row) {
       return <span className="text-gray-600">{row.uploadCount}</span>;
     },
   },
   {
     id: "downloadCount",
-    Header: <GoArrowDown className="text-xl" />,
+    Header: (
+      <div className="flex justify-center">
+        <GoArrowDown className="text-xl" />
+      </div>
+    ),
     accessor(row) {
       return <span className="text-gray-600">{row.downloadCount}</span>;
     },
   },
   {
     id: "completeCount",
-    Header: <GoCheck className="text-xl" />,
+    Header: (
+      <div className="flex justify-center">
+        <GoCheck className="text-xl" />
+      </div>
+    ),
     accessor(row) {
       return <span className="text-gray-600">{row.completeCount}</span>;
     },
@@ -86,7 +114,7 @@ export default class Home extends BasicServerPage<IHomeProps, IHomeState> {
             }}
           />
           <Table
-            className="mt-5"
+            className="mt-5 overflow-scroll lg:w-table md:w-table-md max-w-9/10-screen "
             columns={columns}
             data={list}
             empty={

@@ -43,7 +43,7 @@ export default class Search extends React.Component<
           }}
         />
         <button
-          className="ml-2 focus:outline-none "
+          className="ml-2 focus:outline-none hover:bg-gray-100 rounded-md px-5 py-2 "
           onClick={this.handleSearch}
         >
           <GoSearch className="text-3xl" />

@@ -9,6 +9,14 @@ module.exports = {
       gridTemplateRows: {
         scaffold: "auto 35px",
       },
+      width: {
+        table: "1200px",
+        "table-md": "600px",
+        "table-col-name": "630px",
+      },
+      maxWidth: {
+        "9/10-screen": "90vw",
+      },
     },
   },
   variants: {},

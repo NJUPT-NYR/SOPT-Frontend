@@ -23,7 +23,7 @@ function Table({ columns, data, className, empty }: ITable) {
   return (
     <div
       className={classNames(
-        "shadow overflow-hidden border-b border-gray-200 sm:rounded-lg",
+        "shadow border-b border-gray-200 sm:rounded-lg",
         className
       )}
     >
@@ -38,7 +38,7 @@ function Table({ columns, data, className, empty }: ITable) {
                 <th
                   key={column.id}
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-3 py-1 text-center text-xs font-medium text-gray-500 uppercase tracking-wider  "
                   {...column.getHeaderProps()}
                 >
                   {column.render("Header")}
@@ -60,7 +60,7 @@ function Table({ columns, data, className, empty }: ITable) {
                     return (
                       <td
                         key={cell.value}
-                        className="px-6 py-4 whitespace-nowrap"
+                        className="px-2 py-2 whitespace-nowrap"
                         {...cell.getCellProps()}
                       >
                         <div className="grid place-items-center">
