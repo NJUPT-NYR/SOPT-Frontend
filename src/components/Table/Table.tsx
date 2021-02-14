@@ -6,11 +6,12 @@ interface ITable<TData extends object = any> {
   columns: Array<Column<TData>>;
   data: TData[];
   className?: string;
+  empty?: JSX.Element;
 }
 
 export default React.memo(Table, (prev, current) => prev === current);
 
-function Table({ columns, data, className }: ITable) {
+function Table({ columns, data, className, empty }: ITable) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -32,9 +33,10 @@ function Table({ columns, data, className }: ITable) {
       >
         <thead className="bg-gray-50">
           {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
+            <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
                 <th
+                  key={column.id}
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   {...column.getHeaderProps()}
@@ -49,25 +51,32 @@ function Table({ columns, data, className }: ITable) {
           className="bg-white divide-y divide-gray-200"
           {...getTableBodyProps()}
         >
-          {rows.map((row, _key) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td
-                      className="px-6 py-4 whitespace-nowrap"
-                      {...cell.getCellProps()}
-                    >
-                      <div className="grid place-items-center">
-                        {cell.render("Cell")}
-                      </div>
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
+          {rows.length ? (
+            rows.map((row, _key) => {
+              prepareRow(row);
+              return (
+                <tr key={row.id} {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td
+                        key={cell.value}
+                        className="px-6 py-4 whitespace-nowrap"
+                        {...cell.getCellProps()}
+                      >
+                        <div className="grid place-items-center">
+                          {cell.render("Cell")}
+                        </div>
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td colSpan={columns.length}>{empty}</td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>

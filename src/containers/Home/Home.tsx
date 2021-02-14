@@ -10,35 +10,53 @@ import { BasicServerPage } from "@/utils";
 import styles from "./home.module.css";
 import { IRecord } from "@/utils/interface";
 import { requestRecords } from "@/utils/model";
+import { GoArrowDown, GoArrowUp, GoCheck } from "react-icons/go";
 
 const columns: Column<IRecord>[] = [
   {
     Header: "Name",
-    accessor: "name",
+    accessor(row) {
+      return <span className="text-gray-600">{row.name}</span>;
+    },
   },
   {
     Header: "Link",
-    accessor: "link",
+    accessor(row) {
+      return <span className="text-gray-600">{row.link}</span>;
+    },
   },
   {
     Header: "Size",
-    accessor: "size",
+    accessor(row) {
+      return <span className="text-gray-600">{row.size}</span>;
+    },
   },
   {
     Header: "Date",
-    accessor: "date",
+    accessor(row) {
+      return <span className="text-gray-600">{row.date}</span>;
+    },
   },
   {
-    Header: "Upload",
-    accessor: "uploadCount",
+    id: "uploadCount",
+    Header: <GoArrowUp className="text-xl" />,
+    accessor(row) {
+      return <span className="text-gray-600">{row.uploadCount}</span>;
+    },
   },
   {
-    Header: "Download",
-    accessor: "downloadCount",
+    id: "downloadCount",
+    Header: <GoArrowDown className="text-xl" />,
+    accessor(row) {
+      return <span className="text-gray-600">{row.downloadCount}</span>;
+    },
   },
   {
-    Header: "Complete",
-    accessor: "completeCount",
+    id: "completeCount",
+    Header: <GoCheck className="text-xl" />,
+    accessor(row) {
+      return <span className="text-gray-600">{row.completeCount}</span>;
+    },
   },
 ];
 
@@ -67,7 +85,16 @@ export default class Home extends BasicServerPage<IHomeProps, IHomeState> {
               navigateTo(`/`, { keyword: keyword?.length ? keyword : null });
             }}
           />
-          <Table className="mt-5" columns={columns} data={list} />
+          <Table
+            className="mt-5"
+            columns={columns}
+            data={list}
+            empty={
+              <div className="p-5 text-center text-xl text-gray-500">
+                Empty Data
+              </div>
+            }
+          />
         </div>
       </Scaffold>
     );

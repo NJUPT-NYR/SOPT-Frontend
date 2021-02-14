@@ -22,6 +22,18 @@ var htmlTemplate = `<!DOCTYPE html>
 `;
 
 /**
+ * @see https://www.webpackjs.com/plugins/define-plugin/
+ */
+var env = {
+  STATIC_FILE_PATH: JSON.stringify("../client/static"),
+  ENALBE_SERVER_CLUSTER:
+    String(process.env.ENALBE_SERVER_CLUSTER).toLowerCase() === "true",
+  SERVER_PORT: Number(process.env.SERVER_PORT),
+  ENABLE_MOCK: String(process.env.ENABLE_MOCK).toLowerCase() === "true",
+  API_GATEWAY_URL: JSON.stringify(process.env.API_GATEWAY_URL),
+};
+
+/**
  * @type {import("webpack").Configuration}
  */
 var serverConfig = {
@@ -97,17 +109,7 @@ var serverConfig = {
     path: path.resolve("./build/server"),
   },
   externals: [nodeExternals({ allowlist: ["react"] })],
-  plugins: [
-    new webpack.CleanPlugin(),
-    new webpack.DefinePlugin({
-      STATIC_FILE_PATH: String("'../client/static'"),
-      ENALBE_SERVER_CLUSTER:
-        String(process.env.ENALBE_SERVER_CLUSTER).toLowerCase() === "true",
-      SERVER_PORT: Number(process.env.SERVER_PORT),
-      ENABLE_MOCK: process.env.ENABLE_MOCK,
-      API_GATEWAY_URL: process.env.API_GATEWAY_URL,
-    }),
-  ],
+  plugins: [new webpack.CleanPlugin(), new webpack.DefinePlugin(env)],
   resolve: {
     extensions: [".ts", ".tsx", ".js", "jsx"],
     alias: {
@@ -142,11 +144,7 @@ var clientConfig = {
       templateContent: htmlTemplate,
       filename: "index.html",
     }),
-    new webpack.DefinePlugin({
-      SERVER_PORT: Number(process.env.SERVER_PORT),
-      ENABLE_MOCK: process.env.ENABLE_MOCK,
-      API_GATEWAY_URL: process.env.API_GATEWAY_URL,
-    }),
+    new webpack.DefinePlugin(env),
   ],
   resolve: {
     extensions: [".ts", ".tsx", ".js", "jsx"],

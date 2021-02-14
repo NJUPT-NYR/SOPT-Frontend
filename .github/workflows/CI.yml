@@ -17,6 +17,12 @@ jobs:
 
       - name: build
         run: yarn build
+        env:
+          NODE_ENV: production
+          ENALBE_SERVER_CLUSTER: true
+          SERVER_PORT: 8000
+          ENABLE_MOCK: false
+          API_GATEWAY_URL: http://localhost:8000/api
 
       - name: test
         run: yarn test
