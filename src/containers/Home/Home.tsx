@@ -2,8 +2,16 @@ import React from "react";
 import type { Context } from "koa";
 import type { Column } from "react-table";
 import classNames from "classnames";
+import qs from "query-string";
 
-import { Link, navigateTo, Scaffold, Search, Table } from "@/components";
+import {
+  Link,
+  navigateTo,
+  Pagination,
+  Scaffold,
+  Search,
+  Table,
+} from "@/components";
 import { Page } from "@/utils/decorator";
 import { BasicServerPage } from "@/utils";
 
@@ -92,6 +100,7 @@ interface IHomeProps {
   list?: number[];
   keyword?: string;
   pagination?: number;
+  maxPagination?: number;
 }
 
 interface IHomeState {}
@@ -99,11 +108,11 @@ interface IHomeState {}
 @Page("/")
 export default class Home extends BasicServerPage<IHomeProps, IHomeState> {
   static async getInitPageProps(ctx: Context) {
-    const result = await requestRecords({ keyword: ctx.query.keyword });
-    return { list: result.data };
+    const { data } = await requestRecords({ ...ctx.query });
+    return { ...ctx.query, ...data };
   }
   render() {
-    const { list } = this.props;
+    const { list, keyword, pagination, maxPagination } = this.props;
     return (
       <Scaffold title="Home">
         <div className={`container mx-auto flex flex-col items-center pb-32`}>
@@ -113,16 +122,28 @@ export default class Home extends BasicServerPage<IHomeProps, IHomeState> {
               navigateTo(`/`, { keyword: keyword?.length ? keyword : null });
             }}
           />
-          <Table
-            className="mt-5 overflow-scroll lg:w-table md:w-table-md max-w-9/10-screen "
-            columns={columns}
-            data={list}
-            empty={
-              <div className="p-5 text-center text-xl text-gray-500">
-                Empty Data
-              </div>
-            }
-          />
+          <div className="lg:w-table md:w-table-md max-w-9/10-screen">
+            <Table
+              className="mt-5 overflow-scroll w-full  "
+              columns={columns}
+              data={list}
+              empty={
+                <div className="p-5 text-center text-xl text-gray-500">
+                  Empty Data
+                </div>
+              }
+            />
+            <div className="flex justify-end w-full">
+              <Pagination
+                maxPagination={maxPagination}
+                currentPagination={pagination ?? 1}
+                className="mt-4"
+                handleCreatePath={(pagination) =>
+                  qs.stringifyUrl({ url: "/", query: { pagination, keyword } })
+                }
+              />
+            </div>
+          </div>
         </div>
       </Scaffold>
     );

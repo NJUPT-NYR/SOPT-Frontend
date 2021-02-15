@@ -4,7 +4,7 @@ import mockjs from "mockjs";
 
 const router = new KoaRouter();
 
-const records = Array.from({ length: 20 }).map(() =>
+const records = Array.from({ length: 1000 }).map(() =>
   mockjs.mock({
     "name|+1": mockjs.Random.pick([
       "Kimetsu Gakuen - Valentine-hen",
@@ -26,10 +26,19 @@ const records = Array.from({ length: 20 }).map(() =>
 
 router.get("/records", (ctx) => {
   let result = records;
+  let pagination = ctx.query.pagination ?? 1;
+  pagination = Math.max(1, Math.min(pagination, 50));
   if (ctx.query.keyword) {
     result = result.filter((one) => one.name.includes(ctx.query.keyword));
   }
-  ctx.body = result;
+  if (pagination) {
+    result = result.slice(20 * (pagination - 1), 20 * pagination);
+  }
+  ctx.body = {
+    list: result,
+    maxPagination: 50,
+    pagination,
+  };
 });
 
 export default mount("/mock", router.routes());
