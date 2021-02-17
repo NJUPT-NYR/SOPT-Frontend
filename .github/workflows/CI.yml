@@ -15,14 +15,11 @@ jobs:
       - name: install packages
         run: yarn install --ignore-scripts # disable preisntall script
 
+      - name: wirte env file
+        run: echo "NODE_ENV=production\nENALBE_SERVER_CLUSTER=true\nSERVER_PORT=8000\nENABLE_MOCK=false\nAPI_GATEWAY_URL=http://localhost:8000/api\n" > .env.production
+
       - name: build
-        run: yarn build
-        env:
-          NODE_ENV: production
-          ENALBE_SERVER_CLUSTER: true
-          SERVER_PORT: 8000
-          ENABLE_MOCK: false
-          API_GATEWAY_URL: http://localhost:8000/api
+        run: ./node_modules/.bin/webpack --config config/webpack.production.js --progress
 
       - name: test
         run: yarn test
