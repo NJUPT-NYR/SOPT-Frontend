@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "dotenv -e .env.production -- webpack --config config/webpack.production.js --progress ",
-    "start": "dotenv -e .env.development -- webpack --config config/webpack.development.js --progress --watch",
+    "build": "npx --yes -p dotenv-cli -p path-exists-cli -c \"path-exists .env.production && dotenv -e .env.production -- webpack --config config/webpack.production.js --progress || echo 'FATAL: FILE .env.production NOT FOUND!!!' \"",
+    "start": "npx --yes -p dotenv-cli -p path-exists-cli -c \"path-exists .env.development && dotenv -e .env.development -- webpack --config config/webpack.development.js --progress --watch || echo 'FATAL: FILE .env.development NOT FOUND!!!'  \"",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./src/",
     "prettier": "prettier ./src/**/**.{ts,tsx} --loglevel warn --write",
     "preinstall": "npx --yes only-allow yarn",
@@ -61,7 +61,6 @@
     "babel-loader": "^8.2.2",
     "css-loader": "^5.0.2",
     "cssnano": "^4.1.10",
-    "dotenv-cli": "^4.0.0",
     "eslint": "^7.20.0",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-prettier": "^3.3.1",
