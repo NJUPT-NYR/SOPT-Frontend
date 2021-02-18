@@ -10,8 +10,7 @@ module.exports = {
         scaffold: "auto 35px",
       },
       width: {
-        table: "1200px",
-        "table-md": "600px",
+        300: "300px",
         "table-col-name": "630px",
       },
       maxWidth: {
@@ -20,5 +19,5 @@ module.exports = {
     },
   },
   variants: {},
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
 };

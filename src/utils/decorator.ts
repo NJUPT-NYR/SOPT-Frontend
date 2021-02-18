@@ -9,7 +9,7 @@ export function Page(path: string): ClassDecorator {
 
 export function RequireAuth(roles?: any[]): ClassDecorator {
   return function (target) {
-    Reflect.defineMetadata("roles", roles, target);
+    Reflect.defineMetadata("authRoles", roles, target);
     return target;
   };
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import "reflect-metadata";
 
-import { Router, Route } from "@/components";
+import { Router, Route, navigateTo } from "@/components";
 import { containers } from "@/containers";
 import { fetchPageProps } from "@/utils/request";
 import { urlMatch } from "@/utils";
@@ -21,12 +21,19 @@ interface IAppState {
 }
 
 export default class App extends React.Component<IAppProps, IAppState> {
-  handleFetchPageProps = async (path: string) => {
-    const matched = routes.find((one) => urlMatch(one.path, path).isMatched);
+  handleFetchPageProps = async (nextPath: string) => {
+    const matched = routes.find(
+      (one) => urlMatch(one.path, nextPath).isMatched
+    );
     if (matched.component.getInitPageProps) {
-      return await fetchPageProps(path);
+      const { data, authCheckPass } = await fetchPageProps(nextPath);
+      if (!authCheckPass) {
+        return { nextPath: "/login", nextPageProps: null };
+      } else {
+        return { nextPath, nextPageProps: data };
+      }
     } else {
-      return null;
+      return { nextPath, nextPageProps: null };
     }
   };
   render() {

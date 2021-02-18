@@ -13,7 +13,7 @@ export const fetchPageProps = (path: string, queryObject?: any) => {
     },
     { skipNull: true }
   );
-  return axios.get(nextPath).then((response) => parserProps(response.data));
+  return axios.get(nextPath).then((response) => response.data);
 };
 
 const baseURL = ENABLE_MOCK

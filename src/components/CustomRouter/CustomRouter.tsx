@@ -27,8 +27,8 @@ export class Router extends React.Component<IRouterProps, IRouterState> {
     pageProps: this.props.initPageProps,
   };
   historyState = {};
-  handlePathChange = async ({ path: nextPath, forward }) => {
-    const nextPageProps = await this.props.fetchPageProps(nextPath);
+  handlePathChange = async ({ path, forward }) => {
+    const { nextPath, nextPageProps } = await this.props.fetchPageProps(path);
     this.setState({ path: nextPath, pageProps: nextPageProps });
     if (forward) {
       window.history.pushState(this.historyState, nextPath, nextPath);

@@ -19,7 +19,7 @@ export default class NotFound extends BasicServerPage {
             </a>
             <div>
               <span>404.</span>
-              <span className="text-gray-400 mt-3">That's an error</span>
+              <span className="text-gray-400 mt-3">{"That's an error"}</span>
             </div>
           </div>
           <div className="ml-7">

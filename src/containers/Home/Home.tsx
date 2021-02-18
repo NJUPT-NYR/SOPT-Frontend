@@ -122,7 +122,7 @@ export default class Home extends BasicServerPage<IHomeProps, IHomeState> {
               navigateTo(`/`, { keyword: keyword?.length ? keyword : null });
             }}
           />
-          <div className="lg:w-table md:w-table-md max-w-9/10-screen">
+          <div className="max-w-9/10-screen">
             <Table
               className="mt-5 overflow-scroll w-full  "
               columns={columns}

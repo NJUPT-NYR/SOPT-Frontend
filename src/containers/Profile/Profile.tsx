@@ -1,16 +1,18 @@
 import React from "react";
-import { Page } from "@/utils/decorator";
+import { Page, RequireAuth } from "@/utils/decorator";
 import { BasicServerPage } from "@/utils";
 import type { Context } from "koa";
 import { Link, Scaffold } from "@/components";
 import { GoMarkGithub } from "react-icons/go";
+import { AUTH_ROLES } from "@/utils/constants";
 
 interface IProfileProps {
   name: string;
 }
 
+@RequireAuth([AUTH_ROLES.USER])
 @Page("/profile")
-export default class Profile extends BasicServerPage<IProfileProps, null> {
+export default class Profile extends BasicServerPage<IProfileProps, {}> {
   static getInitPageProps(ctx: Context) {
     return Promise.resolve({ name: "cattchen" });
   }
