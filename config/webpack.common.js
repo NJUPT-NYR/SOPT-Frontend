@@ -37,7 +37,6 @@ var env = {
  * @type {import("webpack").Configuration}
  */
 var serverConfig = {
-  mode: process.env.NODE_ENV,
   target: "node",
   entry: {
     server: path.resolve("./src/server.ts"),
@@ -124,14 +123,13 @@ var serverConfig = {
  * @type {import("webpack").Configuration}
  */
 var clientConfig = {
-  mode: process.env.NODE_ENV,
   target: "web",
   entry: {
     index: path.resolve("./src/index.tsx"),
   },
   output: {
     path: path.resolve("./build/client"),
-    filename: "static/js/[name].js",
+    filename: "static/js/[name]_[chunkhash].js",
     publicPath: "/",
   },
   plugins: [

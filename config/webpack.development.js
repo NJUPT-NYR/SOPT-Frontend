@@ -6,6 +6,7 @@ var { commonClientConfig, commonServerConfig } = require("./webpack.common"),
  * @type {import("webpack").Configuration}
  */
 var serverConfig = merge(commonServerConfig, {
+  mode: "development",
   plugins: [new NodemonPlugin()],
 });
 
@@ -13,6 +14,7 @@ var serverConfig = merge(commonServerConfig, {
  * @type {import("webpack").Configuration}
  */
 var clientConfig = merge(commonClientConfig, {
+  mode: "development",
   optimization: {
     splitChunks: {
       chunks: "all",

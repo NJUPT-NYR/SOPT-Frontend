@@ -6,6 +6,7 @@ var { commonClientConfig, commonServerConfig } = require("./webpack.common"),
  * @type {import("webpack").Configuration}
  */
 var serverConfig = merge(commonServerConfig, {
+  mode: "production",
   optimization: {
     minimizer: [
       new TerserPlugin({
@@ -21,6 +22,7 @@ var serverConfig = merge(commonServerConfig, {
  * @type {import("webpack").Configuration}
  */
 var clientConfig = merge(commonClientConfig, {
+  mode: "production",
   optimization: {
     splitChunks: {
       chunks: "all",
