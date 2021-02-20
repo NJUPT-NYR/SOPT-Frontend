@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "npx --yes -p dotenv-cli -p path-exists-cli -c \"path-exists .env.production && dotenv -e .env.production -- webpack --config config/webpack.production.js --progress || echo 'FATAL: FILE .env.production NOT FOUND!!!' \"",
-    "start": "npx --yes -p dotenv-cli -p path-exists-cli -c \"path-exists .env.development && dotenv -e .env.development -- webpack --config config/webpack.development.js --progress --watch || echo 'FATAL: FILE .env.development NOT FOUND!!!'  \"",
+    "build": "npx --yes -p dotenv-cli -p path-exists-cli -p cross-env -c \"path-exists .env.production && cross-env NODE_ENV=production dotenv -e .env.production -- webpack --config config/webpack.production.js --progress || echo 'FATAL: FILE .env.production NOT FOUND!!!' \"",
+    "start": "npx --yes -p dotenv-cli -p path-exists-cli -p cross-env -c \"path-exists .env.development && cross-env NODE_ENV=development dotenv -e .env.development -- webpack --config config/webpack.development.js --progress --watch || echo 'FATAL: FILE .env.development NOT FOUND!!!'  \"",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./src/",
     "prettier": "prettier ./src/**/**.{ts,tsx} --loglevel warn --write",
     "preinstall": "npx --yes only-allow yarn",
