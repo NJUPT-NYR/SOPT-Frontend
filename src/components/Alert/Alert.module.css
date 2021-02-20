@@ -1,0 +1,15 @@
+.login__container--success {
+  @apply border-green-200 bg-green-100;
+}
+
+.login__container--info {
+  @apply border-blue-200 bg-blue-100;
+}
+
+.login__container--warning {
+  @apply border-yellow-200 bg-yellow-100;
+}
+
+.login__container--error {
+  @apply border-red-200 bg-red-100;
+}

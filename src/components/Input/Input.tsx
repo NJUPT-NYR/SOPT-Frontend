@@ -1,28 +1,30 @@
 import React from "react";
 import classNames from "classnames";
+import { IBaseComponent } from "../base";
 
-interface IInput {
+interface IInput extends IBaseComponent {
   placeholder?: string;
   value?: string;
   onInput?: (value: string) => void;
   defaultValue?: string;
-  classname?: string;
 }
 
-export default function Input({
-  placeholder,
-  value,
-  onInput,
-  defaultValue,
-  classname,
-}: IInput) {
+export default function Input(props: IInput) {
+  const {
+    placeholder,
+    value,
+    onInput,
+    defaultValue,
+    className,
+    ...restProps
+  } = props;
   return (
     <div className="mt-1 relative rounded-md shadow-sm">
       <input
         type="text"
         className={classNames(
           "focus:ring-offset-gray-600 focus:outline-none outline-none block pl-2 pr-2 sm:text-sm border-gray-300 rounded-md",
-          classname
+          className
         )}
         placeholder={placeholder}
         defaultValue={defaultValue}
@@ -30,6 +32,7 @@ export default function Input({
         onChange={(event) => {
           onInput?.(event.target.value);
         }}
+        {...restProps}
       />
     </div>
   );

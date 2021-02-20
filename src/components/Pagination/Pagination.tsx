@@ -2,20 +2,22 @@ import React from "react";
 import { GoChevronLeft, GoChevronRight } from "react-icons/go";
 import classNames from "classnames";
 import { Link } from "../CustomRouter/CustomRouter";
+import { IBaseComponent } from "../base";
 
-interface IPagination {
+interface IPagination extends IBaseComponent {
   maxPagination: number;
   currentPagination: number;
   handleCreatePath: (pagination: number) => string;
-  className?: string;
 }
 
-export default function Pagination({
-  className,
-  currentPagination,
-  maxPagination,
-  handleCreatePath,
-}: IPagination) {
+export default function Pagination(props: IPagination) {
+  const {
+    className,
+    currentPagination,
+    maxPagination,
+    handleCreatePath,
+    ...restProps
+  } = props;
   const paginations = Array.from({ length: 6 })
     .map((_v, k) => currentPagination - 3 + k)
     .filter((one) => one > 0 && one <= maxPagination);
@@ -26,6 +28,7 @@ export default function Pagination({
         className
       )}
       aria-label="Pagination"
+      {...restProps}
     >
       <Link
         to={handleCreatePath(Math.max(1, currentPagination - 1))}

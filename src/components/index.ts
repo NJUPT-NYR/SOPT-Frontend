@@ -7,3 +7,4 @@ export { default as Search } from "./Search/Search";
 export { default as Pagination } from "./Pagination/Pagination";
 export { default as Input } from "./Input/Input";
 export { default as Button } from "./Button/Button";
+export { default as Alert } from "./Alert/Alert";

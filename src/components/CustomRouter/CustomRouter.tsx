@@ -3,6 +3,7 @@ import qs from "query-string";
 import React from "react";
 import { urlMatch } from "@/utils";
 import { Observer } from "@/utils";
+import { IBaseComponent } from "../base";
 
 export const PathContext = React.createContext({
   path: null,
@@ -73,11 +74,8 @@ export class Route extends React.Component<IRouteProps, null> {
   }
 }
 
-interface ILinkProps {
+interface ILinkProps extends IBaseComponent {
   to: string;
-  children: JSX.Element | JSX.Element[];
-  onClick?: (event: any) => void;
-  className?: string;
 }
 export class Link extends React.Component<ILinkProps, any> {
   handleClick = (event) => {

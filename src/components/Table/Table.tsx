@@ -1,17 +1,18 @@
 import React from "react";
 import { useTable, Column } from "react-table";
 import classNames from "classnames";
+import { IBaseComponent } from "../base";
 
-interface ITable<TData extends object = any> {
+interface ITable<TData extends object = any> extends IBaseComponent {
   columns: Array<Column<TData>>;
   data: TData[];
-  className?: string;
   empty?: JSX.Element;
 }
 
 export default React.memo(Table, (prev, current) => prev === current);
 
-function Table({ columns, data, className, empty }: ITable) {
+function Table(props: ITable) {
+  const { columns, data, className, empty } = props;
   const {
     getTableProps,
     getTableBodyProps,

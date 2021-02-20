@@ -1,11 +1,11 @@
 import React from "react";
 import { GoSearch } from "react-icons/go";
+import { IBaseComponent } from "../base";
 
-interface ISearchProps {
+interface ISearchProps extends IBaseComponent {
   keyword?: string;
   onInput?: (event) => void;
   onSearch?: (nextKeyword) => void;
-  className?: string;
 }
 
 interface ISearchState {

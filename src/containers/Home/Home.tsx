@@ -15,7 +15,6 @@ import {
 import { Page } from "@/utils/decorator";
 import { BasicServerPage } from "@/utils";
 
-import styles from "./home.module.css";
 import { IRecord } from "@/utils/interface";
 import { requestRecords } from "@/utils/model";
 import { GoArrowDown, GoArrowUp, GoCheck } from "react-icons/go";
