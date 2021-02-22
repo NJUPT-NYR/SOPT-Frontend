@@ -30,3 +30,16 @@ node build/server/server.js
 ### `npm install`/`yarn install` did not work
 
 It is highly recommanded to use `yarn` as package manager. If you quite sure that you're using yarn, run `yarn install --ignore-scripts` to bypass check.
+
+## Roadmap
+
+- [x] HomePage
+  - [x] Search
+  - [x] Pagination
+  - [x] Table
+- [ ] Profile
+- [ ] Uploading
+- [ ] Help
+- [x] NotFound
+- [x] Login
+- [ ] Registry
