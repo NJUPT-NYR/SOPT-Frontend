@@ -9,8 +9,8 @@ export default function Button(props: IButton) {
   return (
     <div
       className={classNames(
-        "rounded-md shadow-md px-5 py-3 bg-gray-400 cursor-pointer hover:bg-gray-300",
-        className
+        className,
+        "rounded-md shadow-md px-5 py-3 bg-gray-700 cursor-pointer hover:bg-gray-600 text-white"
       )}
       {...restProps}
     >

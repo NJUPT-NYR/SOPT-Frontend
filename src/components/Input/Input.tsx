@@ -19,11 +19,11 @@ export default function Input(props: IInput) {
     ...restProps
   } = props;
   return (
-    <div className="mt-1 relative rounded-md shadow-sm">
+    <div className="mt-1 relative rounded-md shadow-sm mx-auto">
       <input
         type="text"
         className={classNames(
-          "focus:ring-offset-gray-600 focus:outline-none outline-none block pl-2 pr-2 sm:text-sm border-gray-300 rounded-md",
+          "focus:ring-offset-gray-600 focus:outline-none outline-none block pl-2 pr-2 sm:text-sm border-gray-300 rounded-md w-full ",
           className
         )}
         placeholder={placeholder}

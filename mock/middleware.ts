@@ -41,4 +41,12 @@ router.get("/records", (ctx) => {
   };
 });
 
+router.post("/user/login", (ctx) => {
+  ctx.body = {
+    data: null,
+    success: false,
+    errMsg: "Authorization Fail!",
+  };
+});
+
 export default mount("/mock", router.routes());

@@ -4,6 +4,7 @@ import React from "react";
 import { urlMatch } from "@/utils";
 import { Observer } from "@/utils";
 import { IBaseComponent } from "../base";
+import classNames from "classnames";
 
 export const PathContext = React.createContext({
   path: null,
@@ -88,9 +89,13 @@ export class Link extends React.Component<ILinkProps, any> {
     }
   };
   render() {
-    const { to, ...rest } = this.props;
+    const { to, className, ...rest } = this.props;
     return (
-      <a onClick={this.handleClick} {...rest}>
+      <a
+        className={classNames("cursor-pointer", className)}
+        onClick={this.handleClick}
+        {...rest}
+      >
         {this.props.children}
       </a>
     );
