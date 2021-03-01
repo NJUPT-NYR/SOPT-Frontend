@@ -1,6 +1,6 @@
 import React from "react";
-import { Helmet } from "react-helmet";
 import { Navigation, Footer } from "@/components";
+import Head from "next/head";
 
 interface IScaffold {
   children: JSX.Element | JSX.Element[];
@@ -10,9 +10,9 @@ interface IScaffold {
 export default function Scaffold({ children, title }: IScaffold) {
   return (
     <div className="min-h-screen grid grid-rows-scaffold">
-      <Helmet>
+      <Head>
         <title>{title ? title + "|NYR" : "NYR"}</title>
-      </Helmet>
+      </Head>
       <div className="flex flex-col">
         <Navigation />
         <div className="flex-1">{children}</div>

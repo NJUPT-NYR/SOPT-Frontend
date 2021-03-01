@@ -1,7 +1,8 @@
 import React from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
-import { Link, PathContext } from "@/components/CustomRouter/CustomRouter";
-import { urlMatch } from "@/utils";
+// import { Link, PathContext } from "@/components/CustomRouter/CustomRouter";
 
 const navigationItems = [
   {
@@ -23,6 +24,8 @@ const navigationItems = [
 ];
 
 export default function Navigation() {
+  const router = useRouter();
+
   return (
     <nav className="bg-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -33,25 +36,22 @@ export default function Navigation() {
             </div>
             <div>
               <div className="ml-10 flex items-baseline space-x-4">
-                <PathContext.Consumer>
-                  {(value) => {
-                    return navigationItems.map((item) => {
-                      return (
-                        <Link
-                          key={item.to}
-                          className={
-                            urlMatch(item.to, value.path).isMatched
-                              ? "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer select-none "
-                              : "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer select-none "
-                          }
-                          to={item.to}
-                        >
-                          <span>{item.label}</span>
-                        </Link>
-                      );
-                    });
-                  }}
-                </PathContext.Consumer>
+                {navigationItems.map((item) => {
+                  return (
+                    <span
+                      className={
+                        item.to === router.pathname
+                          ? "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer select-none "
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer select-none "
+                      }
+                      key={item.to}
+                    >
+                      <Link href={item.to}>
+                        <span>{item.label}</span>
+                      </Link>
+                    </span>
+                  );
+                })}
               </div>
             </div>
           </div>

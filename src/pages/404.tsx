@@ -1,17 +1,14 @@
-import { BasicServerPage } from "@/utils";
-import { Page } from "@/utils/decorator";
 import React from "react";
-import { Helmet } from "react-helmet";
 import { GoBug, GoUnverified } from "react-icons/go";
+import Head from "next/head";
 
-@Page("/404")
-export default class NotFound extends BasicServerPage {
+export default class NotFound extends React.Component {
   render() {
     return (
       <div className="min-h-full min-w-full">
-        <Helmet>
+        <Head>
           <title>Error 404(Not Found!!!)</title>
-        </Helmet>
+        </Head>
         <div className="flex justify-center items-center mt-40">
           <div>
             <a href="/" className="block p-2">

@@ -12,24 +12,23 @@ User Interface and frontend framework for SOPT.
 #For development
 cp .env.example .env.development
 yarn install
-yarn start
+yarn dev
 
 #For production
 cp .env.example .env.production
 yarn install
-yarn build
-node build/server/server.js
+yarn start
 ```
-
-## Useful Links
-
-- [How This Website's Rendering Works](https://zhuanlan.zhihu.com/p/350560826)
 
 ## Common Question
 
 ### `npm install`/`yarn install` did not work
 
 It is highly recommanded to use `yarn` as package manager. If you quite sure that you're using yarn, run `yarn install --ignore-scripts` to bypass check.
+
+### Some Issue About `sharp` package
+
+See [https://sharp.pixelplumbing.com/install#custom-prebuilt-binaries](https://sharp.pixelplumbing.com/install#custom-prebuilt-binaries).
 
 ## Roadmap
 

@@ -13,13 +13,13 @@ jobs:
           node-version: "14"
 
       - name: install packages
-        run: yarn install --ignore-scripts # disable preisntall script
+        run: yarn install --ignore-scripts --verbose # disable preisntall script
 
-      - name: wirte env file
-        run: echo "NODE_ENV=production\nENALBE_SERVER_CLUSTER=true\nSERVER_PORT=8000\nENABLE_MOCK=false\nAPI_GATEWAY_URL=http://localhost:8000/api\n" > .env.production
+      - name: write env file
+        run: cp .env.example .env.production
 
       - name: build
-        run: ./node_modules/.bin/webpack --config config/webpack.production.js --progress
+        run: ./node_modules/.bin/next build
 
       - name: test
-        run: yarn test
+        run: yarn test --verbose
