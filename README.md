@@ -42,4 +42,4 @@ It is highly recommanded to use `yarn` as package manager. If you quite sure tha
 - [ ] Help
 - [x] NotFound
 - [x] Login
-- [ ] Registry
+- [ ] SignUp

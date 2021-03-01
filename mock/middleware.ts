@@ -1,8 +1,25 @@
 import KoaRouter from "koa-router";
 import mount from "koa-mount";
-import mockjs from "mockjs";
+import mockjs, { mock } from "mockjs";
 
 const router = new KoaRouter();
+
+const response = {
+  success(data) {
+    return {
+      success: true,
+      data,
+      errMsg: "",
+    };
+  },
+  error(errMsg) {
+    return {
+      success: false,
+      data: null,
+      errMsg,
+    };
+  },
+};
 
 const records = Array.from({ length: 1000 }).map(() =>
   mockjs.mock({
@@ -41,12 +58,30 @@ router.get("/records", (ctx) => {
   };
 });
 
-router.post("/user/login", (ctx) => {
-  ctx.body = {
-    data: null,
-    success: false,
-    errMsg: "Authorization Fail!",
-  };
+router.post("/user/add_user", (ctx) => {
+  const { email, username, password, invite_code } = ctx.request.body;
+  if (invite_code !== "code") {
+    ctx.body = response.error("not allowed to register");
+  } else {
+    response.success({
+      id: mockjs.Random.integer(1, 100),
+      email,
+      username,
+      password,
+      passkey: mockjs.Random.string(),
+    });
+  }
 });
+
+router.post("/user/login", (ctx) => {
+  const { username, password } = ctx.request.body;
+  if (username === "cattchen" && password === "pass") {
+    ctx.body = response.success(null);
+  } else {
+    ctx.body = response.error("username and password not match");
+  }
+});
+
+router.post("/user/logout", (ctx) => {});
 
 export default mount("/mock", router.routes());

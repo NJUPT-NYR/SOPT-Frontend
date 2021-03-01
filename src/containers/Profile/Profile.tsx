@@ -10,7 +10,7 @@ interface IProfileProps {
   name: string;
 }
 
-// @RequireAuth([AUTH_ROLES.USER])
+@RequireAuth([AUTH_ROLES.USER])
 @Page("/profile")
 export default class Profile extends BasicServerPage<IProfileProps, {}> {
   static getInitPageProps(ctx: Context) {
