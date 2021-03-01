@@ -17,6 +17,7 @@ yarn dev
 #For production
 cp .env.example .env.production
 yarn install
+yarn build
 yarn start
 ```
 
