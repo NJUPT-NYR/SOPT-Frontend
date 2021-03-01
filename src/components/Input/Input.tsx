@@ -7,6 +7,8 @@ interface IInput extends IBaseComponent {
   value?: string;
   onInput?: (value: string) => void;
   defaultValue?: string;
+  name?: string;
+  inputRef?: any;
 }
 
 export default function Input(props: IInput) {
@@ -16,14 +18,18 @@ export default function Input(props: IInput) {
     onInput,
     defaultValue,
     className,
+    inputRef,
+    name,
     ...restProps
   } = props;
   return (
     <div className="mt-1 relative rounded-md shadow-sm mx-auto">
       <input
+        ref={inputRef}
+        name={name}
         type="text"
         className={classNames(
-          "focus:ring-offset-gray-600 focus:outline-none outline-none block pl-2 pr-2 sm:text-sm border-gray-300 rounded-md w-full ",
+          "focus:ring-offset-gray-600 focus:outline-none  outline-none block pl-2 pr-2 sm:text-sm border-gray-300 rounded-md w-full",
           className
         )}
         placeholder={placeholder}

@@ -1,8 +1,5 @@
 import React from "react";
-import type { Context } from "koa";
 import { Link, Scaffold } from "@/components";
-import { GoMarkGithub } from "react-icons/go";
-import { AUTH_ROLES } from "@/utils/constants";
 
 export default function Profile() {
   return (

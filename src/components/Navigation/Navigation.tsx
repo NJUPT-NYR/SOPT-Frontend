@@ -2,8 +2,6 @@ import React from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-// import { Link, PathContext } from "@/components/CustomRouter/CustomRouter";
-
 const navigationItems = [
   {
     label: "Home",
@@ -38,18 +36,17 @@ export default function Navigation() {
               <div className="ml-10 flex items-baseline space-x-4">
                 {navigationItems.map((item) => {
                   return (
-                    <span
-                      className={
-                        item.to === router.pathname
-                          ? "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer select-none "
-                          : "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer select-none "
-                      }
-                      key={item.to}
-                    >
-                      <Link href={item.to}>
+                    <Link href={item.to} key={item.to}>
+                      <span
+                        className={
+                          item.to === router.pathname
+                            ? "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer select-none "
+                            : "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer select-none "
+                        }
+                      >
                         <span>{item.label}</span>
-                      </Link>
-                    </span>
+                      </span>
+                    </Link>
                   );
                 })}
               </div>

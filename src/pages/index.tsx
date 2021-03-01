@@ -1,5 +1,4 @@
-import React, { useMemo } from "react";
-import type { Context } from "koa";
+import React, { useEffect, useMemo } from "react";
 import type { Column } from "react-table";
 import classNames from "classnames";
 import qs from "query-string";
@@ -7,10 +6,10 @@ import qs from "query-string";
 import { Link, Pagination, Scaffold, Search, Table } from "@/components";
 import { useRouter } from "next/router";
 import { IRecord } from "@/utils/interface";
-import { requestRecords } from "@/utils/model";
 import { GoArrowDown, GoArrowUp, GoCheck } from "react-icons/go";
 import { BiLink } from "react-icons/bi";
 import { GetServerSideProps } from "next";
+import useSWR from "swr";
 
 const columns: Column<IRecord>[] = [
   {
