@@ -1,30 +1,36 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { Alert, Button, Input, Link, Scaffold } from "@/components";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
+import * as model from "@/utils/model";
 
 export default function Login() {
   const { register, handleSubmit, errors } = useForm();
+  const [formData, setFormData] = useState(null);
+
+  const { data, error } = useSWR(
+    formData && [model.requestUserLogin, formData],
+    {
+      shouldRetryOnError: false,
+    }
+  );
 
   const onSubmit = useCallback((data) => {
-    console.log(data);
+    setFormData(data);
   }, []);
-  // console.log(errors);
+
+  console.log(data);
+
   return (
     <Scaffold title="Login">
       <div className="w-full h-full bg-gray-200 overflow-hidden">
-        {/* <div className="mt-2">
-          {errors && (
-            <Alert
-              type="error"
-              onClose={() => {
-                // this.setState({ loginError: "" });
-              }}
-            >
-              <span>{Object.keys(errors)}</span>
+        <div className="mt-2">
+          {error && (
+            <Alert type="error" closable={false}>
+              <span>{String(error)}</span>
             </Alert>
           )}
-        </div> */}
+        </div>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md mt-32 "
@@ -33,14 +39,14 @@ export default function Login() {
             <h2 className="text-3xl text-center text-gray-700">LOGIN | NYR</h2>
             <div>
               <div className="w-full mt-8">
-                {errors.email && (
+                {errors.username && (
                   <span className="text-red-500 text-sm font-semibold">
-                    Email Required
+                    Username Required
                   </span>
                 )}
                 <Input
-                  placeholder="Email Address"
-                  name="email"
+                  placeholder="Username"
+                  name="username"
                   inputRef={register({ required: true })}
                 />
               </div>
@@ -54,6 +60,7 @@ export default function Login() {
                   placeholder="Password"
                   name="password"
                   inputRef={register({ required: true })}
+                  isPassword
                 />
               </div>
               <div className="flex items-center justify-between mt-6">

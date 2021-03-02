@@ -11,7 +11,7 @@ export default function App({ Component, pageProps }: AppProps) {
       if (response?.data?.success === false) {
         throw new Error(response?.data?.errMsg);
       }
-      return response?.data;
+      return response?.data?.data;
     });
   }, []);
   const fetcher = useMemo(

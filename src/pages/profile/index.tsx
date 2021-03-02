@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, Scaffold } from "@/components";
+import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 
 export default function Profile() {
+  const router = useRouter();
+  useEffect(() => {
+    router.push("/login");
+  }, []);
   return (
     <Scaffold title="Profile">
       <div className="container mx-auto flex flex-col items-center pt-40">
@@ -10,3 +16,13 @@ export default function Profile() {
     </Scaffold>
   );
 }
+
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   return {
+//     redirect: {
+//       destination: "/login",
+//       permanent: false,
+//       statusCode: 401,
+//     },
+//   };
+// };

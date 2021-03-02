@@ -16,13 +16,13 @@ export default function SignUp() {
                 <Input placeholder="Email Address" />
               </div>
               <div className="w-full mt-4">
-                <Input placeholder="Password" />
+                <Input placeholder="Password" isPassword />
               </div>
               <div className="w-full mt-4">
-                <Input placeholder="Invitation Code" />
+                <Input placeholder="Invitation Code (Optional)" />
               </div>
               <div className="mt-5">
-                <Button>
+                <Button className="w-full">
                   <span className="text-center">Sign Up</span>
                 </Button>
               </div>

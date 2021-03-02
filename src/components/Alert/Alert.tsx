@@ -9,6 +9,7 @@ type IconType = "success" | "info" | "warning" | "error";
 interface IAlert extends IBaseComponent {
   type: IconType;
   onClose?: () => void;
+  closable?: boolean;
 }
 
 const ALERT_ICONS = {
@@ -34,7 +35,13 @@ const ALERT_ICONS = {
   ),
 };
 
-export default function Alert({ children, className, type, onClose }: IAlert) {
+export default function Alert({
+  children,
+  className,
+  type,
+  onClose,
+  closable,
+}: IAlert) {
   return (
     <div
       className={classNames(
@@ -48,25 +55,27 @@ export default function Alert({ children, className, type, onClose }: IAlert) {
           {ALERT_ICONS[type]}
           <p className="mx-3">{children}</p>
         </div>
-        <button
-          className="p-1 transition-colors duration-200 transform rounded-md hover:bg-opacity-25 hover:bg-gray-600 focus:outline-none"
-          onClick={onClose}
-        >
-          <svg
-            className="w-5 h-5"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+        {closable && (
+          <button
+            className="p-1 transition-colors duration-200 transform rounded-md hover:bg-opacity-25 hover:bg-gray-600 focus:outline-none"
+            onClick={onClose}
           >
-            <path
-              d="M6 18L18 6M6 6L18 18"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
+            <svg
+              className="w-5 h-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 18L18 6M6 6L18 18"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+        )}
       </div>
     </div>
   );

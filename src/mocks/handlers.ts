@@ -1,4 +1,5 @@
 import mockjs from "mockjs";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 export const response = {
   success(data) {
@@ -17,7 +18,11 @@ export const response = {
   },
 };
 
-export const handlers = [
+export const handlers: {
+  path: string;
+  method: "GET" | "POST";
+  resolver: (req: NextApiRequest, res: NextApiResponse) => void;
+}[] = [
   {
     path: "/torrent/list_torrents",
     method: "GET",
@@ -39,8 +44,21 @@ export const handlers = [
           tag: ["tag1", "tag2", "tag3"],
         })
       );
-      // res.json(response.error("Error For Test"));
       res.json(response.success(torrents));
+    },
+  },
+  {
+    path: "/user/login",
+    method: "POST",
+    resolver(req, res) {
+      const { username, password } = req.body;
+      if (!username || !password) {
+        res.json(response.error("Input Invalid."));
+      } else if (username !== "cattchen" || password !== "pass") {
+        res.json(response.error("Auth Fail."));
+      } else {
+        res.json(response.success("FAKE_TOKEN"));
+      }
     },
   },
 ];
