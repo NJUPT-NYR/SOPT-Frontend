@@ -12,7 +12,7 @@ export function makeFetcher(
 }
 
 export const makeServerFetcher = (token?: string) => {
-  const config: AxiosRequestConfig = { baseURL: "http://localhost:3000/api" };
+  const config: AxiosRequestConfig = { baseURL: process.env.API_GATEWAY_URL };
   if (token) {
     config.headers["Authorization"] = "Bearer " + token;
   }

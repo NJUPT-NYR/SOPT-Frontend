@@ -18,7 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
     () =>
       makeFetcher(
         {
-          baseURL: "/api",
+          baseURL: process.env.NEXT_PUBLIC_CLIENT_API_GATEWAY_URL,
         },
         configInstance
       ),
