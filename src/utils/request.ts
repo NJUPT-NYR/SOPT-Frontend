@@ -1,11 +1,39 @@
-import axios from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
-// const baseURL = ENABLE_MOCK
-//   ? "http://localhost:" + SERVER_PORT + "/mock"
-//   : API_GATEWAY_URL;
+export function makeFetcher(
+  config?: AxiosRequestConfig,
+  configInstance?: (instance: AxiosInstance) => void
+) {
+  return function (request, ...rest) {
+    const instace = axios.create(config);
+    configInstance?.(instace);
+    return request(instace, ...rest);
+  };
+}
 
-// export const instance = axios.create({
-//   baseURL,
-// });
+export const makeServerFetcher = (token?: string) => {
+  const config: AxiosRequestConfig = { baseURL: "http://localhost:3000/api" };
+  if (token) {
+    config.headers["Authorization"] = "Bearer " + token;
+  }
+  return makeFetcher(config);
+};
 
-export {};
+export async function serverDoFetch(
+  fetcher,
+  keys: any[]
+): Promise<{ data: any; error: any }> {
+  const [model, ...params] = keys;
+  try {
+    const response = await fetcher(model, ...params);
+    if (response?.data?.success === false) {
+      throw new Error(response?.data?.errMsg);
+    }
+    return {
+      data: response?.data?.data,
+      error: undefined,
+    };
+  } catch (error) {
+    return { data: undefined, error };
+  }
+}

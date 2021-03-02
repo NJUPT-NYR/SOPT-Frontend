@@ -30,34 +30,25 @@ export default function Pagination(props: IPagination) {
       aria-label="Pagination"
       {...restProps}
     >
-      <span className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer select-none">
-        <Link href={handleCreatePath(Math.max(1, currentPagination - 1))}>
-          <span>
-            <GoChevronLeft />
-          </span>
-        </Link>
-      </span>
-      {paginations.map((pagination) => (
-        <span
-          key={pagination}
-          className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer select-none"
-        >
-          <Link href={handleCreatePath(pagination)}>
-            <span>{pagination}</span>
-          </Link>
+      <Link href={handleCreatePath(Math.max(1, currentPagination - 1))}>
+        <span className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer select-none">
+          <GoChevronLeft />
         </span>
-      ))}
-      <span className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer select-none">
-        <Link
-          href={handleCreatePath(
-            Math.min(currentPagination + 1, maxPagination)
-          )}
-        >
-          <span>
-            <GoChevronRight />
+      </Link>
+      {paginations.map((pagination) => (
+        <Link key={pagination} href={handleCreatePath(pagination)}>
+          <span className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer select-none">
+            {pagination}
           </span>
         </Link>
-      </span>
+      ))}
+      <Link
+        href={handleCreatePath(Math.min(currentPagination + 1, maxPagination))}
+      >
+        <span className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer select-none">
+          <GoChevronRight />
+        </span>
+      </Link>
     </nav>
   );
 }

@@ -5,102 +5,66 @@ import qs from "query-string";
 
 import { Link, Pagination, Scaffold, Search, Table } from "@/components";
 import { useRouter } from "next/router";
-import { IRecord } from "@/utils/interface";
+import { IRecord, ISlimTorrent } from "@/utils/interface";
 import { GoArrowDown, GoArrowUp, GoCheck } from "react-icons/go";
 import { BiLink } from "react-icons/bi";
 import { GetServerSideProps } from "next";
 import useSWR from "swr";
+import * as model from "@/utils/model";
+import { makeServerFetcher, serverDoFetch } from "@/utils/request";
 
-const columns: Column<IRecord>[] = [
+const columns: Column<ISlimTorrent>[] = [
   {
-    Header: "Name",
+    Header: "Title",
     accessor(row) {
       return (
-        <span
-          title={row.name}
-          className="text-gray-600 w-table-col-name overflow-hidden overflow-ellipsis"
-        >
-          {row.name}
-        </span>
+        <div title={row.title} className="text-gray-600  text-center ">
+          {row.title}
+        </div>
+      );
+    },
+    width: 500,
+    maxWidth: 600,
+  },
+  {
+    Header: "Poster",
+    accessor(row) {
+      return (
+        <div title={row.poster} className="text-gray-600  text-center">
+          {row.poster}
+        </div>
       );
     },
   },
   {
-    Header: "Link",
-    accessor(row) {
-      return (
-        <a
-          href={row.link}
-          title={row.link}
-          className="block cursor-pointer hover:bg-gray-100 rounded-md px-5 py-2 "
-        >
-          <BiLink />
-        </a>
-      );
-    },
-  },
-  {
-    Header: "Size",
-    accessor(row) {
-      return <span className="text-gray-600">{row.size}</span>;
-    },
-  },
-  {
-    Header: "Date",
-    accessor(row) {
-      return <span className="text-gray-600">{row.date}</span>;
-    },
-  },
-  {
-    id: "uploadCount",
-    Header: (
-      <div className="flex justify-center">
-        <GoArrowUp className="text-xl" />
-      </div>
-    ),
-    accessor(row) {
-      return <span className="text-gray-600">{row.uploadCount}</span>;
-    },
-  },
-  {
-    id: "downloadCount",
+    id: "downloaded",
     Header: (
       <div className="flex justify-center">
         <GoArrowDown className="text-xl" />
       </div>
     ),
     accessor(row) {
-      return <span className="text-gray-600">{row.downloadCount}</span>;
+      return <div className="text-gray-600 text-center">{row.downloaded}</div>;
     },
   },
   {
-    id: "completeCount",
-    Header: (
-      <div className="flex justify-center">
-        <GoCheck className="text-xl" />
-      </div>
-    ),
+    Header: "Tag",
     accessor(row) {
-      return <span className="text-gray-600">{row.completeCount}</span>;
+      return <div className="text-gray-600 text-center">{row.tag}</div>;
     },
   },
 ];
 
 interface IHome {
   list?: number[];
-  keyword?: string;
   pagination?: number;
-  maxPagination?: number;
 }
 
-export default function Home({
-  list,
-  keyword,
-  pagination,
-  maxPagination,
-}: IHome) {
+export default function Home({ list, pagination }: IHome) {
   const router = useRouter();
   const tableColumns = useMemo(() => columns, []);
+
+  // const { data, isValidating, error } = useSWR([model.requestTorrentList]);
 
   return (
     <Scaffold title="Home">
@@ -124,11 +88,11 @@ export default function Home({
           />
           <div className="flex justify-end w-full">
             <Pagination
-              maxPagination={maxPagination}
+              maxPagination={100}
               currentPagination={pagination ?? 1}
               className="mt-4"
               handleCreatePath={(pagination) =>
-                qs.stringifyUrl({ url: "/", query: { pagination, keyword } })
+                qs.stringifyUrl({ url: "/", query: { pagination } })
               }
             />
           </div>
@@ -139,12 +103,16 @@ export default function Home({
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { pagination } = context.query;
+  const fetcher = makeServerFetcher();
+  const { data, error } = await serverDoFetch(fetcher, [
+    model.requestTorrentList,
+  ]);
+
   return {
     props: {
-      list: [],
-      keyword: "",
-      pagination: 1,
-      maxPagination: 100,
+      list: error ? [] : data,
+      pagination: pagination ? Number(pagination) : 1,
     },
   };
 };

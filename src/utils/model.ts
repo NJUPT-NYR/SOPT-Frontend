@@ -1,16 +1,4 @@
-// import { instance } from "./request";
-// import qs from "query-string";
+import type { AxiosInstance } from "axios";
 
-// /**
-//  * @see https://github.com/NJUPT-NYR/SOPT/blob/master/API.md
-//  */
-
-// interface IRequestRcords {
-//   keyword?: string;
-// }
-
-// // !DEPRECATED
-// export const requestRecords = (data?: IRequestRcords) =>
-//   instance.get(qs.stringifyUrl({ url: "/records", query: { ...data } }));
-
-export {};
+export const requestTorrentList = (instance: AxiosInstance) =>
+  instance.get("/torrent/list_torrents");

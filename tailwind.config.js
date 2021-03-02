@@ -11,7 +11,6 @@ module.exports = {
       },
       width: {
         300: "300px",
-        "table-col-name": "630px",
       },
       maxWidth: {
         "9/10-screen": "90vw",

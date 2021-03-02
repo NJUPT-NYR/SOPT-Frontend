@@ -1,7 +1,13 @@
 import React from "react";
-import { useTable, Column } from "react-table";
+import { useTable, Column, useBlockLayout } from "react-table";
 import classNames from "classnames";
 import { IBaseComponent } from "../base";
+
+const defaultColumn = {
+  minWidth: 30,
+  width: 150,
+  maxWidth: 400,
+};
 
 interface ITable<TData extends object = any> extends IBaseComponent {
   columns: Array<Column<TData>>;
@@ -19,7 +25,7 @@ function Table(props: ITable) {
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({ columns, data });
+  } = useTable({ columns, data, defaultColumn }, useBlockLayout);
 
   return (
     <div
@@ -35,16 +41,18 @@ function Table(props: ITable) {
         <thead className="bg-gray-50">
           {headerGroups.map((headerGroup) => (
             <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th
-                  key={column.id}
-                  scope="col"
-                  className="px-3 py-1 text-center text-xs font-medium text-gray-500 uppercase tracking-wider  "
-                  {...column.getHeaderProps()}
-                >
-                  {column.render("Header")}
-                </th>
-              ))}
+              {headerGroup.headers.map((column) => {
+                return (
+                  <th
+                    key={column.id}
+                    scope="col"
+                    className="px-3 py-1 text-center text-xs font-medium text-gray-500 uppercase tracking-wider  "
+                    {...column.getHeaderProps()}
+                  >
+                    {column.render("Header")}
+                  </th>
+                );
+              })}
             </tr>
           ))}
         </thead>
@@ -61,12 +69,10 @@ function Table(props: ITable) {
                     return (
                       <td
                         key={cell.value}
-                        className="px-2 py-2 whitespace-nowrap"
+                        className="px-2 py-2 whitespace-nowrap overflow-hidden overflow-ellipsis"
                         {...cell.getCellProps()}
                       >
-                        <div className="grid place-items-center">
-                          {cell.render("Cell")}
-                        </div>
+                        {cell.render("Cell")}
                       </td>
                     );
                   })}
