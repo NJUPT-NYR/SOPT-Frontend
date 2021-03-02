@@ -15,32 +15,20 @@
     "jsx": "preserve",
     "checkJs": true,
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
     "allowJs": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "skipDefaultLibCheck": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "build",
-    "config"
-  ]
+  "include": ["src/**/*", "mocks"],
+  "exclude": ["node_modules", "build", "config"]
 }

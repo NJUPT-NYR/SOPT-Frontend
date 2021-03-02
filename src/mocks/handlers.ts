@@ -1,6 +1,6 @@
-import { rest } from "msw";
+import mockjs from "mockjs";
 
-const response = {
+export const response = {
   success(data) {
     return {
       success: true,
@@ -18,49 +18,26 @@ const response = {
 };
 
 export const handlers = [
-  rest.post("/user/add_user", (req, res, ctx) => {
-    return res(ctx.json(response.success(null)));
-  }),
-  rest.post("/user/login", (req, res, ctx) => {
-    return res(ctx.json(response.success(null)));
-  }),
-  rest.post("/user/auth/check_identity", (req, res, ctx) => {
-    return res(ctx.json(response.success(null)));
-  }),
-  rest.post("/user/auth/reset_password", (req, res, ctx) => {
-    return res(ctx.json(response.success(null)));
-  }),
-  rest.get("/user/auth/reset_passkey", (req, res, ctx) => {
-    return res(ctx.json(response.success(null)));
-  }),
-  rest.get("/user/auth/transfer_money", (req, res, ctx) => {
-    return res(ctx.json(response.success(null)));
-  }),
-  rest.post("user/upload_avatar", (req, res, ctx) => {
-    return res(ctx.json(response.success(null)));
-  }),
-  rest.post("/user/personal_info_update", (req, res, ctx) => {
-    return res(ctx.json(response.success(null)));
-  }),
-  rest.post("/invitation/send_invitation", (req, res, ctx) => {
-    return res(ctx.json(response.success(null)));
-  }),
-  rest.post("/invitation/list_invitations", (req, res, ctx) => {
-    return res(ctx.json(response.success(null)));
-  }),
-  rest.post("/torrent/add_torrent", (req, res, ctx) => {
-    return res(ctx.json(response.success(null)));
-  }),
-  rest.post("/torrent/update_torrent", (req, res, ctx) => {
-    return res(ctx.json(response.success(null)));
-  }),
-  rest.post("/torrent/list_torrents", (req, res, ctx) => {
-    return res(ctx.json(response.success(null)));
-  }),
-  rest.post("/torrent/list_posted_torrent", (req, res, ctx) => {
-    return res(ctx.json(response.success(null)));
-  }),
-  rest.post("/torrent/show_torrent", (req, res, ctx) => {
-    return res(ctx.json(response.success(null)));
-  }),
+  {
+    path: "/torrent/list_torrents",
+    method: "GET",
+    resolver(req, res) {
+      const torrents = mockjs.mock({
+        id: mockjs.Random.integer(1, 1000),
+        "title|+1": mockjs.Random.pick([
+          "Kimetsu Gakuen - Valentine-hen",
+          "瞬きもせずに+／H△G.",
+          "Mafumafu (まふまふ) x Soraru (そらる) One Two Three single",
+          "[RiPiT] SK8 the Infinity - 06 VOSTFR [WEB 1080p]",
+          "[Baechu] Girls' High Mystery Class 여고추리반 S01E05 (1080p)[Baechu] Girls' High Mystery Class 여고추리반 S01E05 (1080p)",
+          "	Nekopara [SUB][1080P] [ENGLISH]",
+          "ks",
+        ]),
+        poster: mockjs.Random.name(),
+        downloaded: mockjs.Random.integer(1, 100),
+        tag: ["tag1", "tag2", "tag3"],
+      });
+      res.json(response.success(torrents));
+    },
+  },
 ];

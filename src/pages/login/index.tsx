@@ -1,9 +1,11 @@
 import React, { useCallback } from "react";
 import { Alert, Button, Input, Link, Scaffold } from "@/components";
 import { useForm } from "react-hook-form";
+import useSWR from "swr";
 
 export default function Login() {
   const { register, handleSubmit, errors } = useForm();
+
   const onSubmit = useCallback((data) => {
     console.log(data);
   }, []);

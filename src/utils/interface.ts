@@ -13,3 +13,11 @@ export interface IRecord {
   downloadCount: number;
   completeCount: number;
 }
+
+export interface ISlimTorrent {
+  id: number;
+  title: string;
+  poster: string;
+  downloaded: number;
+  tag: string[];
+}
