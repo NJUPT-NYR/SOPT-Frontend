@@ -37,9 +37,18 @@ See [https://sharp.pixelplumbing.com/install#custom-prebuilt-binaries](https://s
   - [x] Search
   - [x] Pagination
   - [x] Table
+  - [ ] ...and so on
 - [ ] Profile
+  - [ ] Account
+  - [ ] Passkey
+  - [ ] Money
+  - [ ] ...and so on
 - [ ] Uploading
+  - [ ] ...and so on
 - [ ] Help
-- [x] NotFound
+  - [ ] ...and so on
 - [x] Login
 - [ ] SignUp
+- [ ] Access
+- [x] 404
+- [ ] 500
