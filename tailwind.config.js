@@ -3,7 +3,7 @@ module.exports = {
     // removeDeprecatedGapUtilities: true,
     // purgeLayersByDefault: true,
   },
-  purge: ["./src/**/*.tsx", "./src/**/*.css"],
+  purge: ["./src/**/*.tsx", "./src/**/*.css", "./src/**/*.mdx"],
   theme: {
     extend: {
       gridTemplateRows: {

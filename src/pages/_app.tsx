@@ -3,7 +3,7 @@ import "@/global.css";
 import type { AppProps } from "next/app";
 import { SWRConfig } from "swr";
 import { makeFetcher } from "@/utils/request";
-import { AxiosInstance } from "axios";
+import type { AxiosInstance } from "axios";
 
 export default function App({ Component, pageProps }: AppProps) {
   const configInstance = useCallback((instance: AxiosInstance) => {

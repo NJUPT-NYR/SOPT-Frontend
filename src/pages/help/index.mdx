@@ -1,0 +1,38 @@
+import { Scaffold } from "@/components";
+import { GoMarkGithub } from "react-icons/go";
+import "github-markdown-css/github-markdown.css";
+
+export default ({ children }) => (
+  <Scaffold title="Help">
+    <div className="w-full h-full bg-gray-100 overflow-hidden">
+      <div className="container mx-auto rounded-lg shadow-md bg-white my-10 py-10 px-6 markdown-body ">
+        {children}
+      </div>
+    </div>
+  </Scaffold>
+);
+
+# HELP
+
+这是一个 pt 站
+
+## NJUPT-NYR
+
+<GoMarkGithub className="inline-block" />
+<a className="ml-3 " href="https://github.com/NJUPT-NYR">
+  https://github.com/NJUPT-NYR
+</a>
+
+## 常见问题
+
+1. 表格测试
+
+| Tables        |      Are      |  Cool |
+| ------------- | :-----------: | ----: |
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      |   centered    |   $12 |
+| zebra stripes |   are neat    |    $1 |
+
+2. 测试 2
+
+I just love **bold text**.
