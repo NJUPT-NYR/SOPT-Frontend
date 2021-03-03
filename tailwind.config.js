@@ -1,3 +1,6 @@
+/**
+ * @type {import("tailwindcss/defaultConfig")}
+ */
 module.exports = {
   future: {
     // removeDeprecatedGapUtilities: true,

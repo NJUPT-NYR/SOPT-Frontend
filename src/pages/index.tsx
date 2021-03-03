@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import type { Column } from "react-table";
 import classNames from "classnames";
 import qs from "query-string";
@@ -64,7 +64,9 @@ export default function Home({ list, pagination }: IHome) {
   const router = useRouter();
   const tableColumns = useMemo(() => columns, []);
 
-  // const { data, isValidating, error } = useSWR([model.requestTorrentList]);
+  const handleRowSelect = useCallback((row: ISlimTorrent) => {
+    router.push(`/torrent/${row.id}`);
+  }, []);
 
   return (
     <Scaffold title="Home">
@@ -85,6 +87,8 @@ export default function Home({ list, pagination }: IHome) {
                 Empty Data
               </div>
             }
+            rowSelect
+            onRowSelect={handleRowSelect}
           />
           <div className="flex justify-end w-full">
             <Pagination

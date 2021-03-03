@@ -38,6 +38,9 @@ See [https://sharp.pixelplumbing.com/install#custom-prebuilt-binaries](https://s
   - [x] Pagination
   - [x] Table
   - [ ] ...and so on
+- [ ] Torrent
+  - [ ] Detail
+  - [ ] Edit
 - [ ] Profile
   - [ ] Account
   - [ ] Passkey
@@ -46,7 +49,8 @@ See [https://sharp.pixelplumbing.com/install#custom-prebuilt-binaries](https://s
 - [ ] Uploading
   - [ ] ...and so on
 - [ ] Help
-  - [ ] ...and so on
+  - [x] (layout)
+  - [ ] (content)
 - [x] Login
 - [ ] SignUp
 - [ ] Access

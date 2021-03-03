@@ -13,6 +13,8 @@ interface ITable<TData extends object = any> extends IBaseComponent {
   columns: Array<Column<TData>>;
   data: TData[];
   empty?: JSX.Element;
+  rowSelect?: boolean;
+  onRowSelect?: (row: TData) => void;
 }
 
 export default React.memo(Table, (prev, current) => prev === current);
@@ -64,7 +66,16 @@ function Table(props: ITable) {
             rows.map((row, _key) => {
               prepareRow(row);
               return (
-                <tr key={row.id} {...row.getRowProps()}>
+                <tr
+                  className={classNames({
+                    "cursor-pointer hover:bg-gray-100": props.rowSelect,
+                  })}
+                  onClick={() => {
+                    props?.onRowSelect?.(row);
+                  }}
+                  key={row.id}
+                  {...row.getRowProps()}
+                >
                   {row.cells.map((cell) => {
                     return (
                       <td
