@@ -9,7 +9,9 @@ interface ITorrentDetail {
 export default function TorrentDetail({ id }: ITorrentDetail) {
   return (
     <Scaffold title="Detail">
-      <div>detail {id}</div>
+      <div className="w-full h-full bg-gray-50">
+        <div>detail {id}</div>
+      </div>
     </Scaffold>
   );
 }

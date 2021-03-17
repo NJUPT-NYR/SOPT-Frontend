@@ -23,7 +23,7 @@ export default function Login() {
 
   return (
     <Scaffold title="Login">
-      <div className="w-full h-full bg-gray-200 overflow-hidden">
+      <div className="w-full h-full bg-gray-50 overflow-hidden">
         <div className="mt-2">
           {error && (
             <Alert type="error" closable={false}>

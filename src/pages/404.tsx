@@ -19,7 +19,7 @@ export default class NotFound extends React.Component {
               <span className="text-gray-400 mt-3">{"That's an error"}</span>
             </div>
           </div>
-          <div className="ml-7">
+          <div className="ml-7 border-l-2 pl-5">
             <GoUnverified className="text-7xl" />
           </div>
         </div>

@@ -30,7 +30,11 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <div className="text-white font-bold text-2xl">NYR</div>
+              <Link href="/">
+                <div className="text-white font-bold text-2xl cursor-pointer">
+                  NYR
+                </div>
+              </Link>
             </div>
             <div>
               <div className="ml-10 flex items-baseline space-x-4">

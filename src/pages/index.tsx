@@ -70,7 +70,9 @@ export default function Home({ list, pagination }: IHome) {
 
   return (
     <Scaffold title="Home">
-      <div className={`container mx-auto flex flex-col items-center pb-32`}>
+      <div
+        className={` flex flex-col items-center pb-32 w-full h-full bg-gray-50`}
+      >
         <Search
           className={classNames(list?.length ? "mt-20" : "mt-40")}
           onSearch={(keyword: string) => {
