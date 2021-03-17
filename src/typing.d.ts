@@ -1,5 +1,3 @@
-/// <reference types="@mdx-js/loader" />
-
 declare module "*.css";
 declare module "*.gif";
 declare module "*.mdx" {

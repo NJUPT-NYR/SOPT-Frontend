@@ -4,7 +4,7 @@ import React from "react";
 export default function SignUp() {
   return (
     <Scaffold title="SignUp">
-      <div className="w-full h-full bg-gray-200 overflow-hidden">
+      <div className="w-full h-full bg-gray-50 overflow-hidden">
         <div></div>
         <div className="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md mt-32">
           <div className="px-6 py-4">
