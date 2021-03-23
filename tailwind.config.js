@@ -18,6 +18,9 @@ module.exports = {
       maxWidth: {
         "9/10-screen": "90vw",
       },
+      backgroundColor: {
+        "244-247-249": "rgb(244,247,249)",
+      },
     },
   },
   variants: {},

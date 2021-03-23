@@ -65,7 +65,7 @@ export default function Login() {
               </div>
               <div className="flex items-center justify-between mt-6">
                 <Link href="#">
-                  <span className="select-none text-gray-500 text-sm">
+                  <span className="cursor-pointer select-none text-gray-500 text-sm">
                     Forget Password?
                   </span>
                 </Link>
