@@ -21,6 +21,9 @@ module.exports = {
       backgroundColor: {
         "244-247-249": "rgb(244,247,249)",
       },
+      gridTemplateColumns: {
+        "1fr-3fr": "1fr 3fr",
+      },
     },
   },
   variants: {},

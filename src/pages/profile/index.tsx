@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
-import { Link, Scaffold } from "@/components";
+import { Link, Scaffold, Card } from "@/components";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
+
+const AVATAR_SRC =
+  "https://cdn.jsdelivr.net/gh/ChenKS12138/ChenKS12138.github.io/static/avatar-9ebf78a88f69fda4a3b437a4f389bb51.png";
 
 export default function Profile() {
   const router = useRouter();
@@ -10,8 +13,16 @@ export default function Profile() {
   }, []);
   return (
     <Scaffold title="Profile">
-      <div className="w-full h-full bg-gray-50 flex flex-col items-center pt-40">
-        <div className="mt-40 text-gray-500 text-lg">This Profile Page</div>
+      <div className="grid md:grid-cols-1fr-3fr pt-10">
+        <div className="flex flex-col items-center">
+          <img className="rounded-full" src={AVATAR_SRC} />
+          <div className="font-light text-2xl">cattchen</div>
+        </div>
+        <div>
+          <Card>
+            <div>profile info</div>
+          </Card>
+        </div>
       </div>
     </Scaffold>
   );

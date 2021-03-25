@@ -45,7 +45,7 @@ export default function Alert({
   return (
     <div
       className={classNames(
-        "w-full text-white",
+        "w-full text-white rounded-sm",
         styles[`login__container--${type}`],
         className
       )}

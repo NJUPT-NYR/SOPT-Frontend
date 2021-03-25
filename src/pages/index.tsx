@@ -70,13 +70,24 @@ export default function Home({ list, pagination }: IHome) {
 
   return (
     <Scaffold title="Home">
-      <div
-        className={` flex flex-col items-center pb-32 w-full h-full bg-gray-50`}
-      >
+      <div className={` flex flex-col items-center pb-32`}>
         <Search
           className={classNames(list?.length ? "mt-20" : "mt-40")}
           onSearch={(keyword: string) => {
-            // router.push(`/`, { keyword: keyword?.length ? keyword : null });
+            router.push(
+              qs.stringifyUrl(
+                {
+                  url: "/",
+                  query: {
+                    keyword,
+                  },
+                },
+                {
+                  skipNull: true,
+                  skipEmptyString: true,
+                }
+              )
+            );
           }}
         />
         <div className="max-w-9/10-screen">

@@ -31,7 +31,7 @@ export default class Search extends React.Component<
   render() {
     const { inputContent } = this.state;
     return (
-      <div className={"flex items-center " + this.props.className}>
+      <div className={"relative flex items-center " + this.props.className}>
         <input
           className="py-2 px-3 text-grey-darkest focus:outline-none rounded-md w-96 border-gray-800 border-2 "
           value={inputContent}

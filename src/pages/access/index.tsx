@@ -13,7 +13,7 @@ export default function Access() {
 
   return (
     <Scaffold title="Access">
-      <div className="w-full h-full overflow-hidden bg-white">
+      <div className="overflow-hidden">
         <div className="mt-8">
           <div className="w-80 mx-auto flex flex-col items-center">
             <div className="text-4xl text-center text-gray-700">NYR</div>
