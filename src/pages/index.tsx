@@ -58,9 +58,10 @@ const columns: Column<ISlimTorrent>[] = [
 interface IHome {
   list?: number[];
   pagination?: number;
+  keyword?: string;
 }
 
-export default function Home({ list, pagination }: IHome) {
+export default function Home({ list, pagination, keyword }: IHome) {
   const router = useRouter();
   const tableColumns = useMemo(() => columns, []);
 
@@ -109,7 +110,10 @@ export default function Home({ list, pagination }: IHome) {
               currentPagination={pagination ?? 1}
               className="mt-4"
               handleCreatePath={(pagination) =>
-                qs.stringifyUrl({ url: "/", query: { pagination } })
+                qs.stringifyUrl(
+                  { url: "/", query: { pagination, keyword } },
+                  { skipEmptyString: true, skipNull: true }
+                )
               }
             />
           </div>
@@ -120,7 +124,7 @@ export default function Home({ list, pagination }: IHome) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { pagination } = context.query;
+  const { pagination, keyword } = context.query;
   const fetcher = makeServerFetcher();
   const { data, error } = await serverDoFetch(fetcher, [
     model.requestTorrentList,
@@ -130,6 +134,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       list: error ? [] : data,
       pagination: pagination ? Number(pagination) : 1,
+      keyword: keyword ?? null,
     },
   };
 };

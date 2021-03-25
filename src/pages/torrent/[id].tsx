@@ -43,19 +43,19 @@ export default function TorrentDetail({
       <div className="pt-14">
         <div className="mx-auto max-w-9/10-screen ">
           <Card>
-            <div className="text-2xl font-bold ">INFO</div>
+            <div className="text-4xl font-normal mb-3 pb-2 ">INFO</div>
             <h2 className="text-xl">{title}</h2>
             <div>id: {id}</div>
             <div>poster: {poster}</div>
           </Card>
           <Card className="mt-5 w-full markdown-body">
-            <div className="text-2xl font-bold">INTRO</div>
+            <div className="text-4xl font-normal mb-3 pb-2 ">INTRO</div>
             <ReactMarkdown className="markdown-body" plugins={[gfm]}>
               {intro}
             </ReactMarkdown>
           </Card>
           <Card className="mt-5 w-full  markdown-body">
-            <div className="text-2xl font-bold">COMMENT</div>
+            <div className="text-4xl font-normal mb-3 pb-2 ">COMMENT</div>
             <div>comment list</div>
           </Card>
         </div>
