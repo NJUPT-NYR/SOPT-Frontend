@@ -1,4 +1,4 @@
-import { Scaffold, Card } from "@/components";
+import { Scaffold, Card, Descriptions } from "@/components";
 import { GetServerSideProps } from "next";
 import React from "react";
 import gfm from "remark-gfm";
@@ -43,20 +43,25 @@ export default function TorrentDetail({
       <div className="pt-14">
         <div className="mx-auto max-w-9/10-screen ">
           <Card>
-            <div className="text-4xl font-normal mb-3 pb-2 ">INFO</div>
-            <h2 className="text-xl">{title}</h2>
-            <div>id: {id}</div>
-            <div>poster: {poster}</div>
+            <Descriptions title={title}>
+              <Descriptions.Item label="id">
+                <span>{id}</span>
+              </Descriptions.Item>
+              <Descriptions.Item label="poster">
+                <span>{poster}</span>
+              </Descriptions.Item>
+            </Descriptions>
           </Card>
           <Card className="mt-5 w-full markdown-body">
-            <div className="text-4xl font-normal mb-3 pb-2 ">INTRO</div>
+            <Descriptions title="Intro"></Descriptions>
             <ReactMarkdown className="markdown-body" plugins={[gfm]}>
               {intro}
             </ReactMarkdown>
           </Card>
           <Card className="mt-5 w-full  markdown-body">
-            <div className="text-4xl font-normal mb-3 pb-2 ">COMMENT</div>
-            <div>comment list</div>
+            <Descriptions title="Comments">
+              <div>comment list</div>
+            </Descriptions>
           </Card>
         </div>
       </div>

@@ -1,13 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { Link, Scaffold, Card, Descriptions } from "@/components";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
+import { RiImageEditFill } from "react-icons/ri";
 
 interface IProfile {
   username: string;
   registerTime: string;
   lastActivity: string;
-  invitor?: string;
+  inviter?: string;
   upload: string;
   download: string;
   money: string;
@@ -28,17 +29,46 @@ export default function Profile({
   upload,
   username,
   avatar,
-  invitor,
+  inviter,
 }: IProfile) {
   const router = useRouter();
+
+  const avatarRef = useRef(null);
   useEffect(() => {
     // router.push("/login");
   }, []);
+
+  const handleLogout = useCallback(() => {
+    router.push("/login");
+  }, [router]);
+
+  const handleChangeAvatar = useCallback((event) => {
+    console.log(event);
+  }, []);
+
   return (
     <Scaffold title="Profile">
       <div className="grid md:grid-cols-1fr-3fr pt-10 px-5">
         <div className="flex flex-col items-center">
-          <img className="rounded-full" src={avatar} />
+          <div className="relative" style={{ clipPath: "circle(50%)" }}>
+            <img className=" rounded-full" src={avatar} />
+            <input
+              className="hidden"
+              type="file"
+              ref={avatarRef}
+              onChange={handleChangeAvatar}
+            />
+            <div
+              className="absolute w-full h-full top-0 left-0 z-10 cursor-pointer bg-black opacity-0 hover:opacity-40 flex items-center justify-center"
+              onClick={() => {
+                avatarRef.current?.click?.();
+              }}
+            >
+              <div>
+                <RiImageEditFill className="text-gray-100 bg-black text-5xl" />
+              </div>
+            </div>
+          </div>
           <div className="font-light text-2xl">cattchen</div>
         </div>
         <div>
@@ -50,8 +80,8 @@ export default function Profile({
               <Descriptions.Item label="lastActivity">
                 <span>{lastActivity}</span>
               </Descriptions.Item>
-              <Descriptions.Item label="invitor">
-                <span>{invitor}</span>
+              <Descriptions.Item label="inviter">
+                <span>{inviter}</span>
               </Descriptions.Item>
               <Descriptions.Item label="upload">
                 <span>{upload}</span>
@@ -73,7 +103,10 @@ export default function Profile({
               </Descriptions.Item>
             </Descriptions>
           </Card>
-          <div className="mt-5 w-full rounded-md bg-gray-100 hover:bg-gray-200 text-center text-red-700 py-2 cursor-pointer transition-all ease-in-out select-none font-semibold ">
+          <div
+            className="mt-5 w-full rounded-md bg-gray-100 hover:bg-gray-200 text-center text-red-700 py-2 cursor-pointer transition-all ease-in-out select-none font-semibold "
+            onClick={handleLogout}
+          >
             Logout
           </div>
         </div>
@@ -88,7 +121,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       username: "cattchen",
       registerTime: "2021-03-25 10:10:10",
       lastActivity: "2021-03-25 10:10:11",
-      invitor: "Brethland",
+      inviter: "Brethland",
       upload: "0kb",
       download: "0kb",
       money: "0",

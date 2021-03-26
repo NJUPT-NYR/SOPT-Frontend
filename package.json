@@ -35,7 +35,8 @@
     "react-table": "^7.6.3",
     "remark-gfm": "^1.0.0",
     "swr": "^0.4.2",
-    "tailwindcss": "^2.0.3"
+    "tailwindcss": "^2.0.3",
+    "tailwindcss-filters": "^3.0.0"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.11",
