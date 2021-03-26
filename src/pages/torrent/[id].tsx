@@ -60,7 +60,7 @@ export default function TorrentDetail({
           </Card>
           <Card className="mt-5 w-full  markdown-body">
             <Descriptions title="Comments">
-              <div>comment list</div>
+              <div>No Comment</div>
             </Descriptions>
           </Card>
         </div>

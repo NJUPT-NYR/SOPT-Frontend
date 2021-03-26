@@ -10,6 +10,7 @@ interface IInput extends IBaseComponent {
   name?: string;
   inputRef?: any;
   isPassword?: boolean;
+  autoComplete?: string;
 }
 
 export default function Input(props: IInput) {

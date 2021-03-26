@@ -1,21 +1,31 @@
+import classNames from "classnames";
 import React from "react";
 import { IBaseComponent } from "../base";
 
 interface IDescriptions extends IBaseComponent {
   title?: string;
+  layoutClassName?: string;
 }
 
 export default function Descriptions({
   title,
   children,
+  layoutClassName,
   ...rest
 }: IDescriptions) {
   return (
     <div {...rest}>
-      <div className="text-4xl font-normal mb-3 pb-2">{title}</div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6 pb-6 ">
-        {children}
-      </div>
+      <div className="text-4xl font-normal mb-2">{title}</div>
+      {children && (
+        <div
+          className={classNames(
+            "mt-3 grid gap-x-8 gap-y-6 pb-6 ",
+            layoutClassName ?? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 "
+          )}
+        >
+          {children}
+        </div>
+      )}
     </div>
   );
 }
