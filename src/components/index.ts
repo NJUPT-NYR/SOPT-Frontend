@@ -9,6 +9,7 @@ export { default as Alert } from "./Alert/Alert";
 export { default as Card } from "./Card/Card";
 export { default as Descriptions } from "./Descriptions/Descriptions";
 export { default as Comment } from "./Comment/Comment";
+export { default as MarkdownEditor } from "./MarkdownEditor/MarkdownEditor";
 
 /**
  * Scaffold

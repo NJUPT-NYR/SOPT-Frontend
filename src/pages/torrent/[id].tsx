@@ -2,7 +2,6 @@ import { Scaffold, Card, Descriptions } from "@/components";
 import { GetServerSideProps } from "next";
 import React from "react";
 import gfm from "remark-gfm";
-import "github-markdown-css/github-markdown.css";
 
 import ReactMarkdown from "react-markdown";
 
@@ -52,13 +51,13 @@ export default function TorrentDetail({
               </Descriptions.Item>
             </Descriptions>
           </Card>
-          <Card className="mt-5 w-full markdown-body">
+          <Card className="mt-5 w-full prose">
             <Descriptions title="Intro"></Descriptions>
-            <ReactMarkdown className="markdown-body" plugins={[gfm]}>
+            <ReactMarkdown className="prose" plugins={[gfm]}>
               {intro}
             </ReactMarkdown>
           </Card>
-          <Card className="mt-5 w-full  markdown-body">
+          <Card className="mt-5 w-full prose">
             <Descriptions title="Comments">
               <div>No Comment</div>
             </Descriptions>

@@ -16,7 +16,7 @@ export default function Scaffold({ children, title }: IScaffold) {
       <div className="flex flex-col">
         <Navigation />
         <div className="flex-1 w-full h-full bg-gray-50 ">
-          <div className="max-w-full md:max-w-3xl xl:max-w-4xl mx-auto">
+          <div className="max-w-full md:max-w-4xl xl:max-w-5xl mx-auto">
             {children}
           </div>
         </div>

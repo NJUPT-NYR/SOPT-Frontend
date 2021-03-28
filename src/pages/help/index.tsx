@@ -2,7 +2,6 @@ import React from "react";
 import { AiFillEdit } from "react-icons/ai";
 
 import { Card, Scaffold } from "@/components";
-import "github-markdown-css/github-markdown.css";
 
 import HelpDoc from "../../docs/help.mdx";
 
@@ -18,7 +17,7 @@ export default function Help() {
               </div>
             </a>
           </span>
-          <div className="markdown-body">
+          <div className="prose">
             <HelpDoc />
           </div>
         </div>
