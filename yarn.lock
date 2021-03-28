@@ -8348,6 +8348,13 @@ table@^6.0.4:
     slice-ansi "^4.0.0"
     string-width "^4.2.0"
 
+tailwindcss-filters@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/tailwindcss-filters/-/tailwindcss-filters-3.0.0.tgz#d5d40ca018a54b1aa2bdc57aeb6677529c24c8d8"
+  integrity sha512-xhortqs8fSp9id17EnneYhmruA5DfU6K0zvN6/mgDlEXKaHthjXlR74Ta+4lrX5Lp7tp6YigB09WO0TOWn7VEQ==
+  dependencies:
+    lodash "^4.17.15"
+
 tailwindcss@^2.0.3:
   version "2.0.3"
   resolved "https://registry.npmjs.org/tailwindcss/-/tailwindcss-2.0.3.tgz#f8d07797d1f89dc4b171673c26237b58783c2c86"
