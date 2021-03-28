@@ -41,7 +41,6 @@ export default function ProfileUserinfo({
         <Card>
           <Descriptions
             title="User Info"
-            className="w-max"
             layoutClassName="grid-cols-1 lg:grid-cols-2 xl:grid-cols-3"
           >
             <Descriptions.Item label="registerTime">

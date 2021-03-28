@@ -1,10 +1,11 @@
 import { Card, Scaffold } from "@/components";
 import { GetServerSideProps } from "next";
 import dynamic from "next/dynamic";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";
 import "react-markdown-editor-lite/lib/index.css";
+import "github-markdown-css/github-markdown.css";
 
 const MdEditor = dynamic(() => import("react-markdown-editor-lite"), {
   ssr: false,
@@ -18,9 +19,13 @@ interface ITorrentEdit {
 }
 
 export default function Uploading({ id, title, description }: ITorrentEdit) {
-  const handleEditorChange = (it: { text: string; html: string }) => {
-    return it.text;
-  };
+  const [editableText, setEditableText] = useState(description);
+  const handleEditorChange = useCallback(
+    (event: { text: string; html: string }) => {
+      setEditableText(event.text);
+    },
+    [setEditableText]
+  );
 
   return (
     <Scaffold title="Edit">
@@ -32,7 +37,7 @@ export default function Uploading({ id, title, description }: ITorrentEdit) {
         <Card className="mt-5 w-full">
           <div className="text-4xl font-normal mb-3 pb-2 ">DESCRIPTION</div>
           <MdEditor
-            value={description}
+            value={editableText}
             onChange={handleEditorChange}
             style={{ height: "500px" }}
             renderHTML={(text) => (
