@@ -80,7 +80,7 @@ export function charsFindIndex({
   return end;
 }
 
-export function stringReplace({
+export function stringAppendAroundSelection({
   str,
   selectionStart,
   selectionEnd,
@@ -157,7 +157,7 @@ export function stringAppendThisLine({
     start: selectionStart,
     end: 0,
     step: -1,
-    condition: (pos, chars) => chars[pos] === "\n",
+    condition: (pos, chars) => chars[pos - 1] === "\n",
   });
   chars.splice(selectionStart ?? 0, 0, replacement);
   return chars.join("");

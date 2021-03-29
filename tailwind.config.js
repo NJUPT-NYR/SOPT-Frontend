@@ -10,6 +10,12 @@ module.exports = {
   corePlugins: {
     outline: false,
   },
+  variants: {
+    extend: {
+      backgroundColor: ["active"],
+      textColor: ["active"],
+    },
+  },
   theme: {
     extend: {
       colors: {
@@ -38,7 +44,6 @@ module.exports = {
       },
     },
   },
-  variants: {},
   plugins: [
     require("@tailwindcss/forms"),
     require("tailwindcss-filters"),

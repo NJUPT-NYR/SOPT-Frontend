@@ -30,7 +30,7 @@ import {
   SizedHistoryState,
   stringAppendNextLine,
   stringAppendThisLine,
-  stringReplace,
+  stringAppendAroundSelection,
 } from "@/utils/tools";
 import classNames from "classnames";
 
@@ -138,7 +138,7 @@ export default function MarkdownEditor({
         <IconContainer
           onClick={() => {
             const { selectionStart, selectionEnd } = textareaRef.current ?? {};
-            const nextValue = stringReplace({
+            const nextValue = stringAppendAroundSelection({
               str: value,
               selectionStart,
               selectionEnd,
@@ -153,7 +153,7 @@ export default function MarkdownEditor({
         <IconContainer
           onClick={() => {
             const { selectionStart, selectionEnd } = textareaRef.current ?? {};
-            const nextValue = stringReplace({
+            const nextValue = stringAppendAroundSelection({
               str: value,
               selectionStart,
               selectionEnd,
@@ -171,7 +171,7 @@ export default function MarkdownEditor({
         <IconContainer
           onClick={() => {
             const { selectionStart, selectionEnd } = textareaRef.current ?? {};
-            const nextValue = stringReplace({
+            const nextValue = stringAppendAroundSelection({
               str: value,
               selectionStart,
               selectionEnd,
@@ -212,7 +212,7 @@ export default function MarkdownEditor({
         <IconContainer
           onClick={() => {
             const { selectionStart, selectionEnd } = textareaRef.current ?? {};
-            const nextValue = stringReplace({
+            const nextValue = stringAppendAroundSelection({
               str: value,
               selectionStart,
               selectionEnd,
@@ -382,7 +382,7 @@ function IconContainer({
         "ml-1 p-2 rounded-md  bg-243-243-243 w-max transition-all relative ",
         disable
           ? "text-gray-200 cursor-not-allowed "
-          : "cursor-pointer text-105-105-105 hover:text-243-243-243 hover:bg-105-105-105"
+          : "cursor-pointer text-105-105-105 hover:text-243-243-243 hover:bg-105-105-105  active:text-243-243-243 active:bg-105-105-105"
       )}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={hanldeMouseLeave}
