@@ -8,8 +8,8 @@ const navigationItems = [
     to: "/",
   },
   {
-    label: "Upload",
-    to: "/uploading",
+    label: "New",
+    to: "/torrent/create",
   },
   {
     label: "Help",

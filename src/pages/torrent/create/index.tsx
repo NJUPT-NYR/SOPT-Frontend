@@ -1,26 +1,15 @@
 import {
   Card,
+  Input,
   Scaffold,
   MarkdownEditor as MdEditor,
-  Input,
 } from "@/components";
-import { GetServerSideProps } from "next";
 import React, { useCallback, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";
 
-interface ITorrentEdit {
-  id: number;
-  title: string;
-  description?: string;
-  tag?: string[];
-  length?: number;
-  files?: string[];
-  infohash?: string;
-}
-
-export default function Edit({ id, title, description }: ITorrentEdit) {
-  const [editableText, setEditableText] = useState(description);
+export default function Create() {
+  const [editableText, setEditableText] = useState("Your New Post");
   const handleEditorChange = useCallback(
     (event: { text: string }) => {
       setEditableText(event.text);
@@ -33,10 +22,10 @@ export default function Edit({ id, title, description }: ITorrentEdit) {
       <div className="pt-14 mx-auto max-w-9/10-screen ">
         <Card>
           <div className="text-4xl font-normal mb-3 pb-2 ">Title</div>
-          <Input defaultValue={title} />
+          <Input placeholder={"New Title"} />
         </Card>
         <Card className="mt-5 w-full">
-          <div className="text-4xl font-normal mb-3 pb-2 ">Description</div>
+          <div className="text-4xl font-normal mb-3 pb-2 ">Decription</div>
           <MdEditor
             value={editableText}
             onChange={handleEditorChange}
@@ -53,14 +42,3 @@ export default function Edit({ id, title, description }: ITorrentEdit) {
     </Scaffold>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.query;
-  return {
-    props: {
-      id,
-      title: "New Torrent",
-      description: "Write down your own description",
-    },
-  };
-};

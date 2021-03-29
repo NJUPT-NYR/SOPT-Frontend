@@ -7281,13 +7281,6 @@ react-is@^17.0.1:
   resolved "https://registry.npmjs.org/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
-react-markdown-editor-lite@^1.2.4:
-  version "1.2.4"
-  resolved "https://registry.npm.taobao.org/react-markdown-editor-lite/download/react-markdown-editor-lite-1.2.4.tgz#d47ea00f62e7c82ae8803a990d011d4f44015c20"
-  integrity sha1-1H6gD2LnyCrogDqZDQEdT0QBXCA=
-  dependencies:
-    classnames "^2.2.6"
-
 react-markdown@^5.0.3:
   version "5.0.3"
   resolved "https://registry.npmjs.org/react-markdown/-/react-markdown-5.0.3.tgz#41040ea7a9324b564b328fb81dd6c04f2a5373ac"
