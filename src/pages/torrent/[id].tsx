@@ -51,13 +51,13 @@ export default function TorrentDetail({
               </Descriptions.Item>
             </Descriptions>
           </Card>
-          <Card className="mt-5 w-full prose">
+          <Card className="mt-5 w-full">
             <Descriptions title="Intro"></Descriptions>
-            <ReactMarkdown className="prose" plugins={[gfm]}>
+            <ReactMarkdown className="prose w-full max-w-full" plugins={[gfm]}>
               {intro}
             </ReactMarkdown>
           </Card>
-          <Card className="mt-5 w-full prose">
+          <Card className="mt-5 w-full">
             <Descriptions title="Comments">
               <div>No Comment</div>
             </Descriptions>

@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { IBaseComponent } from "../base";
 import {
   ImFontSize,
@@ -19,10 +25,11 @@ import {
   ImUndo2,
   ImRedo2,
 } from "react-icons/im";
+import { BsTypeH1, BsTypeH2, BsTypeH3 } from "react-icons/bs";
 import {
-  charsFindIndex,
   SizedHistoryState,
   stringAppendNextLine,
+  stringAppendThisLine,
   stringReplace,
 } from "@/utils/tools";
 import classNames from "classnames";
@@ -78,7 +85,54 @@ export default function MarkdownEditor({
         style={{ height: "40px" }}
         className="w-full bg-243-243-243 border-b-2 border-220-220-220 flex items-center pl-1 "
       >
-        <IconContainer>
+        <IconContainer
+          hoverChildren={
+            <div className=" bg-243-243-243 text-105-105-105 cursor-pointer">
+              <div
+                className="py-2 px-4 hover:text-243-243-243 hover:bg-105-105-105"
+                onClick={() => {
+                  const { selectionStart } = textareaRef.current ?? {};
+                  const nextValue = stringAppendThisLine({
+                    str: value,
+                    selectionStart,
+                    replacement: "# ",
+                  });
+                  commitChange(nextValue);
+                }}
+              >
+                <BsTypeH1 />
+              </div>
+              <div
+                className="py-2 px-4  hover:text-243-243-243 hover:bg-105-105-105"
+                onClick={() => {
+                  const { selectionStart } = textareaRef.current ?? {};
+                  const nextValue = stringAppendThisLine({
+                    str: value,
+                    selectionStart,
+                    replacement: "## ",
+                  });
+                  commitChange(nextValue);
+                }}
+              >
+                <BsTypeH2 />
+              </div>
+              <div
+                className="py-2 px-4  hover:text-243-243-243 hover:bg-105-105-105"
+                onClick={() => {
+                  const { selectionStart } = textareaRef.current ?? {};
+                  const nextValue = stringAppendThisLine({
+                    str: value,
+                    selectionStart,
+                    replacement: "### ",
+                  });
+                  commitChange(nextValue);
+                }}
+              >
+                <BsTypeH3 />
+              </div>
+            </div>
+          }
+        >
           <ImFontSize />
         </IconContainer>
         <IconContainer
@@ -183,13 +237,53 @@ export default function MarkdownEditor({
         >
           <ImPagebreak />
         </IconContainer>
-        <IconContainer>
+        <IconContainer
+          onClick={() => {
+            const { selectionStart } = textareaRef.current ?? {};
+            const nextValue = stringAppendThisLine({
+              str: value,
+              selectionStart,
+              replacement: "> ",
+            });
+            commitChange(nextValue);
+          }}
+        >
           <ImEmbed />
         </IconContainer>
-        <IconContainer>
+        <IconContainer
+          onClick={() => {
+            const { selectionStart } = textareaRef.current ?? {};
+            const nextValue = stringAppendNextLine({
+              str: value,
+              selectionStart,
+              replacement: "\n\n``` \n```\n",
+            });
+            commitChange(nextValue);
+          }}
+        >
           <ImEmbed2 />
         </IconContainer>
-        <IconContainer>
+        <IconContainer
+          hoverChildren={
+            <div className="bg-243-243-243 text-105-105-105 px-4 py-1">
+              <TableSizeSelector
+                maxRows={4}
+                maxColumns={5}
+                onCommitSize={(size) => {
+                  const [row, col] = size;
+                  const { selectionStart } = textareaRef.current ?? {};
+                  const tableText = generateTableText(col, row);
+                  const nextValue = stringAppendNextLine({
+                    str: value,
+                    selectionStart,
+                    replacement: tableText,
+                  });
+                  commitChange(nextValue);
+                }}
+              />
+            </div>
+          }
+        >
           <ImTable2 />
         </IconContainer>
         <IconContainer
@@ -241,7 +335,7 @@ export default function MarkdownEditor({
       <div className="grid grid-cols-2 grid-rows-1 flex-1 overflow-hidden ">
         <textarea
           style={{ boxShadow: "none !important" }}
-          className=" focus:border-220-220-220 border-t-0 border-l-0 border-b-0   focus:shadow-none shadow-none resize-none h-full break-all border-220-220-220 "
+          className=" focus:border-220-220-220 border-t-0 border-l-0 border-b-0 focus:shadow-none shadow-none resize-none h-full break-all border-220-220-220 "
           value={value ?? ""}
           onChange={handleTextareaChange}
           ref={textareaRef}
@@ -256,12 +350,14 @@ export default function MarkdownEditor({
 
 interface IIconContainer extends IBaseComponent {
   disable?: boolean;
+  hoverChildren?: React.ReactNode;
 }
 
 function IconContainer({
   children,
   onClick,
   disable,
+  hoverChildren,
   ...rest
 }: IIconContainer) {
   const handleClick = useCallback(
@@ -270,18 +366,112 @@ function IconContainer({
     },
     [disable, onClick]
   );
+  const [isHover, setIsHover] = useState(false);
+
+  const handleMouseEnter = useCallback(() => {
+    setIsHover(true);
+  }, [setIsHover]);
+
+  const hanldeMouseLeave = useCallback(() => {
+    setIsHover(false);
+  }, [setIsHover]);
+
   return (
     <div
       className={classNames(
-        "ml-1 p-2 rounded-md  bg-243-243-243 w-max transition-all",
+        "ml-1 p-2 rounded-md  bg-243-243-243 w-max transition-all relative ",
         disable
           ? "text-gray-200 cursor-not-allowed "
           : "cursor-pointer text-105-105-105 hover:text-243-243-243 hover:bg-105-105-105"
       )}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={hanldeMouseLeave}
       onClick={handleClick}
       {...rest}
     >
-      {children}
+      <div>{children}</div>
+      {hoverChildren && (
+        <div
+          className={classNames(
+            "absolute left-0 top-8 bg-white shadow-sm rounded-sm z-20 overflow-hidden ",
+            !isHover && "hidden"
+          )}
+        >
+          {hoverChildren}
+        </div>
+      )}
     </div>
   );
+}
+
+interface ITableSizeSelector extends IBaseComponent {
+  onCommitSize: (size: [number, number]) => void;
+  maxRows: number;
+  maxColumns: number;
+}
+
+function TableSizeSelector({
+  maxRows,
+  maxColumns,
+  onCommitSize,
+}: ITableSizeSelector) {
+  const [size, setSize] = useState<[number, number]>([0, 0]);
+  return (
+    <div>
+      <div
+        className="grid gap-x-1 gap-y-1"
+        style={{
+          gridTemplateColumns: `repeat(${maxColumns}, 1fr)`,
+          gridTemplateRows: `repeat(${maxRows}, 1fr)`,
+        }}
+        onMouseLeave={() => {
+          setSize([0, 0]);
+        }}
+      >
+        {Array.from({ length: maxColumns * maxRows }).map((_val, index) => {
+          const currentRow = ~~(index / maxColumns) + 1;
+          const currentCol = (index % maxColumns) + 1;
+          return (
+            <div
+              className={classNames(
+                "w-4 h-4  p-1 cursor-pointer ",
+                size[0] >= currentRow && size[1] >= currentCol
+                  ? "bg-gray-500"
+                  : "bg-gray-300"
+              )}
+              data-index={index}
+              data-row={currentRow}
+              data-col={currentCol}
+              key={index}
+              onMouseOver={(event) => {
+                let { row, col } = (event.currentTarget as any).dataset ?? {};
+                row = parseInt(row);
+                col = parseInt(col);
+                if (Number.isInteger(row) && Number.isInteger(col)) {
+                  setSize([row, col]);
+                }
+              }}
+              onClick={() => {
+                onCommitSize(size);
+              }}
+            ></div>
+          );
+        })}
+      </div>
+      <div className="text-center mt-1">{size[0] + " x " + size[1]}</div>
+    </div>
+  );
+}
+
+function generateTableText(col, row) {
+  let result = "\n";
+  row = Math.max(row, 2);
+  const generateLine = (col: number, content?: string) =>
+    "| " + ((content ?? "   ") + "|").repeat(col) + "\n";
+  result += generateLine(col, " header ");
+  result += generateLine(col, " ---- ");
+  for (let i = 0; i < row - 1; i++) {
+    result += generateLine(col, " data ");
+  }
+  return result;
 }

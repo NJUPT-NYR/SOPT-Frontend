@@ -141,3 +141,24 @@ export function stringAppendNextLine({
   chars.splice((selectionStart ?? 0) + 1, 0, replacement);
   return chars.join("");
 }
+
+export function stringAppendThisLine({
+  str,
+  selectionStart,
+  replacement,
+}: {
+  str: string;
+  selectionStart: number;
+  replacement: string;
+}): string {
+  const chars = str.split("");
+  selectionStart = charsFindIndex({
+    chars,
+    start: selectionStart,
+    end: 0,
+    step: -1,
+    condition: (pos, chars) => chars[pos] === "\n",
+  });
+  chars.splice(selectionStart ?? 0, 0, replacement);
+  return chars.join("");
+}
