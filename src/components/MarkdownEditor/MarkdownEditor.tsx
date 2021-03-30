@@ -33,6 +33,7 @@ import {
   stringAppendAroundSelection,
 } from "@/utils/tools";
 import classNames from "classnames";
+import { useShortcut } from "@/utils/hooks";
 
 interface IMarkdownEditor extends IBaseComponent {
   value: string;
@@ -46,12 +47,14 @@ export default function MarkdownEditor({
   value,
   ...rest
 }: IMarkdownEditor) {
+  const { register, revokeAll } = useShortcut();
+  const historyState = useMemo(() => new SizedHistoryState(10, value), []);
   const commitChange = useCallback(
     (text) => {
       onChange({ text });
       historyState.append(text);
     },
-    [onChange]
+    [onChange, historyState]
   );
 
   const handleTextareaChange = useCallback(
@@ -60,8 +63,6 @@ export default function MarkdownEditor({
     },
     [commitChange]
   );
-
-  const historyState = useMemo(() => new SizedHistoryState(10, value), []);
 
   const textareaRef = useRef(null);
 
@@ -74,6 +75,208 @@ export default function MarkdownEditor({
       historyState.unSubscribe(handleHistoryStateChange);
     };
   });
+
+  const handleH1 = useCallback(() => {
+    const { selectionStart, value } = textareaRef.current ?? {};
+    const nextValue = stringAppendThisLine({
+      str: value,
+      selectionStart,
+      replacement: "# ",
+    });
+    commitChange(nextValue);
+  }, [textareaRef, stringAppendThisLine, commitChange]);
+
+  const handleH2 = useCallback(() => {
+    const { selectionStart, value } = textareaRef.current ?? {};
+    const nextValue = stringAppendThisLine({
+      str: value,
+      selectionStart,
+      replacement: "## ",
+    });
+    commitChange(nextValue);
+  }, [textareaRef, stringAppendThisLine, commitChange]);
+
+  const handleH3 = useCallback(() => {
+    const { selectionStart, value } = textareaRef.current ?? {};
+    const nextValue = stringAppendThisLine({
+      str: value,
+      selectionStart,
+      replacement: "### ",
+    });
+    commitChange(nextValue);
+  }, [textareaRef, stringAppendThisLine, commitChange]);
+
+  const handleBold = useCallback(() => {
+    const { selectionStart, selectionEnd, value } = textareaRef.current ?? {};
+    const nextValue = stringAppendAroundSelection({
+      str: value,
+      selectionStart,
+      selectionEnd,
+      startReplacement: "**",
+      endReplacement: "**",
+    });
+    commitChange(nextValue);
+  }, [textareaRef, stringAppendAroundSelection, commitChange]);
+
+  const handleItalic = useCallback(() => {
+    const { selectionStart, selectionEnd, value } = textareaRef.current ?? {};
+    const nextValue = stringAppendAroundSelection({
+      str: value,
+      selectionStart,
+      selectionEnd,
+      startReplacement: "*",
+      endReplacement: "*",
+    });
+    commitChange(nextValue);
+  }, [textareaRef, stringAppendAroundSelection, commitChange]);
+
+  const handleStrikethrough = useCallback(() => {
+    const { selectionStart, selectionEnd, value } = textareaRef.current ?? {};
+    const nextValue = stringAppendAroundSelection({
+      str: value,
+      selectionStart,
+      selectionEnd,
+      startReplacement: "~~",
+      endReplacement: "~~",
+    });
+    commitChange(nextValue);
+  }, [textareaRef, stringAppendAroundSelection, commitChange]);
+
+  const handleUnnumberedList = useCallback(() => {
+    const { selectionStart, value } = textareaRef.current ?? {};
+    const nextValue = stringAppendNextLine({
+      str: value,
+      selectionStart,
+      replacement: "\n\n* [line text]",
+    });
+    commitChange(nextValue);
+  }, [textareaRef, stringAppendNextLine, commitChange]);
+
+  const handleNumberedList = useCallback(() => {
+    const { selectionStart, value } = textareaRef.current ?? {};
+    const nextValue = stringAppendNextLine({
+      str: value,
+      selectionStart,
+      replacement: "\n\n1. [line text]",
+    });
+    commitChange(nextValue);
+  }, [textareaRef, stringAppendNextLine, commitChange]);
+
+  const handleQuote = useCallback(() => {
+    const { selectionStart, selectionEnd, value } = textareaRef.current ?? {};
+    const nextValue = stringAppendAroundSelection({
+      str: value,
+      selectionStart,
+      selectionEnd,
+      startReplacement: "`",
+      endReplacement: "`",
+    });
+    commitChange(nextValue);
+  }, [textareaRef, stringAppendAroundSelection, commitChange]);
+
+  const handlePagebreak = useCallback(() => {
+    const { selectionStart, value } = textareaRef.current ?? {};
+    const nextValue = stringAppendNextLine({
+      str: value,
+      selectionStart,
+      replacement: "\n\n--- ",
+    });
+    commitChange(nextValue);
+  }, [textareaRef, stringAppendNextLine, commitChange]);
+
+  const handleEmbed = useCallback(() => {
+    const { selectionStart, value } = textareaRef.current ?? {};
+    const nextValue = stringAppendThisLine({
+      str: value,
+      selectionStart,
+      replacement: "> ",
+    });
+    commitChange(nextValue);
+  }, [textareaRef, stringAppendThisLine, commitChange]);
+
+  const handleCode = useCallback(() => {
+    const { selectionStart, value } = textareaRef.current ?? {};
+    const nextValue = stringAppendNextLine({
+      str: value,
+      selectionStart,
+      replacement: "\n\n``` \n```\n",
+    });
+    commitChange(nextValue);
+  }, [textareaRef, stringAppendNextLine, commitChange]);
+
+  const handleTable = useCallback(
+    (size) => {
+      const [row, col] = size;
+      const { selectionStart, value } = textareaRef.current ?? {};
+      const tableText = generateTableText(col, row);
+      const nextValue = stringAppendNextLine({
+        str: value,
+        selectionStart,
+        replacement: tableText,
+      });
+      commitChange(nextValue);
+    },
+    [textareaRef, stringAppendNextLine, generateTableText, commitChange]
+  );
+
+  const handleImage = useCallback(() => {
+    const { selectionStart, value } = textareaRef.current ?? {};
+    const nextValue = stringAppendNextLine({
+      str: value,
+      selectionStart,
+      replacement: "\n\n![]() ",
+    });
+    commitChange(nextValue);
+  }, [textareaRef, stringAppendNextLine, commitChange]);
+
+  const handleLink = useCallback(() => {
+    const { selectionStart, value } = textareaRef.current ?? {};
+    const nextValue = stringAppendNextLine({
+      str: value,
+      selectionStart,
+      replacement: "\n\n[]() ",
+    });
+    commitChange(nextValue);
+  }, [textareaRef, stringAppendNextLine, commitChange]);
+
+  useEffect(() => {
+    register({ key: "1", metaKey: true, callback: handleH1 });
+    register({ key: "2", metaKey: true, callback: handleH2 });
+    register({ key: "3", metaKey: true, callback: handleH3 });
+    register({ key: "b", metaKey: true, callback: handleBold });
+    register({ key: "i", metaKey: true, callback: handleItalic });
+    register({ key: "`", ctrlKey: true, callback: handleEmbed });
+    register({
+      key: "~",
+      ctrlKey: true,
+      shiftKey: true,
+      callback: handleStrikethrough,
+    });
+    register({ key: "k", metaKey: true, callback: handleLink });
+    register({ key: "i", ctrlKey: true, metaKey: true, callback: handleImage });
+    register({ key: "z", metaKey: true, callback: historyState.movePrev });
+    register({
+      key: "z",
+      metaKey: true,
+      shiftKey: true,
+      callback: historyState.moveNext,
+    });
+
+    return () => {
+      revokeAll();
+    };
+  }, [
+    handleH1,
+    handleH2,
+    handleH3,
+    handleBold,
+    handleItalic,
+    handleEmbed,
+    handleStrikethrough,
+    handleLink,
+    handleImage,
+    historyState,
+  ]);
 
   return (
     <div
@@ -90,43 +293,19 @@ export default function MarkdownEditor({
             <div className=" bg-243-243-243 text-105-105-105 cursor-pointer">
               <div
                 className="py-2 px-4 hover:text-243-243-243 hover:bg-105-105-105"
-                onClick={() => {
-                  const { selectionStart } = textareaRef.current ?? {};
-                  const nextValue = stringAppendThisLine({
-                    str: value,
-                    selectionStart,
-                    replacement: "# ",
-                  });
-                  commitChange(nextValue);
-                }}
+                onClick={handleH1}
               >
                 <BsTypeH1 />
               </div>
               <div
                 className="py-2 px-4  hover:text-243-243-243 hover:bg-105-105-105"
-                onClick={() => {
-                  const { selectionStart } = textareaRef.current ?? {};
-                  const nextValue = stringAppendThisLine({
-                    str: value,
-                    selectionStart,
-                    replacement: "## ",
-                  });
-                  commitChange(nextValue);
-                }}
+                onClick={handleH2}
               >
                 <BsTypeH2 />
               </div>
               <div
                 className="py-2 px-4  hover:text-243-243-243 hover:bg-105-105-105"
-                onClick={() => {
-                  const { selectionStart } = textareaRef.current ?? {};
-                  const nextValue = stringAppendThisLine({
-                    str: value,
-                    selectionStart,
-                    replacement: "### ",
-                  });
-                  commitChange(nextValue);
-                }}
+                onClick={handleH3}
               >
                 <BsTypeH3 />
               </div>
@@ -135,132 +314,31 @@ export default function MarkdownEditor({
         >
           <ImFontSize />
         </IconContainer>
-        <IconContainer
-          onClick={() => {
-            const { selectionStart, selectionEnd } = textareaRef.current ?? {};
-            const nextValue = stringAppendAroundSelection({
-              str: value,
-              selectionStart,
-              selectionEnd,
-              startReplacement: "**",
-              endReplacement: "**",
-            });
-            commitChange(nextValue);
-          }}
-        >
+        <IconContainer onClick={handleBold}>
           <ImBold />
         </IconContainer>
-        <IconContainer
-          onClick={() => {
-            const { selectionStart, selectionEnd } = textareaRef.current ?? {};
-            const nextValue = stringAppendAroundSelection({
-              str: value,
-              selectionStart,
-              selectionEnd,
-              startReplacement: "*",
-              endReplacement: "*",
-            });
-            commitChange(nextValue);
-          }}
-        >
+        <IconContainer onClick={handleItalic}>
           <ImItalic />
         </IconContainer>
-        {/* <IconContainer>
-          <ImUnderline />
-        </IconContainer> */}
-        <IconContainer
-          onClick={() => {
-            const { selectionStart, selectionEnd } = textareaRef.current ?? {};
-            const nextValue = stringAppendAroundSelection({
-              str: value,
-              selectionStart,
-              selectionEnd,
-              startReplacement: "~~",
-              endReplacement: "~~",
-            });
-            commitChange(nextValue);
-          }}
-        >
+        <IconContainer onClick={handleStrikethrough}>
           <ImStrikethrough />
         </IconContainer>
-        <IconContainer
-          onClick={() => {
-            const { selectionStart } = textareaRef.current ?? {};
-            const nextValue = stringAppendNextLine({
-              str: value,
-              selectionStart,
-              replacement: "\n\n* ",
-            });
-            commitChange(nextValue);
-          }}
-        >
+        <IconContainer onClick={handleUnnumberedList}>
           <ImList2 />
         </IconContainer>
-        <IconContainer
-          onClick={() => {
-            const { selectionStart } = textareaRef.current ?? {};
-            const nextValue = stringAppendNextLine({
-              str: value,
-              selectionStart,
-              replacement: "\n\n1. ",
-            });
-            commitChange(nextValue);
-          }}
-        >
+        <IconContainer onClick={handleNumberedList}>
           <ImListNumbered />
         </IconContainer>
-        <IconContainer
-          onClick={() => {
-            const { selectionStart, selectionEnd } = textareaRef.current ?? {};
-            const nextValue = stringAppendAroundSelection({
-              str: value,
-              selectionStart,
-              selectionEnd,
-              startReplacement: "`",
-              endReplacement: "`",
-            });
-            commitChange(nextValue);
-          }}
-        >
+        <IconContainer onClick={handleQuote}>
           <ImQuotesRight />
         </IconContainer>
-        <IconContainer
-          onClick={() => {
-            const { selectionStart } = textareaRef.current ?? {};
-            const nextValue = stringAppendNextLine({
-              str: value,
-              selectionStart,
-              replacement: "\n\n--- ",
-            });
-            commitChange(nextValue);
-          }}
-        >
+        <IconContainer onClick={handlePagebreak}>
           <ImPagebreak />
         </IconContainer>
-        <IconContainer
-          onClick={() => {
-            const { selectionStart } = textareaRef.current ?? {};
-            const nextValue = stringAppendThisLine({
-              str: value,
-              selectionStart,
-              replacement: "> ",
-            });
-            commitChange(nextValue);
-          }}
-        >
+        <IconContainer onClick={handleEmbed}>
           <ImEmbed />
         </IconContainer>
-        <IconContainer
-          onClick={() => {
-            const { selectionStart } = textareaRef.current ?? {};
-            const nextValue = stringAppendNextLine({
-              str: value,
-              selectionStart,
-              replacement: "\n\n``` \n```\n",
-            });
-            commitChange(nextValue);
-          }}
-        >
+        <IconContainer onClick={handleCode}>
           <ImEmbed2 />
         </IconContainer>
         <IconContainer
@@ -269,65 +347,31 @@ export default function MarkdownEditor({
               <TableSizeSelector
                 maxRows={4}
                 maxColumns={5}
-                onCommitSize={(size) => {
-                  const [row, col] = size;
-                  const { selectionStart } = textareaRef.current ?? {};
-                  const tableText = generateTableText(col, row);
-                  const nextValue = stringAppendNextLine({
-                    str: value,
-                    selectionStart,
-                    replacement: tableText,
-                  });
-                  commitChange(nextValue);
-                }}
+                onCommitSize={handleTable}
               />
             </div>
           }
         >
           <ImTable2 />
         </IconContainer>
-        <IconContainer
-          onClick={() => {
-            const { selectionStart } = textareaRef.current ?? {};
-            const nextValue = stringAppendNextLine({
-              str: value,
-              selectionStart,
-              replacement: "\n\n![]() ",
-            });
-            commitChange(nextValue);
-          }}
-        >
+        <IconContainer onClick={handleImage}>
           <ImImage />
         </IconContainer>
-        <IconContainer
-          onClick={() => {
-            const { selectionStart } = textareaRef.current ?? {};
-            const nextValue = stringAppendNextLine({
-              str: value,
-              selectionStart,
-              replacement: "\n\n[]() ",
-            });
-            commitChange(nextValue);
-          }}
-        >
+        <IconContainer onClick={handleLink}>
           <ImLink />
         </IconContainer>
-        <IconContainer
-          onClick={() => {
-            historyState.clear();
-          }}
-        >
+        <IconContainer onClick={historyState.clear}>
           <ImBin2 />
         </IconContainer>
         <IconContainer
           disable={!historyState.hasPrev}
-          onClick={historyState.movePrev.bind(historyState)}
+          onClick={historyState.movePrev}
         >
           <ImUndo2 />
         </IconContainer>
         <IconContainer
           disable={!historyState.hasNext}
-          onClick={historyState.moveNext.bind(historyState)}
+          onClick={historyState.moveNext}
         >
           <ImRedo2 />
         </IconContainer>
@@ -351,6 +395,7 @@ export default function MarkdownEditor({
 interface IIconContainer extends IBaseComponent {
   disable?: boolean;
   hoverChildren?: React.ReactNode;
+  innerRef?: any;
 }
 
 function IconContainer({
@@ -358,6 +403,7 @@ function IconContainer({
   onClick,
   disable,
   hoverChildren,
+  innerRef,
   ...rest
 }: IIconContainer) {
   const handleClick = useCallback(
@@ -387,6 +433,7 @@ function IconContainer({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={hanldeMouseLeave}
       onClick={handleClick}
+      ref={innerRef}
       {...rest}
     >
       <div>{children}</div>

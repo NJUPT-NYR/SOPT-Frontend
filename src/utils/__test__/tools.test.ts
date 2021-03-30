@@ -1,5 +1,4 @@
 import {
-  charsFindIndex,
   SizedHistoryState,
   stringAppendAroundSelection,
   stringAppendNextLine,
@@ -52,53 +51,6 @@ describe("sized history state", () => {
     state.append("c2");
     state.clear();
     expect(state.value).toBe(null);
-    done();
-  });
-});
-
-describe("chars find index", () => {
-  it("find end of segment", (done) => {
-    const chars = "hello1 hello2 hello3".split("");
-    expect(
-      charsFindIndex({
-        chars,
-        start: 9,
-        end: chars.length,
-        step: 1,
-        condition: (pos, chars) => chars[pos] === " " || chars[pos] === "\n",
-      })
-    ).toBe(13);
-    expect(
-      charsFindIndex({
-        chars,
-        start: 9,
-        end: chars.length,
-        step: -1,
-        condition: (pos, chars) => chars[pos] === " " || chars[pos] === "\n",
-      })
-    ).toBe(6);
-    done();
-  });
-  it("find end of line", (done) => {
-    const chars = "hello1 \nhello2\n hello3".split("");
-    expect(
-      charsFindIndex({
-        chars,
-        start: 10,
-        end: chars.length,
-        step: 1,
-        condition: (pos, chars) => chars[pos] === " " || chars[pos] === "\n",
-      })
-    ).toBe(14);
-    expect(
-      charsFindIndex({
-        chars,
-        start: 9,
-        end: chars.length,
-        step: -1,
-        condition: (pos, chars) => chars[pos] === " " || chars[pos] === "\n",
-      })
-    ).toBe(7);
     done();
   });
 });
