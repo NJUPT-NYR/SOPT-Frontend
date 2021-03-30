@@ -79,7 +79,7 @@ export function stringAppendAroundSelection({
     const chars = str.split("");
     if (selectionStart === selectionEnd) {
       for (let i = selectionStart; i >= 0; i--) {
-        if (chars[i - 1] === " " || i === 0) {
+        if (chars[i - 1] === " " || chars[i - 1] === "\n" || i === 0) {
           selectionStart = i;
           break;
         }

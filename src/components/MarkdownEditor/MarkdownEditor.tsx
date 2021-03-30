@@ -294,18 +294,21 @@ export default function MarkdownEditor({
               <div
                 className="py-2 px-4 hover:text-243-243-243 hover:bg-105-105-105"
                 onClick={handleH1}
+                title="command + 1"
               >
                 <BsTypeH1 />
               </div>
               <div
                 className="py-2 px-4  hover:text-243-243-243 hover:bg-105-105-105"
                 onClick={handleH2}
+                title="commmand + 2"
               >
                 <BsTypeH2 />
               </div>
               <div
                 className="py-2 px-4  hover:text-243-243-243 hover:bg-105-105-105"
                 onClick={handleH3}
+                title="command + 3"
               >
                 <BsTypeH3 />
               </div>
@@ -314,13 +317,13 @@ export default function MarkdownEditor({
         >
           <ImFontSize />
         </IconContainer>
-        <IconContainer onClick={handleBold}>
+        <IconContainer onClick={handleBold} title="command + B">
           <ImBold />
         </IconContainer>
-        <IconContainer onClick={handleItalic}>
+        <IconContainer onClick={handleItalic} title="command + I">
           <ImItalic />
         </IconContainer>
-        <IconContainer onClick={handleStrikethrough}>
+        <IconContainer onClick={handleStrikethrough} title="ctrl + shift + `">
           <ImStrikethrough />
         </IconContainer>
         <IconContainer onClick={handleUnnumberedList}>
@@ -335,7 +338,7 @@ export default function MarkdownEditor({
         <IconContainer onClick={handlePagebreak}>
           <ImPagebreak />
         </IconContainer>
-        <IconContainer onClick={handleEmbed}>
+        <IconContainer onClick={handleEmbed} title="ctrl + `">
           <ImEmbed />
         </IconContainer>
         <IconContainer onClick={handleCode}>
@@ -354,10 +357,10 @@ export default function MarkdownEditor({
         >
           <ImTable2 />
         </IconContainer>
-        <IconContainer onClick={handleImage}>
+        <IconContainer onClick={handleImage} title="command + ctrl + i">
           <ImImage />
         </IconContainer>
-        <IconContainer onClick={handleLink}>
+        <IconContainer onClick={handleLink} title="command + k">
           <ImLink />
         </IconContainer>
         <IconContainer onClick={historyState.clear}>
@@ -366,12 +369,14 @@ export default function MarkdownEditor({
         <IconContainer
           disable={!historyState.hasPrev}
           onClick={historyState.movePrev}
+          title="command + z"
         >
           <ImUndo2 />
         </IconContainer>
         <IconContainer
           disable={!historyState.hasNext}
           onClick={historyState.moveNext}
+          title="command + shfit + z"
         >
           <ImRedo2 />
         </IconContainer>
@@ -396,6 +401,7 @@ interface IIconContainer extends IBaseComponent {
   disable?: boolean;
   hoverChildren?: React.ReactNode;
   innerRef?: any;
+  title?: string;
 }
 
 function IconContainer({
@@ -510,7 +516,7 @@ function TableSizeSelector({
   );
 }
 
-function generateTableText(col, row) {
+function generateTableText(col: number, row: number): string {
   let result = "\n";
   row = Math.max(row, 2);
   const generateLine = (col: number, content?: string) =>
