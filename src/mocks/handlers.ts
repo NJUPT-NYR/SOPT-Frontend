@@ -61,4 +61,22 @@ export const handlers: {
       }
     },
   },
+  {
+    path: "/user/add_user",
+    method: "POST",
+    resolver(req, res) {
+      const { email, username, password, inviteCode } = req.body;
+      if (email && username) {
+        res.json(
+          response.success({
+            id: 1,
+            email: email,
+            username: username,
+            passkey: "a4d28fd33fa62e837aed9d0c3668818f",
+            role: 1,
+          })
+        );
+      }
+    },
+  },
 ];

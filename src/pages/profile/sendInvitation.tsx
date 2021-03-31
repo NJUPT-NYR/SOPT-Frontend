@@ -8,6 +8,7 @@ import {
 import { GetServerSideProps } from "next";
 import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
+import { GoTelescope } from "react-icons/go";
 
 interface IProfileSendInvitation {
   username: string;
@@ -26,7 +27,7 @@ export default function ProfileInvitaiton({
     // setFormData(data);
   }, []);
   return (
-    <ProfileScaffold avatar={avatar} username={username}>
+    <ProfileScaffold avatar={avatar} username={username} isAdmin>
       <Card>
         <Descriptions title="Send Invitation"></Descriptions>
         <form
@@ -63,7 +64,26 @@ export default function ProfileInvitaiton({
           </Button>
         </form>
       </Card>
+      <Card className="mt-5">
+        <ProfileInvitationList />
+      </Card>
     </ProfileScaffold>
+  );
+}
+
+interface IProfileInvitationList {}
+
+function ProfileInvitationList() {
+  return (
+    <>
+      <Descriptions title="Invitations"></Descriptions>
+      <div className="flex flex-col items-center">
+        <div>
+          <GoTelescope className="text-9xl my-3 ml-6" />
+        </div>
+        <div className="text-gray-500 ml-6">No Invitations</div>
+      </div>
+    </>
   );
 }
 

@@ -2,19 +2,21 @@ import React, { useCallback, useRef } from "react";
 import { IBaseComponent } from "../base";
 import Scaffold from "./Scaffold";
 import { RiImageEditFill } from "react-icons/ri";
-import { PROFILE_SIADBARS } from "@/utils/constants";
+import { PROFILE_SIADBARS, PROFILE_SIADBARS_ADMIN } from "@/utils/constants";
 import classNames from "classnames";
 import Link from "next/link";
 
 interface IProfileScaffold extends IBaseComponent {
   avatar: string;
   username: string;
+  isAdmin?: boolean;
 }
 
 export default function ProfileScaffold({
   avatar,
   username,
   children,
+  isAdmin,
 }: IProfileScaffold) {
   const avatarRef = useRef(null);
 
@@ -48,7 +50,13 @@ export default function ProfileScaffold({
             </div>
           </div>
           <div className="font-light text-2xl">{username}</div>
-          <SideBar />
+          <SideBar list={PROFILE_SIADBARS} />
+          {isAdmin && (
+            <>
+              <div className="mt-1 text-gray-500">As Admin</div>
+              <SideBar list={PROFILE_SIADBARS_ADMIN} />
+            </>
+          )}
         </div>
         <div>{children}</div>
       </div>
@@ -56,10 +64,14 @@ export default function ProfileScaffold({
   );
 }
 
-function SideBar() {
+interface ISideBar {
+  list: { label: string; path: string }[];
+}
+
+function SideBar({ list }: ISideBar) {
   return (
     <div className="overflow-hidden bg-white w-full mt-3 mb-3">
-      {PROFILE_SIADBARS.map((one, index, arr) => (
+      {list.map((one, index, arr) => (
         <Link key={one.path} href={one.path}>
           <div
             className={classNames(

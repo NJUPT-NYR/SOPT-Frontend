@@ -36,7 +36,7 @@ export default function ProfileUserinfo({
     router.push("/login");
   }, [router]);
   return (
-    <ProfileScaffold avatar={avatar} username={username}>
+    <ProfileScaffold avatar={avatar} username={username} isAdmin>
       <div>
         <Card>
           <Descriptions
