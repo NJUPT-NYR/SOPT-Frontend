@@ -136,3 +136,18 @@ export function stringAppendThisLine({
   chars.splice(selectionStart ?? 0, 0, replacement);
   return chars.join("");
 }
+
+export function objectSkipNullOrUndefinedOrEmptyString(obj) {
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      if (
+        obj[key] === undefined ||
+        obj[key] === null ||
+        (typeof obj[key] === "string" && obj[key].length === 0)
+      ) {
+        delete obj[key];
+      }
+    }
+  }
+  return obj;
+}

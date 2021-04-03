@@ -28,6 +28,8 @@ export default function App({ Component, pageProps }: AppProps) {
     <SWRConfig
       value={{
         fetcher,
+        shouldRetryOnError: false,
+        revalidateOnFocus: false,
       }}
     >
       <Component {...pageProps} />

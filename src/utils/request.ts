@@ -11,7 +11,11 @@ export function makeFetcher(
   };
 }
 
-export const makeServerFetcher = (token?: string) => {
+interface IMakeServerFetcher {
+  token?: string;
+}
+
+export const makeServerFetcher = ({ token }: IMakeServerFetcher = {}) => {
   const config: AxiosRequestConfig = { baseURL: process.env.API_GATEWAY_URL };
   if (token) {
     config.headers["Authorization"] = "Bearer " + token;
@@ -31,9 +35,9 @@ export async function serverDoFetch(
     }
     return {
       data: response?.data?.data,
-      error: undefined,
+      error: null,
     };
   } catch (error) {
-    return { data: undefined, error };
+    return { data: undefined, error: String(error) };
   }
 }

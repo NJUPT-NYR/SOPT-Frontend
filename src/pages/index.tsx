@@ -3,11 +3,11 @@ import type { Column } from "react-table";
 import classNames from "classnames";
 import qs from "query-string";
 
-import { Link, Pagination, Scaffold, Search, Table } from "@/components";
+import { Link, Pagination, Scaffold, Search, Table, Alert } from "@/components";
 import { useRouter } from "next/router";
 import { IRecord, ISlimTorrent } from "@/utils/interface";
 import { GoArrowDown, GoArrowUp, GoCheck } from "react-icons/go";
-import { BiLink } from "react-icons/bi";
+import { GoTelescope } from "react-icons/go";
 import { GetServerSideProps } from "next";
 import useSWR from "swr";
 import * as model from "@/utils/model";
@@ -59,9 +59,10 @@ interface IHome {
   list?: number[];
   pagination?: number;
   keyword?: string;
+  error?: string;
 }
 
-export default function Home({ list, pagination, keyword }: IHome) {
+export default function Home({ list, pagination, keyword, error }: IHome) {
   const router = useRouter();
   const tableColumns = useMemo(() => columns, []);
 
@@ -71,6 +72,11 @@ export default function Home({ list, pagination, keyword }: IHome) {
 
   return (
     <Scaffold title="Home">
+      {error && (
+        <Alert className="mt-3" type="error">
+          <span>{error}</span>
+        </Alert>
+      )}
       <div className={` flex flex-col items-center pb-32`}>
         <Search
           className={classNames(list?.length ? "mt-20" : "mt-40")}
@@ -97,26 +103,30 @@ export default function Home({ list, pagination, keyword }: IHome) {
             columns={tableColumns}
             data={list}
             empty={
-              <div className="p-5 text-center text-xl text-gray-500">
-                Empty Data
+              <div className="flex flex-col items-center">
+                <div className="p-5 text-center text-xl text-gray-500">
+                  Empty Data
+                </div>
               </div>
             }
             rowSelect
             onRowSelect={handleRowSelect}
           />
-          <div className="flex justify-end w-full">
-            <Pagination
-              maxPagination={100}
-              currentPagination={pagination ?? 1}
-              className="mt-4"
-              handleCreatePath={(pagination) =>
-                qs.stringifyUrl(
-                  { url: "/", query: { pagination, keyword } },
-                  { skipEmptyString: true, skipNull: true }
-                )
-              }
-            />
-          </div>
+          {list?.length ? (
+            <div className="flex justify-end w-full">
+              <Pagination
+                maxPagination={100}
+                currentPagination={pagination ?? 1}
+                className="mt-4"
+                handleCreatePath={(pagination) =>
+                  qs.stringifyUrl(
+                    { url: "/", query: { pagination, keyword } },
+                    { skipEmptyString: true, skipNull: true }
+                  )
+                }
+              />
+            </div>
+          ) : null}
         </div>
       </div>
     </Scaffold>
@@ -126,13 +136,18 @@ export default function Home({ list, pagination, keyword }: IHome) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { pagination, keyword } = context.query;
   const fetcher = makeServerFetcher();
+  const query: model.IRequestTorrentList = {
+    freeonly: false,
+  };
   const { data, error } = await serverDoFetch(fetcher, [
     model.requestTorrentList,
+    query,
   ]);
 
   return {
     props: {
-      list: error ? [] : data,
+      error: error,
+      list: data?.ret ?? [],
       pagination: pagination ? Number(pagination) : 1,
       keyword: keyword ?? null,
     },

@@ -53,7 +53,7 @@ export default function ProfileScaffold({
           <SideBar list={PROFILE_SIADBARS} />
           {isAdmin && (
             <>
-              <div className="mt-1 text-gray-500">As Admin</div>
+              <div className="mt-1 text-gray-500 text-sm">As Admin</div>
               <SideBar list={PROFILE_SIADBARS_ADMIN} />
             </>
           )}

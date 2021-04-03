@@ -8,11 +8,8 @@ export default function Login() {
   const { register, handleSubmit, errors } = useForm();
   const [formData, setFormData] = useState(null);
 
-  const { data, error } = useSWR(
-    formData && [model.requestUserLogin, formData],
-    {
-      shouldRetryOnError: false,
-    }
+  const { data, error, isValidating } = useSWR(
+    formData && [model.requestUserLogin, formData]
   );
 
   const onSubmit = useCallback((data) => {
@@ -25,7 +22,7 @@ export default function Login() {
     <Scaffold title="Login">
       <div className="overflow-hidden py-3">
         <div className="mt-2">
-          {error && (
+          {!isValidating && error && (
             <Alert type="error" closable={false}>
               <span>{String(error)}</span>
             </Alert>
@@ -69,7 +66,7 @@ export default function Login() {
                     Forget Password?
                   </span>
                 </Link>
-                <Button type="submit">
+                <Button type="submit" isLoading={isValidating}>
                   <span>Login</span>
                 </Button>
               </div>
