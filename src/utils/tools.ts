@@ -178,3 +178,7 @@ export function dateFormat(date: Date, format: string) {
     }
   return format;
 }
+
+export function isBrowser(): boolean {
+  return globalThis.window !== undefined;
+}

@@ -43,7 +43,7 @@ export default function ProfileScaffold({
     if (!isValidating && data === null) {
       router.replace(router.route);
     }
-  }, [data]);
+  }, [data, isValidating]);
 
   return (
     <Scaffold title="Profile">
