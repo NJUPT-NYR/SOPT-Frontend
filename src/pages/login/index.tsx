@@ -3,20 +3,36 @@ import { Alert, Button, Input, Link, Scaffold } from "@/components";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 import * as model from "@/utils/model";
+import { useEffect } from "react";
+import cookies from "js-cookie";
+import { useRouter } from "next/router";
+import { COOKIE_NAME_JWT_TOKEN } from "@/utils/constants";
 
 export default function Login() {
   const { register, handleSubmit, errors } = useForm();
   const [formData, setFormData] = useState(null);
+  const router = useRouter();
 
-  const { data, error, isValidating } = useSWR(
+  const { data, error, isValidating } = useSWR<string | undefined>(
     formData && [model.requestUserLogin, formData]
   );
 
-  const onSubmit = useCallback((data) => {
-    setFormData(data);
-  }, []);
+  const onSubmit = useCallback(
+    (data) => {
+      setFormData(data);
+    },
+    [setFormData]
+  );
 
-  console.log(data);
+  useEffect(() => {
+    if (data?.length) {
+      cookies.set(COOKIE_NAME_JWT_TOKEN, data, {
+        sameSite: "Lax",
+        expires: 3,
+      });
+      router.replace("/profile");
+    }
+  }, [data]);
 
   return (
     <Scaffold title="Login">

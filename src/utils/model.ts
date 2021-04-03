@@ -50,3 +50,15 @@ export const requestUserAddUser = (
   instance: AxiosInstance,
   data: IRequestUserAddUser
 ) => instance.post("/user/add_user", data);
+
+interface IRequestUserShowUser {
+  username?: string;
+}
+
+export const requestUserShowUser = (
+  instance: AxiosInstance,
+  param: IRequestUserShowUser
+) =>
+  instance.get(
+    qs.stringifyUrl({ url: "/user/show_user", query: { ...param } })
+  );

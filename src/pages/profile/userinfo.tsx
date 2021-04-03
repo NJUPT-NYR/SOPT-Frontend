@@ -3,36 +3,48 @@ import { IBaseComponent } from "@/components/base";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useCallback } from "react";
+import cookies from "js-cookie";
+import { COOKIE_NAME_JWT_TOKEN } from "@/utils/constants";
+import { makeServerFetcher, serverDoFetch } from "@/utils/request";
+import * as model from "@/utils/model";
+import { dateFormat } from "@/utils/tools";
 
 interface IProfileUserinfo {
-  username: string;
-  registerTime: string;
-  lastActivity: string;
-  inviter?: string;
-  upload: string;
-  download: string;
-  money: string;
-  rank: string;
-  avatar?: string;
-  passkey: string;
-  email: string;
+  info?: {
+    id: number;
+    username: string;
+    registerTime: string;
+    lastActivity: string;
+    inviter?: string;
+    upload: number;
+    download: number;
+    money: number;
+    rank: string;
+    avatar?: string;
+    passkey: string;
+    email: string;
+    privacy: number;
+  };
+  error?: string;
 }
 
-export default function ProfileUserinfo({
-  download,
-  email,
-  lastActivity,
-  money,
-  passkey,
-  rank,
-  registerTime,
-  upload,
-  username,
-  avatar,
-  inviter,
-}: IProfileUserinfo) {
+export default function ProfileUserinfo(props: IProfileUserinfo) {
+  const {
+    download,
+    email,
+    lastActivity,
+    money,
+    passkey,
+    rank,
+    registerTime,
+    upload,
+    username,
+    avatar,
+    inviter,
+  } = props?.info;
   const router = useRouter();
   const handleLogout = useCallback(() => {
+    cookies.remove(COOKIE_NAME_JWT_TOKEN);
     router.push("/login");
   }, [router]);
   return (
@@ -44,13 +56,17 @@ export default function ProfileUserinfo({
             layoutClassName="grid-cols-1 lg:grid-cols-2 xl:grid-cols-3"
           >
             <Descriptions.Item label="registerTime">
-              <span>{registerTime}</span>
+              <span>
+                {dateFormat(new Date(registerTime), "yyyy-MM-dd HH:mm:ss")}
+              </span>
             </Descriptions.Item>
             <Descriptions.Item label="lastActivity">
-              <span>{lastActivity}</span>
+              <span>
+                {dateFormat(new Date(lastActivity), "yyyy-MM-dd HH:mm:ss")}
+              </span>
             </Descriptions.Item>
             <Descriptions.Item label="inviter">
-              <span>{inviter}</span>
+              <span>{inviter || "No Inviter"}</span>
             </Descriptions.Item>
             <Descriptions.Item label="upload">
               <span>{upload}</span>
@@ -64,7 +80,7 @@ export default function ProfileUserinfo({
             <Descriptions.Item label="rank">
               <span>{rank}</span>
             </Descriptions.Item>
-            <Descriptions.Item label="passkey">
+            <Descriptions.Item className="col-start-span-2" label="passkey">
               <span>{passkey}</span>
             </Descriptions.Item>
             <Descriptions.Item label="email">
@@ -84,20 +100,26 @@ export default function ProfileUserinfo({
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const token = context.req.cookies[COOKIE_NAME_JWT_TOKEN];
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  const fetcher = makeServerFetcher({ token });
+
+  const { data, error } = await serverDoFetch(fetcher, [
+    model.requestUserShowUser,
+    { username: "cattchen" },
+  ]);
   return {
     props: {
-      username: "cattchen",
-      registerTime: "2021-03-25 10:10:10",
-      lastActivity: "2021-03-25 10:10:11",
-      inviter: "Brethland",
-      upload: "0kb",
-      download: "0kb",
-      money: "0",
-      rank: "1",
-      avatar:
-        "https://cdn.jsdelivr.net/gh/ChenKS12138/ChenKS12138.github.io/static/avatar-9ebf78a88f69fda4a3b437a4f389bb51.png",
-      passkey: "abc123",
-      email: "cattchen@tracker.sopt.rs",
+      info: data,
+      error,
     },
   };
 };

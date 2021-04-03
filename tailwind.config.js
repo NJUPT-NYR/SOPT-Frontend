@@ -42,6 +42,9 @@ module.exports = {
       gridTemplateColumns: {
         "1fr-3fr": "1fr 3fr",
       },
+      gridColumnStart: {
+        "span-2": "span 2",
+      },
     },
   },
   plugins: [

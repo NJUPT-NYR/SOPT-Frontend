@@ -5,20 +5,24 @@ import {
   Input,
   ProfileScaffold,
 } from "@/components";
+import { COOKIE_NAME_JWT_TOKEN } from "@/utils/constants";
+import { makeServerFetcher, serverDoFetch } from "@/utils/request";
 import { GetServerSideProps } from "next";
 import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { GoTelescope } from "react-icons/go";
+import * as model from "@/utils/model";
 
 interface IProfileSendInvitation {
-  username: string;
-  avatar: string;
+  info: {
+    username: string;
+    avatar: string;
+  };
+  error: string;
 }
 
-export default function ProfileInvitaiton({
-  avatar,
-  username,
-}: IProfileSendInvitation) {
+export default function ProfileInvitaiton(props: IProfileSendInvitation) {
+  const { avatar, username } = props?.info || {};
   const { register, handleSubmit, errors } = useForm();
   const [formData, setFormData] = useState(null);
 
@@ -88,20 +92,27 @@ function ProfileInvitationList() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const token = context.req.cookies[COOKIE_NAME_JWT_TOKEN];
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  const fetcher = makeServerFetcher({ token });
+
+  const { data, error } = await serverDoFetch(fetcher, [
+    model.requestUserShowUser,
+    { username: "cattchen" },
+  ]);
+
   return {
     props: {
-      username: "cattchen",
-      registerTime: "2021-03-25 10:10:10",
-      lastActivity: "2021-03-25 10:10:11",
-      inviter: "Brethland",
-      upload: "0kb",
-      download: "0kb",
-      money: "0",
-      rank: "1",
-      avatar:
-        "https://cdn.jsdelivr.net/gh/ChenKS12138/ChenKS12138.github.io/static/avatar-9ebf78a88f69fda4a3b437a4f389bb51.png",
-      passkey: "abc123",
-      email: "cattchen@tracker.sopt.rs",
+      info: data,
+      error,
     },
   };
 };

@@ -27,11 +27,22 @@ export default function ProfileScaffold({
     <Scaffold title="Profile">
       <div className="grid md:grid-cols-1fr-3fr pt-10 px-5 gap-x-2 gap-y-1">
         <div className="flex flex-col items-center">
-          <div
-            className="relative max-w-xl"
-            style={{ clipPath: "circle(50%)" }}
-          >
-            <img className=" rounded-full" src={avatar} />
+          <div className="relative w-36  " style={{ clipPath: "circle(50%)" }}>
+            {avatar ? (
+              <img
+                className="rounded-full"
+                src={
+                  "data:image/png;base64," + avatar ||
+                  "https://avatars.githubusercontent.com/u/42082890?v=4"
+                }
+              />
+            ) : (
+              <div className="rounded-full bg-white w-36 h-36 grid place-items-center ">
+                <span className="text-9xl text-black">
+                  {username?.toUpperCase?.()[0] ?? "N"}
+                </span>
+              </div>
+            )}
             <input
               className="hidden"
               type="file"
