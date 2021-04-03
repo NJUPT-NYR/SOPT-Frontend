@@ -11,7 +11,7 @@ export function makeFetcher(
     config = {
       ...config,
       get headers() {
-        const nextHeaders = baseHeaders;
+        const nextHeaders = baseHeaders || {};
         const token = cookies.get(COOKIE_NAME_JWT_TOKEN);
         if (token?.length) {
           nextHeaders.Authorization = "Bearer " + token;

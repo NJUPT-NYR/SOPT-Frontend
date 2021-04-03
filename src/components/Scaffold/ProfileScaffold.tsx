@@ -5,6 +5,12 @@ import { RiImageEditFill } from "react-icons/ri";
 import { PROFILE_SIADBARS, PROFILE_SIADBARS_ADMIN } from "@/utils/constants";
 import classNames from "classnames";
 import Link from "next/link";
+import useSWR from "swr";
+import { useState } from "react";
+import * as model from "@/utils/model";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import Alert from "../Alert/Alert";
 
 interface IProfileScaffold extends IBaseComponent {
   avatar: string;
@@ -19,12 +25,33 @@ export default function ProfileScaffold({
   isAdmin,
 }: IProfileScaffold) {
   const avatarRef = useRef(null);
+  const [file, setFile] = useState(null);
+  const { data, error, isValidating } = useSWR(
+    file && [model.requestUserUploadAvatar, file]
+  );
+
+  const router = useRouter();
 
   const handleChangeAvatar = useCallback((event) => {
-    console.log(event);
+    const file = event?.target?.files?.[0];
+    if (file) {
+      setFile(file);
+    }
   }, []);
+
+  useEffect(() => {
+    if (!isValidating && data === null) {
+      router.replace(router.route);
+    }
+  }, [data]);
+
   return (
     <Scaffold title="Profile">
+      {!isValidating && error && (
+        <Alert className="mt-5" type="error">
+          <span>{String(error)}</span>
+        </Alert>
+      )}
       <div className="grid md:grid-cols-1fr-3fr pt-10 px-5 gap-x-2 gap-y-1">
         <div className="flex flex-col items-center">
           <div className="relative w-36  " style={{ clipPath: "circle(50%)" }}>

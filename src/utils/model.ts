@@ -62,3 +62,21 @@ export const requestUserShowUser = (
   instance.get(
     qs.stringifyUrl({ url: "/user/show_user", query: { ...param } })
   );
+
+/**
+ * client side only
+ * @param {AxiosInstance} instance
+ * @param {IRequestUserUploadAvatar} param1
+ */
+export const requestUserUploadAvatar = (
+  instance: AxiosInstance,
+  file: File
+) => {
+  const data = new FormData();
+  data.append("file", file);
+  return instance.post("/user/upload_avatar", data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
