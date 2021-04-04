@@ -13,6 +13,7 @@ import {
   Scaffold,
   Input,
   Button,
+  Table,
 } from "@/components";
 import useSWR from "swr";
 import * as model from "@/utils/model";
@@ -31,6 +32,8 @@ import { GoTelescope } from "react-icons/go";
 import qs from "query-string";
 import { useCookies } from "@/utils/hooks";
 import { useJwtClaim } from "@/utils/hooks/useJwtClaim";
+import type { Column } from "react-table";
+import { IInvitation } from "@/utils/interface";
 
 interface IProfileUsername {
   username: string;
@@ -131,6 +134,11 @@ function ProfileUserinfo() {
     router.query?.username,
   ]);
 
+  const jwtClaim = useJwtClaim();
+  const isOwned = useMemo(() => {
+    return jwtClaim.sub === router.query.username;
+  }, [jwtClaim, router]);
+
   const { data, error } = useSWR([model.requestUserShowUser, param]);
 
   return (
@@ -177,24 +185,89 @@ function ProfileUserinfo() {
           </Descriptions.Item>
         </Descriptions>
       </Card>
-      <div
-        className="mt-5 w-full rounded-md bg-gray-50 hover:bg-gray-200 text-center text-red-700 py-2 cursor-pointer transition-all ease-in-out select-none font-semibold "
-        onClick={handleLogout}
-      >
-        Logout
-      </div>
+      {isOwned && (
+        <div
+          className="mt-5 w-full rounded-md bg-gray-50 hover:bg-gray-200 text-center text-red-700 py-2 cursor-pointer transition-all ease-in-out select-none font-semibold "
+          onClick={handleLogout}
+        >
+          Logout
+        </div>
+      )}
     </div>
   );
 }
 
+const columns: Column<IInvitation>[] = [
+  {
+    Header: "Sender",
+    accessor(row) {
+      return (
+        <div title={row.sender} className="text-gray-600 text-center">
+          {row?.sender ?? "-"}
+        </div>
+      );
+    },
+  },
+  {
+    Header: "Code",
+    accessor(row) {
+      return (
+        <div title={row.code} className="text-gray-600 text-center">
+          {row.code ?? "-"}
+        </div>
+      );
+    },
+  },
+  {
+    Header: "Address",
+    accessor(row) {
+      return (
+        <div title={row.address} className="text-gray-600 text-center">
+          {row.address ?? "-"}
+        </div>
+      );
+    },
+  },
+  {
+    Header: "Usage",
+    accessor(row) {
+      return (
+        <div className="text-gray-600 text-center">
+          {String(row.usage) ?? "-"}
+        </div>
+      );
+    },
+  },
+];
+
 function ProfileSendInvitation() {
   const { register, handleSubmit, errors } = useForm();
   const [formData, setFormData] = useState(null);
+  const router = useRouter();
 
-  const onSubmit = useCallback((data) => {
-    console.log(data);
-    // setFormData(data);
-  }, []);
+  const { data: listInvitationsData, error: listInvitationError } = useSWR([
+    model.requestInvitationListInvitations,
+  ]);
+
+  const {
+    data: sendInvitationData,
+    error: sendInvitationError,
+    isValidating: sendInvitaionIsValidating,
+  } = useSWR(formData && [model.requestInvitationSendInvitation, formData]);
+
+  const onSubmit = useCallback(
+    (data) => {
+      setFormData(data);
+    },
+    [setFormData]
+  );
+
+  useEffect(() => {
+    if (!sendInvitaionIsValidating && sendInvitationData !== undefined) {
+      router.replace(router.asPath);
+    }
+  }, [router, sendInvitationData, sendInvitaionIsValidating]);
+
   return (
     <>
       <Card>
@@ -235,12 +308,19 @@ function ProfileSendInvitation() {
       </Card>
       <Card className="mt-5">
         <Descriptions title="Invitations"></Descriptions>
-        <div className="flex flex-col items-center">
-          <div>
-            <GoTelescope className="text-9xl my-3 ml-6" />
-          </div>
-          <div className="text-gray-500 ml-6">No Invitations</div>
-        </div>
+        <Table
+          className="my-5"
+          columns={columns}
+          data={listInvitationsData ?? []}
+          empty={
+            <div className="flex flex-col items-center py-3 ">
+              <div>
+                <GoTelescope className="text-9xl my-3 ml-6" />
+              </div>
+              <div className="text-gray-500 ml-6">No Invitations</div>
+            </div>
+          }
+        />
       </Card>
     </>
   );

@@ -1,5 +1,6 @@
 import type { AxiosInstance } from "axios";
 import qs from "query-string";
+import { IInvitation } from "./interface";
 
 export interface IRequestTorrentList {
   freeonly: boolean;
@@ -80,3 +81,17 @@ export const requestUserUploadAvatar = (
     },
   });
 };
+
+export const requestInvitationListInvitations = (instance: AxiosInstance) =>
+  instance.get<IInvitation[]>("/invitation/list_invitations");
+
+interface IInvitationSendInvitaion {
+  to: string;
+  address: string;
+  body: string;
+}
+
+export const requestInvitationSendInvitation = (
+  instance: AxiosInstance,
+  data: IInvitationSendInvitaion
+) => instance.post("/invitation/send_invitation", data);
