@@ -23,7 +23,7 @@
     "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "github-markdown-css": "^4.0.0",
-    "js-cookie": "^2.2.1",
+    "jwt-decode": "^3.1.2",
     "next": "^10.0.7",
     "path-to-regexp": "^6.2.0",
     "query-string": "^6.14.0",
@@ -37,13 +37,13 @@
     "remark-gfm": "^1.0.0",
     "swr": "^0.4.2",
     "tailwindcss": "^2.0.3",
-    "tailwindcss-filters": "^3.0.0"
+    "tailwindcss-filters": "^3.0.0",
+    "universal-cookie": "^4.0.4"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.4.0",
     "@types/classnames": "^2.2.11",
     "@types/jest": "^26.0.20",
-    "@types/js-cookie": "^2.2.6",
     "@types/mockjs": "^1.0.3",
     "@types/query-string": "^6.3.0",
     "@types/react": "^17.0.1",

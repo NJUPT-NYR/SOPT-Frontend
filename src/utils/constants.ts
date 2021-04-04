@@ -4,31 +4,28 @@ export enum AUTH_ROLES {
 
 export const COOKIE_NAME_JWT_TOKEN = "JWT_TOKEN";
 
-export const PROFILE_SIADBARS: { label: string; path: string }[] = [
+export const PROFILE_SIADBARS: { label: string; tab: string }[] = [
   {
     label: "User Info",
-    path: "/profile/userinfo",
+    tab: "",
   },
   {
     label: "Send Invitation",
-    path: "/profile/sendInvitation",
+    tab: "invitations",
   },
 ];
 
-export const PROFILE_SIADBARS_ADMIN: { label: string; path: string }[] = [
+export const PROFILE_SIADBARS_ADMIN: { label: string; tab: string }[] = [
   {
     label: "Manage Torrent",
-    path: "#torrent",
-    // path: "/profile/admin/torrent",
+    tab: "#torrent",
   },
   {
     label: "Manage User",
-    path: "#user",
-    // path: "/profile/admin/user",
+    tab: "#user",
   },
   {
     label: "Configure Site",
-    path: "#site",
-    // path: "/profile/admin/site",
+    tab: "#site",
   },
 ];

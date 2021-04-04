@@ -3,17 +3,15 @@ import type { Column } from "react-table";
 import classNames from "classnames";
 import qs from "query-string";
 
-import { Link, Pagination, Scaffold, Search, Table, Alert } from "@/components";
+import { Pagination, Scaffold, Search, Table, Alert } from "@/components";
 import { useRouter } from "next/router";
-import { IRecord, ISlimTorrent } from "@/utils/interface";
-import { GoArrowDown, GoArrowUp, GoCheck } from "react-icons/go";
-import { GoTelescope } from "react-icons/go";
+import { GoArrowDown } from "react-icons/go";
 import { GetServerSideProps } from "next";
 import useSWR from "swr";
 import * as model from "@/utils/model";
 import { makeServerFetcher, serverDoFetch } from "@/utils/request";
 
-const columns: Column<ISlimTorrent>[] = [
+const columns: Column<any>[] = [
   {
     Header: "Title",
     accessor(row) {
@@ -66,7 +64,7 @@ export default function Home({ list, pagination, keyword, error }: IHome) {
   const router = useRouter();
   const tableColumns = useMemo(() => columns, []);
 
-  const handleRowSelect = useCallback((row: ISlimTorrent) => {
+  const handleRowSelect = useCallback((row) => {
     router.push(`/torrent/${row.id}`);
   }, []);
 

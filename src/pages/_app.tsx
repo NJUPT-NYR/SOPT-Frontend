@@ -1,17 +1,29 @@
 import React, { useCallback, useMemo } from "react";
 import "@/global.css";
-import type { AppProps } from "next/app";
+import NextApp, { AppProps } from "next/app";
+
+import type { GetServerSideProps, GetServerSidePropsContext } from "next";
+
 import { SWRConfig } from "swr";
 import { makeFetcher } from "@/utils/request";
 import type { AxiosInstance } from "axios";
 import { isBrowser } from "@/utils/tools";
 import { COOKIE_NAME_JWT_TOKEN } from "@/utils/constants";
-import cookies from "js-cookie";
+import Cookies from "universal-cookie";
+import { CookieContext } from "@/utils/hooks/useCookies";
 
-export default function App({ Component, pageProps }: AppProps) {
+interface IApp extends AppProps {
+  cookie: any;
+}
+
+export default function App({
+  Component,
+  pageProps: { cookies, ...restPageProps },
+}: IApp) {
   const configInstance = useCallback(
     (instance: AxiosInstance) => {
       if (isBrowser()) {
+        const cookies = new Cookies();
         instance.interceptors.request.use((config) => {
           const token = cookies.get(COOKIE_NAME_JWT_TOKEN);
           if (token?.length) {
@@ -53,7 +65,16 @@ export default function App({ Component, pageProps }: AppProps) {
         revalidateOnFocus: false,
       }}
     >
-      <Component {...pageProps} />
+      <CookieContext.Provider value={cookies}>
+        <Component {...restPageProps} />
+      </CookieContext.Provider>
     </SWRConfig>
   );
 }
+
+App.getInitialProps = async (appContext) => {
+  const cookies = appContext.ctx.req?.cookies ?? null;
+  const appProps = await NextApp.getInitialProps(appContext);
+  appProps.pageProps.cookies = cookies;
+  return { ...appProps };
+};

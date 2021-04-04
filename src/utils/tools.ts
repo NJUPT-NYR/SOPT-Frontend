@@ -153,6 +153,7 @@ export function objectSkipNullOrUndefinedOrEmptyString(obj) {
 }
 
 export function dateFormat(date: Date, format: string) {
+  if (!date) return undefined;
   var o = {
     "M+": date.getMonth() + 1, //月份
     "d+": date.getDate(), //日

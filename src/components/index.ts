@@ -15,7 +15,6 @@ export { default as MarkdownEditor } from "./MarkdownEditor/MarkdownEditor";
  * Scaffold
  */
 export { default as Scaffold } from "./Scaffold/Scaffold";
-export { default as ProfileScaffold } from "./Scaffold/ProfileScaffold";
 
 /**
  * nextjs components
