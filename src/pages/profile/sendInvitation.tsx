@@ -106,12 +106,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const { data, error } = await serverDoFetch(fetcher, [
     model.requestUserShowUser,
-    { username: "cattchen" },
   ]);
 
   return {
     props: {
-      info: data ?? null,
+      info: data ?? {},
       error,
     },
   };

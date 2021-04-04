@@ -118,7 +118,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   ]);
   return {
     props: {
-      info: data ?? null,
+      info: data ?? {},
       error,
     },
   };
