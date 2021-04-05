@@ -30,6 +30,7 @@ export default function Login() {
       cookies.set(COOKIE_NAME_JWT_TOKEN, data, {
         sameSite: "lax",
         expires: new Date(Date.now() + +259200000),
+        path: "/",
       });
       router.replace("/profile");
     }

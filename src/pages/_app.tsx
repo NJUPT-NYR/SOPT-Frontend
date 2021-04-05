@@ -16,10 +16,7 @@ interface IApp extends AppProps {
   cookie: any;
 }
 
-export default function App({
-  Component,
-  pageProps: { cookies, ...restPageProps },
-}: IApp) {
+export default function App({ Component, pageProps }: IApp) {
   const configInstance = useCallback(
     (instance: AxiosInstance) => {
       if (isBrowser()) {
@@ -65,16 +62,7 @@ export default function App({
         revalidateOnFocus: false,
       }}
     >
-      <CookieContext.Provider value={cookies}>
-        <Component {...restPageProps} />
-      </CookieContext.Provider>
+      <Component {...pageProps} />
     </SWRConfig>
   );
 }
-
-App.getInitialProps = async (appContext) => {
-  const cookies = appContext.ctx.req?.cookies ?? null;
-  const appProps = await NextApp.getInitialProps(appContext);
-  appProps.pageProps.cookies = cookies;
-  return { ...appProps };
-};

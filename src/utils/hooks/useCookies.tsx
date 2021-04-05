@@ -10,3 +10,15 @@ export function useCookies() {
   }, [initCookies]);
   return cookies;
 }
+
+export function withCookiesContext(WrappedComponent, cookies) {
+  return class CookiesContextComponent extends React.Component {
+    render() {
+      return (
+        <CookieContext.Provider value={cookies}>
+          <WrappedComponent {...this.props} />
+        </CookieContext.Provider>
+      );
+    }
+  };
+}

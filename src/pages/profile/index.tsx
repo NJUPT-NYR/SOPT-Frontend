@@ -3,7 +3,7 @@ import { COOKIE_NAME_JWT_TOKEN } from "@/utils/constants";
 import { makeServerFetcher, serverDoFetch } from "@/utils/request";
 import * as model from "@/utils/model";
 
-export default function Porfile() {
+export default function Profile() {
   return null;
 }
 
