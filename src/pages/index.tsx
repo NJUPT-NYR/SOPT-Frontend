@@ -7,7 +7,6 @@ import { Pagination, Scaffold, Search, Table, Alert } from "@/components";
 import { useRouter } from "next/router";
 import { GoArrowDown } from "react-icons/go";
 import { GetServerSideProps } from "next";
-import useSWR from "swr";
 import * as model from "@/utils/model";
 import { makeServerFetcher, serverDoFetch } from "@/utils/request";
 
@@ -136,6 +135,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const fetcher = makeServerFetcher();
   const { data, error } = await serverDoFetch(fetcher, [
     model.requestTorrentList,
+    { freeonly: true },
   ]);
 
   return {

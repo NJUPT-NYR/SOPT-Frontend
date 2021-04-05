@@ -1,5 +1,5 @@
 import React from "react";
-import NextDocument from "next/document";
+import NextDocument, { Html, Head, Main, NextScript } from "next/document";
 import { withCookiesContext } from "@/utils/hooks/useCookies";
 
 export default class Document extends NextDocument {
@@ -18,5 +18,23 @@ export default class Document extends NextDocument {
     const initialProps = await NextDocument.getInitialProps(ctx);
 
     return initialProps;
+  }
+  render() {
+    return (
+      <Html>
+        <Head>
+          <link
+            rel="search"
+            type="application/opensearchdescription+xml"
+            href="/content-search.xml"
+            title="NYR Search"
+          />
+        </Head>
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    );
   }
 }
