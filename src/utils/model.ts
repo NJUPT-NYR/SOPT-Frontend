@@ -3,7 +3,7 @@ import qs from "query-string";
 import { IInvitation } from "./interface";
 
 export interface IRequestTorrentList {
-  freeonly: boolean;
+  freeonly?: boolean;
   tags?: string[];
   page?: number;
   sort?:

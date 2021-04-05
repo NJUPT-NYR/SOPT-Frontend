@@ -134,12 +134,8 @@ export default function Home({ list, pagination, keyword, error }: IHome) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { pagination, keyword } = context.query;
   const fetcher = makeServerFetcher();
-  const query: model.IRequestTorrentList = {
-    freeonly: false,
-  };
   const { data, error } = await serverDoFetch(fetcher, [
     model.requestTorrentList,
-    query,
   ]);
 
   return {
