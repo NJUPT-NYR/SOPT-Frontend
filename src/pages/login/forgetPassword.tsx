@@ -1,21 +1,17 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Alert, Button, Input, Link, Scaffold } from "@/components";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 import * as model from "@/utils/model";
-import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { COOKIE_NAME_JWT_TOKEN } from "@/utils/constants";
-import { useCookies } from "@/utils/hooks";
 
-export default function Login() {
+export default function ForgetPassword() {
   const { register, handleSubmit, errors } = useForm();
   const [formData, setFormData] = useState(null);
   const router = useRouter();
-  const cookies = useCookies();
 
   const { data, error, isValidating } = useSWR<string | undefined>(
-    formData && [model.requestUserLogin, formData]
+    formData && [model.requestUserAuthForgetPassword, formData]
   );
 
   const onSubmit = useCallback(
@@ -26,19 +22,23 @@ export default function Login() {
   );
 
   useEffect(() => {
-    if (data?.length) {
-      cookies.set(COOKIE_NAME_JWT_TOKEN, data, {
-        sameSite: "lax",
-        expires: new Date(Date.now() + +259200000),
-        path: "/",
-      });
-      router.replace("/profile");
+    if (!isValidating && data === null) {
+      setTimeout(() => {
+        router.replace("/login");
+      }, 2000);
     }
-  }, [data, cookies]);
+  }, [data, isValidating]);
 
   return (
     <Scaffold title="Login">
       <div className="overflow-hidden py-3">
+        <div className="mt-2">
+          {!isValidating && data === null && (
+            <Alert type="success" closable={false}>
+              <span>Success! Navigating To Login...</span>
+            </Alert>
+          )}
+        </div>
         <div className="mt-2">
           {!isValidating && error && (
             <Alert type="error" closable={false}>
@@ -51,7 +51,9 @@ export default function Login() {
           className="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md mt-32 "
         >
           <div className="px-6 py-4">
-            <h2 className="text-3xl text-center text-gray-700">LOGIN | NYR</h2>
+            <h2 className="text-3xl text-center text-gray-700">
+              FORGET PASSWORD
+            </h2>
             <div>
               <div className="w-full mt-8">
                 {errors.username && (
@@ -60,41 +62,27 @@ export default function Login() {
                   </span>
                 )}
                 <Input
-                  placeholder="Username"
-                  name="username"
+                  placeholder="Email"
+                  name="email"
                   inputRef={register({ required: true })}
-                />
-              </div>
-              <div className="w-full mt-4">
-                {errors.password && (
-                  <span className="text-red-500 text-sm font-semibold">
-                    Password Required
-                  </span>
-                )}
-                <Input
-                  placeholder="Password"
-                  name="password"
-                  inputRef={register({ required: true })}
-                  isPassword
                 />
               </div>
               <div className="flex items-center justify-between mt-6">
-                <Link href="/login/forgetPassword">
-                  <span className="cursor-pointer select-none text-gray-500 text-sm">
-                    Forget Password?
-                  </span>
-                </Link>
-                <Button type="submit" isLoading={isValidating}>
-                  <span>Login</span>
+                <Button
+                  className="w-full"
+                  type="submit"
+                  isLoading={isValidating}
+                >
+                  <span>Send Email</span>
                 </Button>
               </div>
             </div>
           </div>
           <div className="flex items-center justify-center py-4 bg-gray-100 text-center text-sm ">
-            <span>{"Don't Have Account?"}</span>
-            <Link href="/signUp">
+            <span>{"Remember Password?"}</span>
+            <Link href="/login">
               <span className="text-blue-500 font-bold ml-3 cursor-pointer">
-                Sign Up
+                Login
               </span>
             </Link>
           </div>

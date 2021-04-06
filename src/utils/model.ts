@@ -1,8 +1,8 @@
 import type { AxiosInstance } from "axios";
-import qs from "query-string";
+import qs, { StringifiableRecord } from "query-string";
 import { IInvitation } from "./interface";
 
-export interface IRequestTorrentList {
+export interface IRequestTorrentList extends StringifiableRecord {
   freeonly?: boolean;
   tags?: string[];
   page?: number;
@@ -19,14 +19,12 @@ export interface IRequestTorrentList {
 
 export const requestTorrentList = (
   instance: AxiosInstance,
-  param: IRequestTorrentList
+  query: IRequestTorrentList
 ) =>
   instance.get(
     qs.stringifyUrl({
       url: "/torrent/list_torrents",
-      query: {
-        ...param,
-      },
+      query,
     })
   );
 
@@ -52,17 +50,14 @@ export const requestUserAddUser = (
   data: IRequestUserAddUser
 ) => instance.post("/user/add_user", data);
 
-interface IRequestUserShowUser {
+interface IRequestUserShowUser extends StringifiableRecord {
   username?: string;
 }
 
 export const requestUserShowUser = (
   instance: AxiosInstance,
-  param: IRequestUserShowUser
-) =>
-  instance.get(
-    qs.stringifyUrl({ url: "/user/show_user", query: { ...param } })
-  );
+  query: IRequestUserShowUser
+) => instance.get(qs.stringifyUrl({ url: "/user/show_user", query }));
 
 /**
  * client side only
@@ -95,3 +90,13 @@ export const requestInvitationSendInvitation = (
   instance: AxiosInstance,
   data: IInvitationSendInvitaion
 ) => instance.post("/invitation/send_invitation", data);
+
+interface IUserAuthForgetPassword extends StringifiableRecord {
+  email: string;
+}
+
+export const requestUserAuthForgetPassword = (
+  instance: AxiosInstance,
+  query: IUserAuthForgetPassword
+) =>
+  instance.get(qs.stringifyUrl({ url: "/user/auth/forget_password", query }));
