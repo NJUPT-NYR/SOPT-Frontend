@@ -146,7 +146,33 @@ function ProfileUserinfo() {
     router.query?.username,
   ]);
 
-  const { data, error } = useInstantModel([model.requestUserShowUser, param]);
+  const { data: userData, error } = useInstantModel([
+    model.requestUserShowUser,
+    param,
+  ]);
+
+  const { requester } = useModel([model.requestUserPersonalInfoUpdate]);
+
+  const handlePrivacyChange = useCallback(async (nextValue) => {
+    await requester({ info: userData?.other ?? {}, privacy: nextValue });
+    // router.replace(router.asPath);
+    router.reload();
+  }, []);
+
+  const selectOptions = useMemo(
+    () => [
+      {
+        label: <div>Public</div>,
+        value: 0,
+      },
+      {
+        label: <div>Private</div>,
+        value: 1,
+        isSelected: (value) => value !== 0,
+      },
+    ],
+    []
+  );
 
   return (
     <div>
@@ -157,59 +183,55 @@ function ProfileUserinfo() {
         >
           <Descriptions.Item label="registerTime">
             <span>
-              {data?.registerTime
-                ? dateFormat(new Date(data.registerTime), "yyyy-MM-dd HH:mm:ss")
+              {userData?.registerTime
+                ? dateFormat(
+                    new Date(userData.registerTime),
+                    "yyyy-MM-dd HH:mm:ss"
+                  )
                 : "-"}
             </span>
           </Descriptions.Item>
           <Descriptions.Item label="lastActivity">
             <span>
-              {data?.lastActivity
-                ? dateFormat(new Date(data.lastActivity), "yyyy-MM-dd HH:mm:ss")
+              {userData?.lastActivity
+                ? dateFormat(
+                    new Date(userData.lastActivity),
+                    "yyyy-MM-dd HH:mm:ss"
+                  )
                 : "-"}
             </span>
           </Descriptions.Item>
           <Descriptions.Item label="inviter">
-            <span>{data?.invitor ?? "-"}</span>
+            <span>{userData?.invitor ?? "-"}</span>
           </Descriptions.Item>
           <Descriptions.Item label="upload">
-            <span>{data?.upload ?? "-"}</span>
+            <span>{userData?.upload ?? "-"}</span>
           </Descriptions.Item>
           <Descriptions.Item label="download">
-            <span>{data?.download ?? "-"}</span>
+            <span>{userData?.download ?? "-"}</span>
           </Descriptions.Item>
           <Descriptions.Item label="money">
-            <span>{data?.money ?? "-"}</span>
+            <span>{userData?.money ?? "-"}</span>
           </Descriptions.Item>
           <Descriptions.Item label="rank">
-            <span>{data?.rank ?? "-"}</span>
+            <span>{userData?.rank ?? "-"}</span>
           </Descriptions.Item>
           <Descriptions.Item className="col-start-span-2" label="passkey">
-            <span>{data?.passkey ?? "-"}</span>
+            <span>{userData?.passkey ?? "-"}</span>
           </Descriptions.Item>
           <Descriptions.Item label="email">
-            <span>{data?.email ?? "-"}</span>
+            <span>{userData?.email ?? "-"}</span>
           </Descriptions.Item>
         </Descriptions>
       </Card>
-
       {isOwned && (
         <>
           <Card className="mt-5">
             <Descriptions title="Privacy" />
             <Select
-              value={0}
-              options={[
-                {
-                  label: <div>Public</div>,
-                  value: 0,
-                },
-                {
-                  label: <div>Private</div>,
-                  value: 1,
-                  isSelected: (value) => value !== 0,
-                },
-              ]}
+              value={userData?.privacy}
+              options={selectOptions}
+              onChange={handlePrivacyChange}
             />
           </Card>
           <Card className="mt-5">

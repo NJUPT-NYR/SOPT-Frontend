@@ -57,6 +57,7 @@ export default function Select<T>({
               )}
               onClick={() => {
                 onChange?.(option.value);
+                setIsUnfold(false);
               }}
             >
               {option.label}
