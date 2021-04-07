@@ -2,6 +2,11 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import qs, { StringifiableRecord } from "query-string";
 import { IAccount, IInvitation, ISlimTorrent, IUser } from "./interface";
 
+export type IModel<TData = any, TParam = any> = (
+  instance: AxiosInstance,
+  param?: TParam
+) => Promise<TData>;
+
 interface SoptAxiosInstance extends AxiosInstance {
   request<T = any>(config: AxiosRequestConfig): Promise<T>;
   get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>;

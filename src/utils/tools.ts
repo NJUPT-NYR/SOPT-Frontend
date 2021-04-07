@@ -183,3 +183,44 @@ export function dateFormat(date: Date, format: string) {
 export function isBrowser(): boolean {
   return globalThis.window !== undefined;
 }
+
+export class Revalidator<T extends object> {
+  private activators: WeakMap<T, T[]>;
+  private listeners: WeakMap<T, (() => void)[]>;
+  constructor(dependencies: [T, T[]][]) {
+    this.activators = new WeakMap();
+    for (const [key, value] of dependencies) {
+      for (const item of value) {
+        if (!this.activators.has(item)) {
+          this.activators.set(item, []);
+        }
+        this.activators.get(item).push(key);
+      }
+    }
+    this.listeners = new WeakMap();
+  }
+  revalidate(model: T) {
+    const watchers = this.activators.get(model);
+    watchers?.forEach((watcher) => {
+      const callbacks = this.listeners.get(watcher);
+      callbacks?.forEach((callback) => {
+        callback();
+      });
+    });
+  }
+  register(model, callback) {
+    if (!this.listeners.has(model)) {
+      this.listeners.set(model, []);
+    }
+    this.listeners.get(model).push(callback);
+  }
+  revoke(model, callback) {
+    const callbacks = this.listeners.get(model);
+    if (callbacks?.length) {
+      const index = callbacks.findIndex((one) => one === callback);
+      if (index !== -1) {
+        callbacks.splice(index, 1);
+      }
+    }
+  }
+}

@@ -8,6 +8,7 @@ import { isBrowser } from "@/utils/tools";
 import { COOKIE_NAME_JWT_TOKEN } from "@/utils/constants";
 import Cookies from "universal-cookie";
 import { ModelContext } from "@/utils/hooks/useModel";
+import { revalidator } from "@/utils/revalidations";
 
 interface IApp extends AppProps {
   cookie: any;
@@ -55,6 +56,7 @@ export default function App({ Component, pageProps }: IApp) {
     <ModelContext.Provider
       value={{
         fetcher,
+        revalidator,
       }}
     >
       <Component {...pageProps} />

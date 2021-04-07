@@ -3,6 +3,7 @@ import {
   stringAppendAroundSelection,
   stringAppendNextLine,
   stringAppendThisLine,
+  Revalidator,
 } from "../tools";
 
 describe("sized history state", () => {
@@ -107,6 +108,38 @@ describe("string append this line", () => {
         replacement: "> ",
       })
     ).toBe("hello1\n>  hello2 \nhello3");
+    done();
+  });
+});
+
+describe("revalidator", () => {
+  const modelA = () => {};
+  const modelB = () => {};
+  const modelC = () => {};
+
+  const dependencies: [Function, Function[]][] = [[modelA, [modelB, modelC]]];
+  it("register and remove well", (done) => {
+    const revalidatedCountMap = new WeakMap([
+      [modelA, 0],
+      [modelB, 0],
+      [modelC, 0],
+    ]);
+    const revalidator = new Revalidator(dependencies);
+    const handleRevalidated = () => {
+      const prevCount = revalidatedCountMap.get(modelA);
+      revalidatedCountMap.set(modelA, prevCount + 1);
+    };
+    revalidator.register(modelA, handleRevalidated);
+    expect(revalidatedCountMap.get(modelA)).toBe(0);
+    revalidator.revalidate(modelB);
+    expect(revalidatedCountMap.get(modelA)).toBe(1);
+    revalidator.revalidate(modelC);
+    expect(revalidatedCountMap.get(modelA)).toBe(2);
+    revalidator.revalidate(modelA);
+    expect(revalidatedCountMap.get(modelA)).toBe(2);
+    revalidator.revoke(modelA, handleRevalidated);
+    revalidator.revalidate(modelB);
+    expect(revalidatedCountMap.get(modelA)).toBe(2);
     done();
   });
 });

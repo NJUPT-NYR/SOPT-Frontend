@@ -155,8 +155,6 @@ function ProfileUserinfo() {
 
   const handlePrivacyChange = useCallback(async (nextValue) => {
     await requester({ info: userData?.other ?? {}, privacy: nextValue });
-    // router.replace(router.asPath);
-    router.reload();
   }, []);
 
   const selectOptions = useMemo(
@@ -306,15 +304,7 @@ function ProfileSendInvitation() {
     model.requestInvitationSendInvitation,
   ]);
 
-  const onSubmit = useCallback(
-    async (formData) => {
-      const { error } = await sendInvitationRequester(formData);
-      if (!error) {
-        router.replace(router.asPath);
-      }
-    },
-    [setFormData]
-  );
+  const onSubmit = useCallback(sendInvitationRequester, [setFormData]);
 
   return (
     <>
@@ -396,7 +386,7 @@ function ProfileAvatar({
   const handleChangeAvatar = useCallback(async (event) => {
     const file = event?.target?.files?.[0];
     if (file) {
-      const { data, error } = await requester(file);
+      const { error } = await requester(file);
       if (!error) {
         router.replace(router.asPath);
       }
