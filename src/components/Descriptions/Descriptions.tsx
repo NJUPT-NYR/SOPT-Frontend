@@ -15,7 +15,7 @@ export default function Descriptions({
 }: IDescriptions) {
   return (
     <div {...rest}>
-      <div className="text-4xl font-normal mb-2">{title}</div>
+      <div className="text-3xl font-normal mb-2">{title}</div>
       {children && (
         <div
           className={classNames(

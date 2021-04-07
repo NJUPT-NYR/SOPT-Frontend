@@ -77,7 +77,7 @@ export interface IUser {
   lastActivity: string;
   invitor?: string;
   upload: number;
-  downlaod: number;
+  download: number;
   money: number;
   rank: string;
   avatar?: string;

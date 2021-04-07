@@ -1,46 +1,38 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { Alert, Button, Input, Link, Scaffold } from "@/components";
 import { useForm } from "react-hook-form";
-import useSWR from "swr";
 import * as model from "@/utils/model";
-import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { COOKIE_NAME_JWT_TOKEN } from "@/utils/constants";
-import { useCookies } from "@/utils/hooks";
+import { useCookies, useModel } from "@/utils/hooks";
 
 export default function Login() {
   const { register, handleSubmit, errors } = useForm();
-  const [formData, setFormData] = useState(null);
   const router = useRouter();
   const cookies = useCookies();
 
-  const { data, error, isValidating } = useSWR<string | undefined>(
-    formData && [model.requestUserLogin, formData]
-  );
+  const { requester, isLoading, error } = useModel([model.requestUserLogin]);
 
   const onSubmit = useCallback(
-    (data) => {
-      setFormData(data);
+    async (formData) => {
+      const { data, error } = await requester(formData);
+      if (data?.length) {
+        cookies.set(COOKIE_NAME_JWT_TOKEN, data, {
+          sameSite: "lax",
+          expires: new Date(Date.now() + +259200000),
+          path: "/",
+        });
+        router.replace("/profile");
+      }
     },
-    [setFormData]
+    [cookies]
   );
-
-  useEffect(() => {
-    if (data?.length) {
-      cookies.set(COOKIE_NAME_JWT_TOKEN, data, {
-        sameSite: "lax",
-        expires: new Date(Date.now() + +259200000),
-        path: "/",
-      });
-      router.replace("/profile");
-    }
-  }, [data, cookies]);
 
   return (
     <Scaffold title="Login">
       <div className="overflow-hidden py-3">
         <div className="mt-2">
-          {!isValidating && error && (
+          {!isLoading && error && (
             <Alert type="error" closable={false}>
               <span>{String(error)}</span>
             </Alert>
@@ -84,7 +76,7 @@ export default function Login() {
                     Forget Password?
                   </span>
                 </Link>
-                <Button type="submit" isLoading={isValidating}>
+                <Button type="submit" isLoading={isLoading}>
                   <span>Login</span>
                 </Button>
               </div>

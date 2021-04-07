@@ -14,8 +14,8 @@ import {
   Input,
   Button,
   Table,
+  Select,
 } from "@/components";
-import useSWR from "swr";
 import * as model from "@/utils/model";
 import { RiImageEditFill } from "react-icons/ri";
 import classNames from "classnames";
@@ -30,8 +30,12 @@ import { makeServerFetcher, serverDoFetch } from "@/utils/request";
 import { useForm } from "react-hook-form";
 import { GoTelescope } from "react-icons/go";
 import qs from "query-string";
-import { useCookies } from "@/utils/hooks";
-import { useJwtClaim } from "@/utils/hooks/useJwtClaim";
+import {
+  useCookies,
+  useJwtClaim,
+  useModel,
+  useInstantModel,
+} from "@/utils/hooks";
 import type { Column } from "react-table";
 import { IInvitation } from "@/utils/interface";
 
@@ -55,10 +59,12 @@ export default function ProfileUsername({
   ]);
 
   let content = <ProfileUserinfo />;
-  switch (tab) {
-    case "invitations":
-      content = <ProfileSendInvitation />;
-      break;
+  if (isOwned) {
+    switch (tab) {
+      case "invitations":
+        content = <ProfileSendInvitation />;
+        break;
+    }
   }
 
   return (
@@ -113,7 +119,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
   return {
     redirect: {
-      destination: "/login",
+      destination: "/404",
       permanent: false,
     },
   };
@@ -130,16 +136,17 @@ function ProfileUserinfo() {
     cookies.remove(COOKIE_NAME_JWT_TOKEN);
     router.push("/login");
   }, [router, cookies]);
-  const param = useMemo(() => ({ username: router.query.username }), [
-    router.query?.username,
-  ]);
 
   const jwtClaim = useJwtClaim();
   const isOwned = useMemo(() => {
     return jwtClaim.sub === router.query.username;
   }, [jwtClaim, router]);
 
-  const { data, error } = useSWR([model.requestUserShowUser, param]);
+  const param = useMemo(() => ({ username: router.query.username as string }), [
+    router.query?.username,
+  ]);
+
+  const { data, error } = useInstantModel([model.requestUserShowUser, param]);
 
   return (
     <div>
@@ -163,7 +170,7 @@ function ProfileUserinfo() {
             </span>
           </Descriptions.Item>
           <Descriptions.Item label="inviter">
-            <span>{data?.inviter ?? "-"}</span>
+            <span>{data?.invitor ?? "-"}</span>
           </Descriptions.Item>
           <Descriptions.Item label="upload">
             <span>{data?.upload ?? "-"}</span>
@@ -185,13 +192,37 @@ function ProfileUserinfo() {
           </Descriptions.Item>
         </Descriptions>
       </Card>
+
       {isOwned && (
-        <div
-          className="mt-5 w-full rounded-md bg-gray-50 hover:bg-gray-200 text-center text-red-700 py-2 cursor-pointer transition-all ease-in-out select-none font-semibold "
-          onClick={handleLogout}
-        >
-          Logout
-        </div>
+        <>
+          <Card className="mt-5">
+            <Descriptions title="Privacy" />
+            <Select
+              value={0}
+              options={[
+                {
+                  label: <div>Public</div>,
+                  value: 0,
+                },
+                {
+                  label: <div>Private</div>,
+                  value: 1,
+                  isSelected: (value) => value !== 0,
+                },
+              ]}
+            />
+          </Card>
+          <Card className="mt-5">
+            <Descriptions title="Tags" />
+            <div>tags</div>
+          </Card>
+          <div
+            className="mt-5 w-full rounded-md bg-gray-50 hover:bg-gray-200 text-center text-red-700 py-2 cursor-pointer transition-all ease-in-out select-none font-semibold "
+            onClick={handleLogout}
+          >
+            Logout
+          </div>
+        </>
       )}
     </div>
   );
@@ -245,28 +276,23 @@ function ProfileSendInvitation() {
   const [formData, setFormData] = useState(null);
   const router = useRouter();
 
-  const { data: listInvitationsData, error: listInvitationError } = useSWR([
+  const { data: listInvitationsData } = useInstantModel([
     model.requestInvitationListInvitations,
   ]);
 
-  const {
-    data: sendInvitationData,
-    error: sendInvitationError,
-    isValidating: sendInvitaionIsValidating,
-  } = useSWR(formData && [model.requestInvitationSendInvitation, formData]);
+  const { requester: sendInvitationRequester } = useModel([
+    model.requestInvitationSendInvitation,
+  ]);
 
   const onSubmit = useCallback(
-    (data) => {
-      setFormData(data);
+    async (formData) => {
+      const { error } = await sendInvitationRequester(formData);
+      if (!error) {
+        router.replace(router.asPath);
+      }
     },
     [setFormData]
   );
-
-  useEffect(() => {
-    if (!sendInvitaionIsValidating && sendInvitationData !== undefined) {
-      router.replace(router.asPath);
-    }
-  }, [router, sendInvitationData, sendInvitaionIsValidating]);
 
   return (
     <>
@@ -342,25 +368,18 @@ function ProfileAvatar({
   editable,
 }: IProfileAvatar) {
   const avatarRef = useRef(null);
-  const [file, setFile] = useState(null);
-  const { data, error, isValidating } = useSWR(
-    file && [model.requestUserUploadAvatar, file]
-  );
-
+  const { requester } = useModel([model.requestUserUploadAvatar]);
   const router = useRouter();
 
-  const handleChangeAvatar = useCallback((event) => {
+  const handleChangeAvatar = useCallback(async (event) => {
     const file = event?.target?.files?.[0];
     if (file) {
-      setFile(file);
+      const { data, error } = await requester(file);
+      if (!error) {
+        router.replace(router.asPath);
+      }
     }
   }, []);
-
-  useEffect(() => {
-    if (!isValidating && data === null) {
-      router.replace(router.asPath);
-    }
-  }, [data, isValidating]);
 
   return (
     <div className="relative w-36  " style={{ clipPath: "circle(50%)" }}>

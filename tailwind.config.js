@@ -39,6 +39,9 @@ module.exports = {
       maxWidth: {
         "9/10-screen": "90vw",
       },
+      minWidth: {
+        10: "10rem",
+      },
       gridTemplateColumns: {
         "1fr-3fr": "1fr 3fr",
       },

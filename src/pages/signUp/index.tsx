@@ -1,49 +1,29 @@
 import { Button, Input, Link, Scaffold, Alert } from "@/components";
 import React, { useCallback } from "react";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import useSWR from "swr";
 
 import * as model from "@/utils/model";
 import { objectSkipNullOrUndefinedOrEmptyString } from "@/utils/tools";
-import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { useModel } from "@/utils/hooks";
 
 export default function SignUp() {
   const { register, handleSubmit, errors } = useForm();
-  const [formData, setFormData] = useState(null);
+  const { requester, isLoading } = useModel([model.requestUserAddUser]);
 
-  const { data, error, isValidating } = useSWR(
-    formData && [model.requestUserAddUser, formData]
-  );
   const router = useRouter();
 
-  const onSubmit = useCallback((data) => {
-    const nextData = objectSkipNullOrUndefinedOrEmptyString(data);
-    setFormData(nextData);
-  }, []);
-
-  useEffect(() => {
-    if (data) {
-      setTimeout(() => {
-        router.replace("/login");
-      }, 2000);
+  const onSubmit = useCallback(async (formData) => {
+    const nextFormData = objectSkipNullOrUndefinedOrEmptyString(formData);
+    const { data, error } = await requester(nextFormData);
+    if (!error) {
+      router.replace("/login");
     }
-  }, [data]);
+  }, []);
 
   return (
     <Scaffold title="SignUp">
       <div className="overflow-hidden py-3">
-        {!isValidating && data && (
-          <Alert type="success">
-            <span>Sign Up Success! Navigating To Login...</span>
-          </Alert>
-        )}
-        {!isValidating && error && (
-          <Alert type="error">
-            <span>{String(error)}</span>
-          </Alert>
-        )}
         <div className="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md mt-32">
           <div className="px-6 py-4">
             <h2 className="text-3xl text-center text-gray-700">
@@ -82,11 +62,7 @@ export default function SignUp() {
                 />
               </div>
               <div className="mt-5">
-                <Button
-                  className="w-full"
-                  type="submit"
-                  isLoading={isValidating}
-                >
+                <Button className="w-full" type="submit" isLoading={isLoading}>
                   <span className="text-center">Sign Up</span>
                 </Button>
               </div>

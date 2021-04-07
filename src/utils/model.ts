@@ -1,6 +1,29 @@
-import type { AxiosInstance } from "axios";
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import qs, { StringifiableRecord } from "query-string";
-import { IInvitation } from "./interface";
+import { IAccount, IInvitation, ISlimTorrent, IUser } from "./interface";
+
+interface SoptAxiosInstance extends AxiosInstance {
+  request<T = any>(config: AxiosRequestConfig): Promise<T>;
+  get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>;
+  delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>;
+  head<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>;
+  options<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>;
+  post<T = any>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig
+  ): Promise<T>;
+  put<T = any>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig
+  ): Promise<T>;
+  patch<T = any>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig
+  ): Promise<T>;
+}
 
 export interface IRequestTorrentList extends StringifiableRecord {
   freeonly?: boolean;
@@ -18,10 +41,10 @@ export interface IRequestTorrentList extends StringifiableRecord {
 }
 
 export const requestTorrentList = (
-  instance: AxiosInstance,
+  instance: SoptAxiosInstance,
   query: IRequestTorrentList
 ) =>
-  instance.get(
+  instance.get<ISlimTorrent[]>(
     qs.stringifyUrl({
       url: "/torrent/list_torrents",
       query,
@@ -34,9 +57,9 @@ interface IRequestUserLogin {
 }
 
 export const requestUserLogin = (
-  instance: AxiosInstance,
+  instance: SoptAxiosInstance,
   { username, password }: IRequestUserLogin
-) => instance.post("/user/login", { username, password });
+) => instance.post<string>("/user/login", { username, password });
 
 interface IRequestUserAddUser {
   email: string;
@@ -46,38 +69,33 @@ interface IRequestUserAddUser {
 }
 
 export const requestUserAddUser = (
-  instance: AxiosInstance,
+  instance: SoptAxiosInstance,
   data: IRequestUserAddUser
-) => instance.post("/user/add_user", data);
+) => instance.post<IAccount>("/user/add_user", data);
 
 interface IRequestUserShowUser extends StringifiableRecord {
   username?: string;
 }
 
 export const requestUserShowUser = (
-  instance: AxiosInstance,
+  instance: SoptAxiosInstance,
   query: IRequestUserShowUser
-) => instance.get(qs.stringifyUrl({ url: "/user/show_user", query }));
+) => instance.get<IUser>(qs.stringifyUrl({ url: "/user/show_user", query }));
 
-/**
- * client side only
- * @param {AxiosInstance} instance
- * @param {IRequestUserUploadAvatar} param1
- */
 export const requestUserUploadAvatar = (
-  instance: AxiosInstance,
+  instance: SoptAxiosInstance,
   file: File
 ) => {
   const data = new FormData();
   data.append("file", file);
-  return instance.post("/user/upload_avatar", data, {
+  return instance.post<IUser>("/user/upload_avatar", data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
 };
 
-export const requestInvitationListInvitations = (instance: AxiosInstance) =>
+export const requestInvitationListInvitations = (instance: SoptAxiosInstance) =>
   instance.get<IInvitation[]>("/invitation/list_invitations");
 
 interface IInvitationSendInvitaion {
@@ -87,16 +105,28 @@ interface IInvitationSendInvitaion {
 }
 
 export const requestInvitationSendInvitation = (
-  instance: AxiosInstance,
+  instance: SoptAxiosInstance,
   data: IInvitationSendInvitaion
-) => instance.post("/invitation/send_invitation", data);
+) => instance.post<IInvitation>("/invitation/send_invitation", data);
 
 interface IUserAuthForgetPassword extends StringifiableRecord {
   email: string;
 }
 
 export const requestUserAuthForgetPassword = (
-  instance: AxiosInstance,
+  instance: SoptAxiosInstance,
   query: IUserAuthForgetPassword
 ) =>
-  instance.get(qs.stringifyUrl({ url: "/user/auth/forget_password", query }));
+  instance.get<null>(
+    qs.stringifyUrl({ url: "/user/auth/forget_password", query })
+  );
+
+interface IUserPersonalInfoUpdate {
+  info: any;
+  privacy: number;
+}
+
+export const requestUserPersonalInfoUpdate = (
+  instance: SoptAxiosInstance,
+  data: IUserPersonalInfoUpdate
+) => instance.post<null>("/user/personal_info_update", data);

@@ -1,38 +1,31 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Alert, Button, Input, Link, Scaffold } from "@/components";
 import { useForm } from "react-hook-form";
-import useSWR from "swr";
 import * as model from "@/utils/model";
 import { useRouter } from "next/router";
+import { useInstantModel, useModel } from "@/utils/hooks";
 
 export default function ForgetPassword() {
   const { register, handleSubmit, errors } = useForm();
-  const [formData, setFormData] = useState(null);
   const router = useRouter();
-
-  const { data, error, isValidating } = useSWR<string | undefined>(
-    formData && [model.requestUserAuthForgetPassword, formData]
-  );
+  const { isLoading, requester } = useModel([
+    model.requestUserAuthForgetPassword,
+  ]);
 
   const onSubmit = useCallback(
-    (data) => {
-      setFormData(data);
-    },
-    [setFormData]
-  );
-
-  useEffect(() => {
-    if (!isValidating && data === null) {
-      setTimeout(() => {
+    async (formData) => {
+      const { error } = await requester(formData);
+      if (!error) {
         router.replace("/login");
-      }, 2000);
-    }
-  }, [data, isValidating]);
+      }
+    },
+    [requester, router]
+  );
 
   return (
     <Scaffold title="Login">
       <div className="overflow-hidden py-3">
-        <div className="mt-2">
+        {/* <div className="mt-2">
           {!isValidating && data === null && (
             <Alert type="success" closable={false}>
               <span>Success! Navigating To Login...</span>
@@ -45,7 +38,7 @@ export default function ForgetPassword() {
               <span>{String(error)}</span>
             </Alert>
           )}
-        </div>
+        </div> */}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md mt-32 "
@@ -68,11 +61,7 @@ export default function ForgetPassword() {
                 />
               </div>
               <div className="flex items-center justify-between mt-6">
-                <Button
-                  className="w-full"
-                  type="submit"
-                  isLoading={isValidating}
-                >
+                <Button className="w-full" type="submit" isLoading={isLoading}>
                   <span>Send Email</span>
                 </Button>
               </div>
