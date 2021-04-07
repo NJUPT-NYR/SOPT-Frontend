@@ -25,6 +25,9 @@ interface SoptAxiosInstance extends AxiosInstance {
   ): Promise<T>;
 }
 
+/**
+ *  {@link https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apitorrentlist_torrents}
+ */
 export interface IRequestTorrentList extends StringifiableRecord {
   freeonly?: boolean;
   tags?: string[];
@@ -51,6 +54,9 @@ export const requestTorrentList = (
     })
   );
 
+/**
+ * {@link https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiuserlogin}
+ */
 interface IRequestUserLogin {
   username: string;
   password: string;
@@ -61,6 +67,9 @@ export const requestUserLogin = (
   { username, password }: IRequestUserLogin
 ) => instance.post<string>("/user/login", { username, password });
 
+/**
+ * {@link https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiuseradd_user}
+ */
 interface IRequestUserAddUser {
   email: string;
   username: string;
@@ -73,6 +82,9 @@ export const requestUserAddUser = (
   data: IRequestUserAddUser
 ) => instance.post<IAccount>("/user/add_user", data);
 
+/**
+ * {@link https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiusershow_user}
+ */
 interface IRequestUserShowUser extends StringifiableRecord {
   username?: string;
 }
@@ -82,6 +94,9 @@ export const requestUserShowUser = (
   query: IRequestUserShowUser
 ) => instance.get<IUser>(qs.stringifyUrl({ url: "/user/show_user", query }));
 
+/**
+ * {@link https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiuserupload_avatar}
+ */
 export const requestUserUploadAvatar = (
   instance: SoptAxiosInstance,
   file: File
@@ -95,9 +110,15 @@ export const requestUserUploadAvatar = (
   });
 };
 
+/**
+ * {@see https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiinvitationlist_invitations}
+ */
 export const requestInvitationListInvitations = (instance: SoptAxiosInstance) =>
   instance.get<IInvitation[]>("/invitation/list_invitations");
 
+/**
+ * {@see https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiinvitationsend_invitation}
+ */
 interface IInvitationSendInvitaion {
   to: string;
   address: string;
@@ -109,6 +130,9 @@ export const requestInvitationSendInvitation = (
   data: IInvitationSendInvitaion
 ) => instance.post<IInvitation>("/invitation/send_invitation", data);
 
+/**
+ * {@see https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiuserauthforget_password}
+ */
 interface IUserAuthForgetPassword extends StringifiableRecord {
   email: string;
 }
@@ -121,6 +145,9 @@ export const requestUserAuthForgetPassword = (
     qs.stringifyUrl({ url: "/user/auth/forget_password", query })
   );
 
+/**
+ * {@see https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiuserpersonal_info_update}
+ */
 interface IUserPersonalInfoUpdate {
   info: any;
   privacy: number;

@@ -1,5 +1,5 @@
 /**
- * @see https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#response-data
+ * @see {@link https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#response-data}
  */
 
 export interface IGeneralResponse<TData> {
