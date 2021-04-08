@@ -45,7 +45,7 @@ interface IProfileUsername {
   username: string;
   avatar: string;
   isAdmin: boolean;
-  tab: "invitations" | "torrentsStatus" | null;
+  tab: "invitations" | "torrentsStatus" | "security" | null;
 }
 
 export default function ProfileUsername({
@@ -68,6 +68,9 @@ export default function ProfileUsername({
         break;
       case "torrentsStatus":
         content = <ProfileTorrentsStatus />;
+        break;
+      case "security":
+        content = <ProfileSecurity />;
         break;
     }
   }
@@ -575,6 +578,71 @@ function ProfileSendInvitation() {
         />
       </Card>
     </>
+  );
+}
+
+function ProfileSecurity() {
+  const resetPasswordForm = useForm();
+  const cookies = useCookies();
+  const router = useRouter();
+  const { requester: resetPasswordRequester } = useModel([
+    model.requestUserAuthResetPassword,
+  ]);
+
+  const { requester: resetResetPasskey } = useModel([
+    model.requestUserAuthResetPasskey,
+  ]);
+
+  const onSubmitPassword = useCallback(
+    async (formData) => {
+      await resetPasswordRequester(formData);
+      cookies.remove(COOKIE_NAME_JWT_TOKEN);
+      router.push("/login");
+    },
+    [resetPasswordRequester, cookies, router]
+  );
+
+  const onSubmitPasskey = useCallback(async () => {
+    await resetResetPasskey();
+  }, [resetResetPasskey]);
+
+  const param = useMemo(() => ({ username: router.query.username as string }), [
+    router.query?.username,
+  ]);
+  const { data: userData, error } = useInstantModel([
+    model.requestUserShowUser,
+    param,
+  ]);
+
+  return (
+    <div>
+      <Descriptions title="Security"></Descriptions>
+      <Card className="mt-5">
+        <Descriptions title="Reset Password"></Descriptions>
+        <form onSubmit={resetPasswordForm.handleSubmit(onSubmitPassword)}>
+          <div className="mt-3">
+            <Input
+              placeholder="New Password"
+              name="password"
+              inputRef={resetPasswordForm.register({ required: true })}
+            />
+          </div>
+          <Button type="submit" className="w-full mt-3">
+            <span>Submit</span>
+          </Button>
+        </form>
+      </Card>
+      <Card className="mt-5">
+        <Descriptions title="Reset Passkey">
+          <Descriptions.Item label="passkey">
+            <span>{userData?.passkey}</span>
+          </Descriptions.Item>
+        </Descriptions>
+        <Button className="w-full" onClick={onSubmitPasskey}>
+          <span>Reset</span>
+        </Button>
+      </Card>
+    </div>
   );
 }
 

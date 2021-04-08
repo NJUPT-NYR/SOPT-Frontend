@@ -10,7 +10,7 @@ import { IModel } from "../model";
 import { Memorizer, Revalidator } from "../tools";
 
 interface IModelContext<TData = any, TParam = any> {
-  fetcher: (model: IModel<TData, TParam>, param: TParam) => Promise<TData>;
+  fetcher: (model: IModel<TData, TParam>, param?: TParam) => Promise<TData>;
   revalidator: Revalidator<IModel>;
   memorizer: Memorizer<IModel>;
 }
@@ -23,7 +23,7 @@ export function useModel<TData = any, TParam = any>([model]: [
   data: TData | undefined;
   error: any;
   isLoading: boolean;
-  requester: (param: TParam) => Promise<{ data: TData; error: any }>;
+  requester: (param?: TParam) => Promise<{ data: TData; error: any }>;
 } {
   const { fetcher, revalidator, memorizer } = useContext<
     IModelContext<TData, TParam>

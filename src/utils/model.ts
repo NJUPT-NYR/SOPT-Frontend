@@ -185,3 +185,22 @@ export const requestUserShowTorrentStatus: IModel<
   IUserShowTorrentStatus
 > = (instance, query) =>
   instance.get(qs.stringifyUrl({ url: "/user/show_torrent_status", query }));
+
+/**
+ * {@link https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiuserauthreset_password}
+ */
+interface IUserAuthResetPassword {
+  password: string;
+}
+
+export const requestUserAuthResetPassword: IModel<
+  null,
+  IUserAuthResetPassword
+> = (instance, data) => instance.post("/user/auth/reset_password", data);
+
+/**
+ * {@link https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiuserauthreset_passkey}
+ */
+export const requestUserAuthResetPasskey: IModel<null, undefined> = (
+  instance
+) => instance.get("/user/auth/reset_passkey");

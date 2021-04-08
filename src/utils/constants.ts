@@ -17,6 +17,10 @@ export const PROFILE_SIADBARS: { label: string; tab: string }[] = [
     label: "Send Invitation",
     tab: "invitations",
   },
+  {
+    label: "Security",
+    tab: "security",
+  },
 ];
 
 export const PROFILE_SIADBARS_ADMIN: { label: string; tab: string }[] = [

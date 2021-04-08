@@ -2,6 +2,7 @@ import {
   IModel,
   requestInvitationListInvitations,
   requestInvitationSendInvitation,
+  requestUserAuthResetPasskey,
   requestUserPersonalInfoUpdate,
   requestUserShowUser,
   requestUserUploadAvatar,
@@ -22,7 +23,11 @@ import { Revalidator } from "@/utils/tools";
 export const revalidator = new Revalidator<IModel>([
   [
     requestUserShowUser,
-    [requestUserUploadAvatar, requestUserPersonalInfoUpdate],
+    [
+      requestUserUploadAvatar,
+      requestUserPersonalInfoUpdate,
+      requestUserAuthResetPasskey,
+    ],
   ],
   [requestInvitationListInvitations, [requestInvitationSendInvitation]],
 ]);
