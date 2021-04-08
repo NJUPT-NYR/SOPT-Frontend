@@ -529,7 +529,6 @@ const sendInvitationColumns: Column<IInvitation>[] = [
 function ProfileSendInvitation() {
   const { register, handleSubmit, errors } = useForm();
   const [formData, setFormData] = useState(null);
-  const router = useRouter();
 
   const { data: listInvitationsData } = useInstantModel([
     model.requestInvitationListInvitations,
@@ -603,26 +602,22 @@ function ProfileSecurity() {
   const resetPasswordForm = useForm();
   const cookies = useCookies();
   const router = useRouter();
-  const { requester: resetPasswordRequester } = useModel([
-    model.requestUserAuthResetPassword,
-  ]);
+  const resetPasswordModel = useModel([model.requestUserAuthResetPassword]);
 
-  const { requester: resetResetPasskey } = useModel([
-    model.requestUserAuthResetPasskey,
-  ]);
+  const resetPasskeyModel = useModel([model.requestUserAuthResetPasskey]);
 
   const onSubmitPassword = useCallback(
     async (formData) => {
-      await resetPasswordRequester(formData);
+      await resetPasswordModel.requester(formData);
       cookies.remove(COOKIE_NAME_JWT_TOKEN);
       router.push("/login");
     },
-    [resetPasswordRequester, cookies, router]
+    [resetPasswordModel, cookies, router]
   );
 
   const onSubmitPasskey = useCallback(async () => {
-    await resetResetPasskey();
-  }, [resetResetPasskey]);
+    await resetPasskeyModel.requester();
+  }, [resetPasskeyModel]);
 
   const param = useMemo(() => ({ username: router.query.username as string }), [
     router.query?.username,
@@ -642,10 +637,15 @@ function ProfileSecurity() {
             <Input
               placeholder="New Password"
               name="password"
+              isPassword
               inputRef={resetPasswordForm.register({ required: true })}
             />
           </div>
-          <Button type="submit" className="w-full mt-3">
+          <Button
+            type="submit"
+            className="w-full mt-3"
+            isLoading={resetPasswordModel.isLoading}
+          >
             <span>Submit</span>
           </Button>
         </form>
@@ -656,7 +656,11 @@ function ProfileSecurity() {
             <span>{userData?.passkey}</span>
           </Descriptions.Item>
         </Descriptions>
-        <Button className="w-full" onClick={onSubmitPasskey}>
+        <Button
+          className="w-full"
+          onClick={onSubmitPasskey}
+          isLoading={resetPasskeyModel.isLoading}
+        >
           <span>Reset</span>
         </Button>
       </Card>
