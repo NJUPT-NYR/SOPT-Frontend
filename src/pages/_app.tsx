@@ -9,6 +9,7 @@ import { COOKIE_NAME_JWT_TOKEN } from "@/utils/constants";
 import Cookies from "universal-cookie";
 import { ModelContext } from "@/utils/hooks/useModel";
 import { revalidator } from "@/utils/revalidations";
+import { memorizer } from "@/utils/memorizer";
 
 interface IApp extends AppProps {
   cookie: any;
@@ -57,6 +58,7 @@ export default function App({ Component, pageProps }: IApp) {
       value={{
         fetcher,
         revalidator,
+        memorizer,
       }}
     >
       <Component {...pageProps} />

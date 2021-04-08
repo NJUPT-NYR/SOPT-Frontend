@@ -7,11 +7,12 @@ import React, {
   useState,
 } from "react";
 import { IModel } from "../model";
-import { Revalidator } from "../tools";
+import { Memorizer, Revalidator } from "../tools";
 
 interface IModelContext<TData = any, TParam = any> {
   fetcher: (model: IModel<TData, TParam>, param: TParam) => Promise<TData>;
   revalidator: Revalidator<IModel>;
+  memorizer: Memorizer<IModel>;
 }
 
 export const ModelContext = React.createContext<IModelContext>(null);
@@ -24,9 +25,9 @@ export function useModel<TData = any, TParam = any>([model]: [
   isLoading: boolean;
   requester: (param: TParam) => Promise<{ data: TData; error: any }>;
 } {
-  const { fetcher, revalidator } = useContext<IModelContext<TData, TParam>>(
-    ModelContext
-  );
+  const { fetcher, revalidator, memorizer } = useContext<
+    IModelContext<TData, TParam>
+  >(ModelContext);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<TData | undefined>(undefined);
@@ -38,7 +39,7 @@ export function useModel<TData = any, TParam = any>([model]: [
       setIsLoading(true);
       let nextData, nextError;
       try {
-        nextData = await fetcher(model, param);
+        nextData = await memorizer.call(fetcher)(model, param);
         setData(nextData);
       } catch (err) {
         nextError = err;
@@ -49,11 +50,12 @@ export function useModel<TData = any, TParam = any>([model]: [
       }
       return { data: nextData, error: nextError };
     },
-    [model]
+    [model, memorizer, revalidator]
   );
 
   useEffect(() => {
     const callback = () => {
+      memorizer.revoke(model);
       requester(paramRef.current);
     };
     revalidator.register(model, callback);

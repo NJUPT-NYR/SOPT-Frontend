@@ -224,3 +224,68 @@ export class Revalidator<T extends object> {
     }
   }
 }
+
+export class Memorizer<TModel extends object> {
+  private memo: WeakMap<
+    TModel,
+    Map<
+      string,
+      { response: undefined; listeners: ((data: any, error: any) => void)[] }
+    >
+  >;
+  private models: WeakSet<TModel>;
+  constructor(model: TModel[]) {
+    this.models = new WeakSet(model);
+    this.memo = new WeakMap();
+  }
+  call(fetcher: Function) {
+    return (model: TModel, param: any) => {
+      if (!this.models.has(model)) {
+        return fetcher(model, param);
+      }
+      let serializedKey;
+      try {
+        serializedKey = JSON.stringify(param);
+      } catch (_error) {
+        return fetcher(model, param);
+      }
+      if (!this.memo.get(model)) {
+        this.memo.set(model, new Map());
+      }
+      const map = this.memo.get(model);
+      if (!map.has(serializedKey)) {
+        map.set(serializedKey, { response: undefined, listeners: [] });
+      }
+      const value = map.get(serializedKey);
+      if (value.listeners.length === 0) {
+        if (value.response === undefined) {
+          fetcher(model, param)
+            .then((data) => {
+              value.response = data;
+              value.listeners.forEach((cb) => cb(data, undefined));
+            })
+            .catch((error) => {
+              value.listeners.forEach((cb) => cb(undefined, error));
+            })
+            .finally(() => {
+              value.listeners = [];
+            });
+        } else {
+          return value.response;
+        }
+      }
+      return new Promise(async (resolve, reject) => {
+        value.listeners.push((data, error) => {
+          if (error) {
+            reject(error);
+          } else if (data) {
+            resolve(data);
+          }
+        });
+      });
+    };
+  }
+  revoke(model: TModel) {
+    this.memo.delete(model);
+  }
+}

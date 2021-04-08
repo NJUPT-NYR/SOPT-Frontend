@@ -2,11 +2,6 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import qs, { StringifiableRecord } from "query-string";
 import { IAccount, IInvitation, ISlimTorrent, IUser } from "./interface";
 
-export type IModel<TData = any, TParam = any> = (
-  instance: AxiosInstance,
-  param?: TParam
-) => Promise<TData>;
-
 interface SoptAxiosInstance extends AxiosInstance {
   request<T = any>(config: AxiosRequestConfig): Promise<T>;
   get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>;
@@ -30,6 +25,11 @@ interface SoptAxiosInstance extends AxiosInstance {
   ): Promise<T>;
 }
 
+export type IModel<TData = any, TParam = any> = (
+  instance: SoptAxiosInstance,
+  param?: TParam
+) => Promise<TData>;
+
 /**
  *  {@link https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apitorrentlist_torrents}
  */
@@ -48,11 +48,11 @@ export interface IRequestTorrentList extends StringifiableRecord {
   type?: "Asc" | "Desc";
 }
 
-export const requestTorrentList = (
-  instance: SoptAxiosInstance,
-  query: IRequestTorrentList
+export const requestTorrentList: IModel<ISlimTorrent[], IRequestTorrentList> = (
+  instance,
+  query
 ) =>
-  instance.get<ISlimTorrent[]>(
+  instance.get(
     qs.stringifyUrl({
       url: "/torrent/list_torrents",
       query,
@@ -67,10 +67,10 @@ interface IRequestUserLogin {
   password: string;
 }
 
-export const requestUserLogin = (
-  instance: SoptAxiosInstance,
-  { username, password }: IRequestUserLogin
-) => instance.post<string>("/user/login", { username, password });
+export const requestUserLogin: IModel<string, IRequestUserLogin> = (
+  instance,
+  param
+) => instance.post("/user/login", param);
 
 /**
  * {@link https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiuseradd_user}
@@ -82,10 +82,10 @@ interface IRequestUserAddUser {
   invite_code?: string;
 }
 
-export const requestUserAddUser = (
-  instance: SoptAxiosInstance,
-  data: IRequestUserAddUser
-) => instance.post<IAccount>("/user/add_user", data);
+export const requestUserAddUser: IModel<IAccount, IRequestUserAddUser> = (
+  instance,
+  data
+) => instance.post("/user/add_user", data);
 
 /**
  * {@link https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiusershow_user}
@@ -94,21 +94,21 @@ interface IRequestUserShowUser extends StringifiableRecord {
   username?: string;
 }
 
-export const requestUserShowUser = (
-  instance: SoptAxiosInstance,
-  query: IRequestUserShowUser
-) => instance.get<IUser>(qs.stringifyUrl({ url: "/user/show_user", query }));
+export const requestUserShowUser: IModel<IUser, IRequestUserShowUser> = (
+  instance,
+  query
+) => instance.get(qs.stringifyUrl({ url: "/user/show_user", query }));
 
 /**
  * {@link https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiuserupload_avatar}
  */
-export const requestUserUploadAvatar = (
-  instance: SoptAxiosInstance,
-  file: File
+export const requestUserUploadAvatar: IModel<IUser, File> = (
+  instance,
+  file
 ) => {
   const data = new FormData();
   data.append("file", file);
-  return instance.post<IUser>("/user/upload_avatar", data, {
+  return instance.post("/user/upload_avatar", data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -118,8 +118,9 @@ export const requestUserUploadAvatar = (
 /**
  * {@see https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiinvitationlist_invitations}
  */
-export const requestInvitationListInvitations = (instance: SoptAxiosInstance) =>
-  instance.get<IInvitation[]>("/invitation/list_invitations");
+export const requestInvitationListInvitations: IModel<IInvitation[]> = (
+  instance
+) => instance.get("/invitation/list_invitations");
 
 /**
  * {@see https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiinvitationsend_invitation}
@@ -130,10 +131,10 @@ interface IInvitationSendInvitaion {
   body: string;
 }
 
-export const requestInvitationSendInvitation = (
-  instance: SoptAxiosInstance,
-  data: IInvitationSendInvitaion
-) => instance.post<IInvitation>("/invitation/send_invitation", data);
+export const requestInvitationSendInvitation: IModel<
+  IInvitation,
+  IInvitationSendInvitaion
+> = (instance, data) => instance.post("/invitation/send_invitation", data);
 
 /**
  * {@see https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiuserauthforget_password}
@@ -142,13 +143,11 @@ interface IUserAuthForgetPassword extends StringifiableRecord {
   email: string;
 }
 
-export const requestUserAuthForgetPassword = (
-  instance: SoptAxiosInstance,
-  query: IUserAuthForgetPassword
-) =>
-  instance.get<null>(
-    qs.stringifyUrl({ url: "/user/auth/forget_password", query })
-  );
+export const requestUserAuthForgetPassword: IModel<
+  null,
+  IUserAuthForgetPassword
+> = (instance, query) =>
+  instance.get(qs.stringifyUrl({ url: "/user/auth/forget_password", query }));
 
 /**
  * {@see https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiuserpersonal_info_update}
@@ -158,7 +157,7 @@ interface IUserPersonalInfoUpdate {
   privacy: number;
 }
 
-export const requestUserPersonalInfoUpdate = (
-  instance: SoptAxiosInstance,
-  data: IUserPersonalInfoUpdate
-) => instance.post<null>("/user/personal_info_update", data);
+export const requestUserPersonalInfoUpdate: IModel<
+  null,
+  IUserPersonalInfoUpdate
+> = (instance, data) => instance.post("/user/personal_info_update", data);
