@@ -4,7 +4,18 @@ export enum AUTH_ROLES {
 
 export const COOKIE_NAME_JWT_TOKEN = "JWT_TOKEN";
 
-export const PROFILE_SIADBARS: { label: string; tab: string }[] = [
+export const VISITOR_SIADBARS: { label: string; tab: string }[] = [
+  {
+    label: "User Info",
+    tab: "",
+  },
+  {
+    label: "Torrent Status",
+    tab: "torrentsStatus",
+  },
+];
+
+export const PROFILE_SIDEBARS: { label: string; tab: string }[] = [
   {
     label: "User Info",
     tab: "",
@@ -23,7 +34,7 @@ export const PROFILE_SIADBARS: { label: string; tab: string }[] = [
   },
 ];
 
-export const PROFILE_SIADBARS_ADMIN: { label: string; tab: string }[] = [
+export const PROFILE_SIDEBARS_ADMIN: { label: string; tab: string }[] = [
   {
     label: "Manage Torrent",
     tab: "#torrent",

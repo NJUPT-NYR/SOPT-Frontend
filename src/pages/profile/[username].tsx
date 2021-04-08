@@ -22,8 +22,9 @@ import { RiImageEditFill } from "react-icons/ri";
 import classNames from "classnames";
 import {
   COOKIE_NAME_JWT_TOKEN,
-  PROFILE_SIADBARS,
-  PROFILE_SIADBARS_ADMIN,
+  VISITOR_SIADBARS,
+  PROFILE_SIDEBARS,
+  PROFILE_SIDEBARS_ADMIN,
 } from "@/utils/constants";
 import { dateFormat } from "@/utils/tools";
 import { GetServerSideProps } from "next";
@@ -61,18 +62,16 @@ export default function ProfileUsername({
   ]);
 
   let content = <ProfileUserinfo />;
-  if (isOwned) {
-    switch (tab) {
-      case "invitations":
-        content = <ProfileSendInvitation />;
-        break;
-      case "torrentsStatus":
-        content = <ProfileTorrentsStatus />;
-        break;
-      case "security":
-        content = <ProfileSecurity />;
-        break;
-    }
+  switch (tab) {
+    case "invitations":
+      content = <ProfileSendInvitation />;
+      break;
+    case "torrentsStatus":
+      content = <ProfileTorrentsStatus />;
+      break;
+    case "security":
+      content = <ProfileSecurity />;
+      break;
   }
 
   return (
@@ -85,15 +84,19 @@ export default function ProfileUsername({
             fallbackAvatarText={"N"}
           />
           <div className="font-light text-2xl">{username}</div>
-          {isOwned && (
+          {(isOwned && (
             <>
-              <ProfileSidebar items={PROFILE_SIADBARS} />
+              <ProfileSidebar items={PROFILE_SIDEBARS} />
               {isAdmin && (
                 <>
                   <div className="mt-1 text-gray-500 text-sm">As Admin</div>
-                  <ProfileSidebar items={PROFILE_SIADBARS_ADMIN} />
+                  <ProfileSidebar items={PROFILE_SIDEBARS_ADMIN} />
                 </>
               )}
+            </>
+          )) || (
+            <>
+              <ProfileSidebar items={VISITOR_SIADBARS} />
             </>
           )}
         </div>
@@ -166,7 +169,7 @@ function ProfileUserinfo() {
           title="User Info"
           layoutClassName="grid-cols-1 lg:grid-cols-2 xl:grid-cols-3"
         >
-          <Descriptions.Item label="registerTime">
+          <Descriptions.Item label="Register Time">
             <span>
               {userData?.registerTime
                 ? dateFormat(
@@ -176,7 +179,7 @@ function ProfileUserinfo() {
                 : "-"}
             </span>
           </Descriptions.Item>
-          <Descriptions.Item label="lastActivity">
+          <Descriptions.Item label="Last Activity">
             <span>
               {userData?.lastActivity
                 ? dateFormat(
@@ -186,33 +189,35 @@ function ProfileUserinfo() {
                 : "-"}
             </span>
           </Descriptions.Item>
-          <Descriptions.Item label="inviter">
+          <Descriptions.Item label="Inviter">
             <span>{userData?.invitor ?? "-"}</span>
           </Descriptions.Item>
-          <Descriptions.Item label="upload">
+          <Descriptions.Item label="Upload">
             <span>{userData?.upload ?? "-"}</span>
           </Descriptions.Item>
-          <Descriptions.Item label="download">
+          <Descriptions.Item label="Download">
             <span>{userData?.download ?? "-"}</span>
           </Descriptions.Item>
-          <Descriptions.Item label="money">
+          <Descriptions.Item label="Money">
             <span>{userData?.money ?? "-"}</span>
           </Descriptions.Item>
-          <Descriptions.Item label="rank">
+          <Descriptions.Item label="Rank">
             <span>{userData?.rank ?? "-"}</span>
           </Descriptions.Item>
-          <Descriptions.Item className="col-start-span-2" label="passkey">
-            <span>{userData?.passkey ?? "-"}</span>
-          </Descriptions.Item>
-          <Descriptions.Item label="email">
+          {isOwned && (
+            <Descriptions.Item className="col-start-span-2" label="Passkey">
+              <span>{userData?.passkey ?? "-"}</span>
+            </Descriptions.Item>
+          )}
+          <Descriptions.Item label="Email">
             <span>{userData?.email ?? "-"}</span>
           </Descriptions.Item>
         </Descriptions>
       </Card>
+      <ProfileUserTag />
       {isOwned && (
         <>
           <ProfileUserInfoPrivacy />
-          <ProfileUserTag />
           <div
             className="mt-5 w-full rounded-md bg-gray-50 hover:bg-gray-200 text-center text-red-700 py-2 cursor-pointer transition-all ease-in-out select-none font-semibold "
             onClick={handleLogout}
@@ -279,6 +284,12 @@ function ProfileUserTag() {
     param,
   ]);
   const [isEditing, setIsEditing] = useState(false);
+  const jwtClaim = useJwtClaim();
+  const username = router.query.username as string;
+  const isOwned = useMemo(() => jwtClaim.sub === username, [
+    jwtClaim,
+    username,
+  ]);
 
   const handleSwitchEditing = useCallback(() => {
     setIsEditing((value) => !value);
@@ -320,17 +331,18 @@ function ProfileUserTag() {
 
   return (
     <Card className="mt-5 relative">
-      {isEditing ? (
-        <MdDone
-          onClick={handleSwitchEditing}
-          className="absolute top-4 right-4 cursor-pointer text-2xl  "
-        />
-      ) : (
-        <MdModeEdit
-          onClick={handleSwitchEditing}
-          className="absolute top-4 right-4 cursor-pointer text-2xl "
-        />
-      )}
+      {isOwned &&
+        (isEditing ? (
+          <MdDone
+            onClick={handleSwitchEditing}
+            className="absolute top-4 right-4 cursor-pointer text-2xl  "
+          />
+        ) : (
+          <MdModeEdit
+            onClick={handleSwitchEditing}
+            className="absolute top-4 right-4 cursor-pointer text-2xl "
+          />
+        ))}
       <Descriptions title="Tags" />
       <div className="py-5">
         {!tags.length && !isEditing ? (
@@ -433,8 +445,14 @@ const torrentsStatusColumn: Column<IPersonTorrent>[] = [
 ];
 
 function ProfileTorrentsStatus() {
+  const router = useRouter();
+  const param = useMemo(() => ({ username: router.query.username as string }), [
+    router.query?.username,
+  ]);
+
   const { data: torrentsStatus } = useInstantModel([
     model.requestUserShowTorrentStatus,
+    param,
   ]);
   const list = useMemo(() => {
     if (!torrentsStatus) {
