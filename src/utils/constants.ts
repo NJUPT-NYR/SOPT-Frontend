@@ -10,6 +10,10 @@ export const PROFILE_SIADBARS: { label: string; tab: string }[] = [
     tab: "",
   },
   {
+    label: "Torrents Status",
+    tab: "torrentsStatus",
+  },
+  {
     label: "Send Invitation",
     tab: "invitations",
   },

@@ -1,6 +1,12 @@
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import qs, { StringifiableRecord } from "query-string";
-import { IAccount, IInvitation, ISlimTorrent, IUser } from "./interface";
+import {
+  IAccount,
+  IInvitation,
+  IPersonTorrent,
+  ISlimTorrent,
+  IUser,
+} from "./interface";
 
 interface SoptAxiosInstance extends AxiosInstance {
   request<T = any>(config: AxiosRequestConfig): Promise<T>;
@@ -116,7 +122,7 @@ export const requestUserUploadAvatar: IModel<IUser, File> = (
 };
 
 /**
- * {@see https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiinvitationlist_invitations}
+ * {@link https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiinvitationlist_invitations}
  */
 export const requestInvitationListInvitations: IModel<IInvitation[]> = (
   instance
@@ -137,7 +143,7 @@ export const requestInvitationSendInvitation: IModel<
 > = (instance, data) => instance.post("/invitation/send_invitation", data);
 
 /**
- * {@see https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiuserauthforget_password}
+ * {@link https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiuserauthforget_password}
  */
 interface IUserAuthForgetPassword extends StringifiableRecord {
   email: string;
@@ -150,7 +156,7 @@ export const requestUserAuthForgetPassword: IModel<
   instance.get(qs.stringifyUrl({ url: "/user/auth/forget_password", query }));
 
 /**
- * {@see https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiuserpersonal_info_update}
+ * {@link https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiuserpersonal_info_update}
  */
 interface IUserPersonalInfoUpdate {
   info: any;
@@ -161,3 +167,21 @@ export const requestUserPersonalInfoUpdate: IModel<
   null,
   IUserPersonalInfoUpdate
 > = (instance, data) => instance.post("/user/personal_info_update", data);
+
+/**
+ * {@link https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiusershow_torrent_status}
+ */
+interface IUserShowTorrentStatus extends StringifiableRecord {
+  username: string;
+}
+
+export const requestUserShowTorrentStatus: IModel<
+  {
+    uploading: IPersonTorrent[];
+    downloading: IPersonTorrent[];
+    finished: IPersonTorrent[];
+    unfinished: IPersonTorrent[];
+  },
+  IUserShowTorrentStatus
+> = (instance, query) =>
+  instance.get(qs.stringifyUrl({ url: "/user/show_torrent_status", query }));

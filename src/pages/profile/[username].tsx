@@ -39,13 +39,13 @@ import {
   useInstantModel,
 } from "@/utils/hooks";
 import type { Column } from "react-table";
-import { IInvitation } from "@/utils/interface";
+import { IInvitation, IPersonTorrent } from "@/utils/interface";
 
 interface IProfileUsername {
   username: string;
   avatar: string;
   isAdmin: boolean;
-  tab: "invitations" | null;
+  tab: "invitations" | "torrentsStatus" | null;
 }
 
 export default function ProfileUsername({
@@ -65,6 +65,9 @@ export default function ProfileUsername({
     switch (tab) {
       case "invitations":
         content = <ProfileSendInvitation />;
+        break;
+      case "torrentsStatus":
+        content = <ProfileTorrentsStatus />;
         break;
     }
   }
@@ -381,7 +384,85 @@ function ProfileUserTag() {
   );
 }
 
-const columns: Column<IInvitation>[] = [
+const torrentsStatusColumn: Column<IPersonTorrent>[] = [
+  {
+    Header: "Id",
+    accessor(row) {
+      return <div className="text-gray-600 text-center">{row?.id ?? "-"}</div>;
+    },
+    maxWidth: 100,
+  },
+  {
+    Header: "Title",
+    accessor(row) {
+      return (
+        <div className="text-gray-600 text-center">{row?.title ?? "-"}</div>
+      );
+    },
+  },
+  {
+    Header: "Length",
+    accessor(row) {
+      return (
+        <div className="text-gray-600 text-center">{row?.length ?? "-"}</div>
+      );
+    },
+    maxWidth: 100,
+  },
+  {
+    Header: "Upload",
+    accessor(row) {
+      return (
+        <div className="text-gray-600 text-center">{row?.upload ?? "-"}</div>
+      );
+    },
+    maxWidth: 100,
+  },
+  {
+    Header: "Download",
+    accessor(row) {
+      return (
+        <div className="text-gray-600 text-center">{row?.download ?? "-"}</div>
+      );
+    },
+    maxWidth: 100,
+  },
+];
+
+function ProfileTorrentsStatus() {
+  const { data: torrentsStatus } = useInstantModel([
+    model.requestUserShowTorrentStatus,
+  ]);
+  const list = useMemo(() => {
+    if (!torrentsStatus) {
+      return [];
+    }
+    const { downloading, finished, unfinished, uploading } = torrentsStatus;
+    return [...downloading, ...finished, ...unfinished, ...uploading];
+  }, [torrentsStatus]);
+  return (
+    <div>
+      <Card>
+        <Descriptions title="Torrents Status"></Descriptions>
+        <Table
+          className="mt-5 overflow-scroll w-full  "
+          columns={torrentsStatusColumn}
+          data={list ?? []}
+          empty={
+            <div className="flex flex-col items-center py-3 ">
+              <div>
+                <GoTelescope className="text-9xl my-3 ml-6" />
+              </div>
+              <div className="text-gray-500 ml-6">No Torrent Status</div>
+            </div>
+          }
+        />
+      </Card>
+    </div>
+  );
+}
+
+const sendInvitationColumns: Column<IInvitation>[] = [
   {
     Header: "Sender",
     accessor(row) {
@@ -480,8 +561,8 @@ function ProfileSendInvitation() {
       <Card className="mt-5">
         <Descriptions title="Invitations"></Descriptions>
         <Table
-          className="my-5"
-          columns={columns}
+          className="mt-5 overflow-scroll w-full "
+          columns={sendInvitationColumns}
           data={listInvitationsData ?? []}
           empty={
             <div className="flex flex-col items-center py-3 ">

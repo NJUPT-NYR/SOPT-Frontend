@@ -20,7 +20,7 @@ export const ModelContext = React.createContext<IModelContext>(null);
 export function useModel<TData = any, TParam = any>([model]: [
   IModel<TData, TParam>
 ]): {
-  data: TData;
+  data: TData | undefined;
   error: any;
   isLoading: boolean;
   requester: (param: TParam) => Promise<{ data: TData; error: any }>;
@@ -73,7 +73,7 @@ export function useInstantModel<TData = any, TParam = any>([model, param]: [
   IModel<TData, TParam>,
   TParam?
 ]): {
-  data: TData;
+  data: TData | undefined;
   error: any;
   isLoading: boolean;
 } {
