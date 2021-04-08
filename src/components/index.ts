@@ -11,6 +11,8 @@ export { default as Descriptions } from "./Descriptions/Descriptions";
 export { default as Comment } from "./Comment/Comment";
 export { default as MarkdownEditor } from "./MarkdownEditor/MarkdownEditor";
 export { default as Select } from "./Select/Select";
+export { default as Tag } from "./Tag/Tag";
+export { default as Hover } from "./Hover/Hover";
 
 /**
  * Scaffold

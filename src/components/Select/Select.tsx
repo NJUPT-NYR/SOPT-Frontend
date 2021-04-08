@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { IBaseComponent } from "../base";
 import { AiOutlineCaretDown } from "react-icons/ai";
 import classNames from "classnames";
+import Hover from "../Hover/Hover";
 
 interface ISelect<T> extends IBaseComponent {
   value: T;
@@ -65,15 +66,12 @@ export default function Select<T>({
           ))}
         </div>
       </div>
-      <div
-        className={classNames(
-          "fixed z-10 top-0 left-0 w-screen h-screen",
-          !isUnfold && "hidden"
-        )}
+      <Hover
+        className={classNames(!isUnfold && "hidden")}
         onClick={() => {
           setIsUnfold(false);
         }}
-      ></div>
+      />
     </>
   );
 }

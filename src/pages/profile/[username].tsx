@@ -15,6 +15,7 @@ import {
   Button,
   Table,
   Select,
+  Tag,
 } from "@/components";
 import * as model from "@/utils/model";
 import { RiImageEditFill } from "react-icons/ri";
@@ -29,6 +30,7 @@ import { GetServerSideProps } from "next";
 import { makeServerFetcher, serverDoFetch } from "@/utils/request";
 import { useForm } from "react-hook-form";
 import { GoTelescope } from "react-icons/go";
+import { MdModeEdit, MdDone, MdAdd } from "react-icons/md";
 import qs from "query-string";
 import {
   useCookies,
@@ -151,27 +153,6 @@ function ProfileUserinfo() {
     param,
   ]);
 
-  const { requester } = useModel([model.requestUserPersonalInfoUpdate]);
-
-  const handlePrivacyChange = useCallback(async (nextValue) => {
-    await requester({ info: userData?.other ?? {}, privacy: nextValue });
-  }, []);
-
-  const selectOptions = useMemo(
-    () => [
-      {
-        label: <div>Public</div>,
-        value: 0,
-      },
-      {
-        label: <div>Private</div>,
-        value: 1,
-        isSelected: (value) => value !== 0,
-      },
-    ],
-    []
-  );
-
   return (
     <div>
       <Card>
@@ -224,18 +205,8 @@ function ProfileUserinfo() {
       </Card>
       {isOwned && (
         <>
-          <Card className="mt-5">
-            <Descriptions title="Privacy" />
-            <Select
-              value={userData?.privacy}
-              options={selectOptions}
-              onChange={handlePrivacyChange}
-            />
-          </Card>
-          <Card className="mt-5">
-            <Descriptions title="Tags" />
-            <div>tags</div>
-          </Card>
+          <ProfileUserInfoPrivacy />
+          <ProfileUserTag />
           <div
             className="mt-5 w-full rounded-md bg-gray-50 hover:bg-gray-200 text-center text-red-700 py-2 cursor-pointer transition-all ease-in-out select-none font-semibold "
             onClick={handleLogout}
@@ -245,6 +216,168 @@ function ProfileUserinfo() {
         </>
       )}
     </div>
+  );
+}
+
+function ProfileUserInfoPrivacy() {
+  const router = useRouter();
+  const param = useMemo(() => ({ username: router.query.username as string }), [
+    router.query?.username,
+  ]);
+  const { data: userData, error } = useInstantModel([
+    model.requestUserShowUser,
+    param,
+  ]);
+  const selectOptions = useMemo(
+    () => [
+      {
+        label: <div>Public</div>,
+        value: 0,
+      },
+      {
+        label: <div>Private</div>,
+        value: 1,
+        isSelected: (value) => value !== 0,
+      },
+    ],
+    []
+  );
+  const { requester } = useModel([model.requestUserPersonalInfoUpdate]);
+
+  const handlePrivacyChange = useCallback(
+    async (nextValue) => {
+      await requester({ info: userData?.other ?? {}, privacy: nextValue });
+    },
+    [userData, userData?.other]
+  );
+
+  return (
+    <Card className="mt-5">
+      <Descriptions title="Privacy" />
+      <Select
+        value={userData?.privacy}
+        options={selectOptions}
+        onChange={handlePrivacyChange}
+      />
+    </Card>
+  );
+}
+
+function ProfileUserTag() {
+  const router = useRouter();
+  const param = useMemo(() => ({ username: router.query.username as string }), [
+    router.query?.username,
+  ]);
+  const { data: userData, error } = useInstantModel([
+    model.requestUserShowUser,
+    param,
+  ]);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleSwitchEditing = useCallback(() => {
+    setIsEditing((value) => !value);
+  }, [setIsEditing]);
+
+  const { requester, isLoading } = useModel([
+    model.requestUserPersonalInfoUpdate,
+  ]);
+
+  const tags = useMemo(() => {
+    return Object.entries(userData?.other ?? {});
+  }, [userData, userData?.other]);
+
+  const { register, handleSubmit, reset } = useForm();
+
+  const onAddTag = useCallback(
+    async (formData) => {
+      const nextInfo = {
+        ...(userData?.other ?? {}),
+        [formData.key]: formData.value,
+      };
+      await requester({ info: nextInfo, privacy: userData?.privacy });
+      reset();
+    },
+    [userData]
+  );
+
+  const onDeleteTag = useCallback(
+    async (key) => {
+      const nextInfo = {
+        ...(userData?.other ?? {}),
+      };
+      delete nextInfo[key];
+      await requester({ info: nextInfo, privacy: userData?.privacy });
+      reset();
+    },
+    [userData]
+  );
+
+  return (
+    <Card className="mt-5 relative">
+      {isEditing ? (
+        <MdDone
+          onClick={handleSwitchEditing}
+          className="absolute top-4 right-4 cursor-pointer text-2xl  "
+        />
+      ) : (
+        <MdModeEdit
+          onClick={handleSwitchEditing}
+          className="absolute top-4 right-4 cursor-pointer text-2xl "
+        />
+      )}
+      <Descriptions title="Tags" />
+      <div className="py-5">
+        {!tags.length && !isEditing ? (
+          <div className="flex justify-center">
+            <GoTelescope className="text-9xl my-3 ml-6" />
+          </div>
+        ) : (
+          <>
+            {tags.map(([key, value]) => (
+              <Tag
+                className="mx-1 my-1"
+                key={key?.toString() + value?.toString()}
+                deletable={isEditing}
+                onDelete={() => {
+                  onDeleteTag(key);
+                }}
+              >
+                <span>
+                  {key}:{value}
+                </span>
+              </Tag>
+            ))}
+            {isEditing && (
+              <form className="mt-4" onSubmit={handleSubmit(onAddTag)}>
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-x-2 gap-y-2">
+                  <div>
+                    <Input
+                      placeholder="Key"
+                      name="key"
+                      inputRef={register({ required: true })}
+                    />
+                  </div>
+                  <div>
+                    <Input
+                      placeholder="Value"
+                      name="value"
+                      inputRef={register({ required: true })}
+                    />
+                  </div>
+                </div>
+                <Button
+                  className="w-full mt-3"
+                  type="submit"
+                  isLoading={isLoading}
+                >
+                  <span>Add</span>
+                </Button>
+              </form>
+            )}
+          </>
+        )}
+      </div>
+    </Card>
   );
 }
 
@@ -396,13 +529,7 @@ function ProfileAvatar({
   return (
     <div className="relative w-36  " style={{ clipPath: "circle(50%)" }}>
       {avatar ? (
-        <img
-          className="rounded-full"
-          src={
-            "data:image/png;base64," + avatar ||
-            "https://avatars.githubusercontent.com/u/42082890?v=4"
-          }
-        />
+        <img className="rounded-full" src={"data:image/png;base64," + avatar} />
       ) : (
         <div className="rounded-full bg-white w-36 h-36 grid place-items-center ">
           <span className="text-9xl text-black">{fallbackAvatarText}</span>

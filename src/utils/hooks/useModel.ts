@@ -56,7 +56,9 @@ export function useModel<TData = any, TParam = any>([model]: [
   useEffect(() => {
     const callback = () => {
       memorizer.revoke(model);
-      requester(paramRef.current);
+      setTimeout(() => {
+        requester(paramRef.current);
+      });
     };
     revalidator.register(model, callback);
     return () => {

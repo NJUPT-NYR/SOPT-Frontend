@@ -268,7 +268,7 @@ export class Memorizer<TModel extends object> {
               value.listeners.forEach((cb) => cb(undefined, error));
             })
             .finally(() => {
-              value.listeners = [];
+              value.listeners.splice(0, value.listeners.length);
             });
         } else {
           return value.response;
