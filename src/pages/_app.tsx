@@ -3,19 +3,17 @@ import "@/global.css";
 import { AppProps } from "next/app";
 
 import { makeFetcher } from "@/utils/request";
-import type { AxiosInstance } from "axios";
+import type { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 import { isBrowser } from "@/utils/tools";
 import { COOKIE_NAME_JWT_TOKEN } from "@/utils/constants";
 import Cookies from "universal-cookie";
 import { ModelContext } from "@/utils/hooks/useModel";
 import { revalidator } from "@/utils/revalidations";
 import { memorizer } from "@/utils/memorizer";
+import { useRouter } from "next/router";
 
-interface IApp extends AppProps {
-  cookie: any;
-}
-
-export default function App({ Component, pageProps }: IApp) {
+export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
   const configInstance = useCallback(
     (instance: AxiosInstance) => {
       if (isBrowser()) {
@@ -34,14 +32,21 @@ export default function App({ Component, pageProps }: IApp) {
           return config;
         });
       }
-      instance.interceptors.response.use((response) => {
-        if (response?.data?.success === false) {
-          throw new Error(response?.data?.errMsg);
+      instance.interceptors.response.use(
+        (response: AxiosResponse) => {
+          if (response?.data?.success === false) {
+            throw new Error(response?.data?.errMsg);
+          }
+          return response?.data?.data;
+        },
+        (error: AxiosError) => {
+          if (error.response.status === 401) {
+            router.push("/login");
+          }
         }
-        return response?.data?.data;
-      });
+      );
     },
-    [isBrowser]
+    [isBrowser, router]
   );
   const fetcher = useMemo(
     () =>

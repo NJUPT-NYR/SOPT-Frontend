@@ -201,6 +201,12 @@ export const requestUserAuthResetPassword: IModel<
 /**
  * {@link https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiuserauthreset_passkey}
  */
-export const requestUserAuthResetPasskey: IModel<null, undefined> = (
-  instance
-) => instance.get("/user/auth/reset_passkey");
+export const requestUserAuthResetPasskey: IModel<null> = (instance) =>
+  instance.get("/user/auth/reset_passkey");
+
+/**
+ * {@link https://github.com/NJUPT-NYR/SOPT/blob/master/docs/API.md#apiadmintorrentshow_invisible_torrents}
+ */
+export const requestAdminTorrentShowInvisibleTorrents: IModel<
+  ISlimTorrent[]
+> = (instance) => instance.get("/admin/torrent/show_invisible_torrents");
