@@ -14,6 +14,7 @@ export { default as Select } from "./Select/Select";
 export { default as Tag } from "./Tag/Tag";
 export { default as Hover } from "./Hover/Hover";
 export { default as Badge } from "./Badge/Badge";
+export { default as Tabs } from "./Tabs/Tabs";
 
 /**
  * Scaffold

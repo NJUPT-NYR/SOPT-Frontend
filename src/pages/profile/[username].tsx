@@ -90,8 +90,14 @@ export default function ProfileUsername({
               <ProfileSidebar items={PROFILE_SIDEBARS} />
               {isAdmin && (
                 <>
-                  <div className="mt-1 text-gray-500 text-sm">As Admin</div>
-                  <ProfileSidebar items={PROFILE_SIDEBARS_ADMIN} />
+                  <div className="mt-1 text-gray-500 text-sm">Others</div>
+                  <div className="overflow-hidden bg-white w-full mt-3 mb-3">
+                    <Link href="/admin">
+                      <div className="px-5 py-3 border-2 cursor-pointer border-gray-200 hover:bg-gray-100 font-medium rounded-lg">
+                        Switch As Admin
+                      </div>
+                    </Link>
+                  </div>
                 </>
               )}
             </>
