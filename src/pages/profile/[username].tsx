@@ -13,6 +13,7 @@ import {
   Scaffold,
   Input,
   Button,
+  Badge,
   Table,
   Select,
   Tag,
@@ -351,20 +352,29 @@ function ProfileUserTag() {
           </div>
         ) : (
           <>
-            {tags.map(([key, value]) => (
-              <Tag
-                className="mx-1 my-1"
-                key={key?.toString() + value?.toString()}
-                deletable={isEditing}
-                onDelete={() => {
-                  onDeleteTag(key);
-                }}
-              >
-                <span>
-                  {key}:{value}
-                </span>
-              </Tag>
-            ))}
+            {tags.map(([key, value]) =>
+              isEditing ? (
+                <Tag
+                  className="mx-1 my-1"
+                  key={key?.toString() + value?.toString()}
+                  deletable={isEditing}
+                  onDelete={() => {
+                    onDeleteTag(key);
+                  }}
+                >
+                  <span>
+                    {key}:{value}
+                  </span>
+                </Tag>
+              ) : (
+                <Badge
+                  key={key?.toString() + value?.toString()}
+                  colorKey={key}
+                  name={<span>{key}</span>}
+                  value={<span>{value}</span>}
+                />
+              )
+            )}
             {isEditing && (
               <form className="mt-4" onSubmit={handleSubmit(onAddTag)}>
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-x-2 gap-y-2">
