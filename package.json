@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "npx --yes -p cross-env -c \"cross-env NODE_ENV=production next build \"",
-    "dev": "npx --yes -p path-exists-cli -p cross-env -c \"path-exists .env.development && cross-env NODE_ENV=development next dev || echo 'FATAL: FILE .env.development NOT FOUND!!!'  \"",
-    "start": "npx --yes -p cross-env -c \"cross-env NODE_ENV=production next start \"",
+    "build": "next build",
+    "dev": "next dev",
+    "start": "next start",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./src/",
     "prettier": "prettier ./src/**/**.{ts,tsx} --loglevel warn --write",
     "preinstall": "npx --yes only-allow yarn",
